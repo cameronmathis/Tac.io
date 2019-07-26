@@ -12,6 +12,7 @@ import javafx.stage.Popup;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Main extends Application {
 
@@ -22,7 +23,8 @@ public class Main extends Application {
     private AnchorPane gamePane;
     private Scene gameScene;
     private boolean paused;
-    private Popup pausedPopUp;
+    private Popup PopUp;
+    private boolean markedError;
 
     //The GUI interface scene
     @Override
@@ -46,16 +48,46 @@ public class Main extends Application {
         primaryStage.setResizable(true); //makes app able to be resized
         primaryStage.show(); //shows the primaryStage
 
+        //ensure the window proportions remain the same
+//        Pane pane = (Pane) openingScene.lookup("#openingPane");
+//        openingScene.widthProperty().addListener((obs, oldVal, newVal) -> {
+//            pane.setLayoutY(newVal.intValue());
+//        });
+//        openingScene.heightProperty().addListener((obs, oldVal, newVal) -> {
+//            pane.setLayoutX(newVal.intValue() + 100);
+//        });
+
+        //initialize each quadrant
+        Pane topLeft = (Pane) gameScene.lookup("#topLeftPane");
+        Pane topCenter = (Pane) gameScene.lookup("#topCenterPane");
+        Pane topRight = (Pane) gameScene.lookup("#topRightPane");
+        Pane centerLeft = (Pane) gameScene.lookup("#centerLeftPane");
+        Pane center = (Pane) gameScene.lookup("#centerPane");
+        Pane centerRight = (Pane) gameScene.lookup("#centerRightPane");
+        Pane bottomLeft = (Pane) gameScene.lookup("#bottomLeftPane");
+        Pane bottomCenter = (Pane) gameScene.lookup("#bottomCenterPane");
+        Pane bottomRight = (Pane) gameScene.lookup("#bottomRightPane");
+
+        //initialize boolean values for if quadrant has been marked
+        AtomicBoolean topLeftMarked = new AtomicBoolean(false);
+        AtomicBoolean topCenterMarked = new AtomicBoolean(false);
+        AtomicBoolean topRightMarked = new AtomicBoolean(false);
+        AtomicBoolean centerLeftMarked = new AtomicBoolean(false);
+        AtomicBoolean centerMarked = new AtomicBoolean(false);
+        AtomicBoolean centerRightMarked = new AtomicBoolean(false);
+        AtomicBoolean bottomLeftMarked = new AtomicBoolean(false);
+        AtomicBoolean bottomCenterMarked = new AtomicBoolean(false);
+        AtomicBoolean bottomRightMarked = new AtomicBoolean(false);
+
         /**
          * BUTTON INITIALIZATION
          * Initialize all the buttons
          */
-        Button startBtn = (Button) openingScene.lookup("#start"); //calls the browse button from the fxml file
+        Button startBtn = (Button) openingScene.lookup("#start");
+        Button pauseBtn = (Button) gameScene.lookup("#pause");
 
         /**
-         * IMAGE LAYER GROUP
-         * New group for the image layer
-         * (used so you can snapshot the current photo and crop
+         * SHORTCUT KEYS
          */
         paused = false;
 
@@ -68,17 +100,9 @@ public class Main extends Application {
         gameScene.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.SPACE && !paused) {
                 pause();
-            } else if (event.getCode() == KeyCode.ENTER && paused) {
+            } else if (event.getCode() == KeyCode.ENTER && PopUp != null) {
                 resume();
             }
-        });
-
-        Pane pane = (Pane) openingScene.lookup("#textPane");
-        openingScene.widthProperty().addListener((obs, oldVal, newVal) -> {
-            pane.setLayoutY(newVal.intValue());
-        });
-        openingScene.heightProperty().addListener((obs, oldVal, newVal) -> {
-            pane.setLayoutX(newVal.intValue());
         });
 
         /**
@@ -86,6 +110,19 @@ public class Main extends Application {
          * Start the game
          */
         startBtn.setOnAction(event -> start());
+
+        /**
+         * PAUSE BUTTON
+         * Pause the game
+         */
+        pauseBtn.setOnAction(event -> pause());
+
+        /**
+         * CHECK FOR PLAYS
+         */
+        center.setOnMouseClicked(event -> {
+            centerMarked.set(markBox(center, centerMarked.get()));
+        });
     }
 
     /**
@@ -107,24 +144,25 @@ public class Main extends Application {
     }
 
     /**
-     * START METHOD
-     * Starts the game
+     * RESUME METHOD
+     * Resumes the game
      */
     private void resume() {
         try {
             paused = false;
-            pausedPopUp.hide();
+            PopUp.hide();
+            PopUp = null;
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
     }
 
     /**
-     * Paused POPUP
+     * PAUSES POPUP
      * PopUp for when the game is paused
      */
     private void pausedPopUp() {
-        pausedPopUp = new Popup(); //creates new popup
+        PopUp = new Popup(); //creates new popup
 
         TitledPane pausedPupUpPane = null; //calls popup menu created in 'chooseZipErrorPopUp.fxml' file
 
@@ -133,23 +171,61 @@ public class Main extends Application {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        pausedPopUp.getContent().add(pausedPupUpPane); //adds the popup (child) created in fxml file to the popup (parent) created
+        PopUp.getContent().add(pausedPupUpPane); //adds the popup (child) created in fxml file to the popup (parent) created
 
         //show popup on primaryStage
-        pausedPopUp.show(primaryStage);
+        PopUp.show(primaryStage);
 
         Button resumeBtn = (Button) pausedPupUpPane.lookup("#resume");
         resumeBtn.setOnAction(browseDismissEvent -> resume());
 
         Button exitBtn = (Button) pausedPupUpPane.lookup("#exit");
-        exitBtn.setOnAction(browseDismissEvent -> {
+        exitBtn.setOnAction(event -> {
             try {
                 System.exit(0);
-                pausedPopUp.hide();
+                PopUp.hide();
             } catch (Exception ex) {
                 System.out.println(ex.getMessage());
             }
         });
+    }
+
+    /**
+     * CHECK MARKED METHOD
+     * Check if square is playable and responds accordingly
+     */
+    private boolean markBox(Pane boxPane, boolean isMarked) {
+        if (isMarked) {
+            markedError = true;
+//            isAlreadyMarkedPopUp();
+        } else {
+            boxPane.setStyle("-fx-background-color: #ffffff");
+        }
+
+        return true;
+    }
+
+    /**
+     * Paused POPUP
+     * PopUp for when the game is paused
+     */
+    private void isAlreadyMarkedPopUp() {
+        PopUp = new Popup(); //creates new popup
+
+        TitledPane isAlreadyMarkedPopUpPane = null; //calls popup menu created in 'isAlreadyMarkedPopUp.fxml' file
+
+        try {
+            isAlreadyMarkedPopUpPane = FXMLLoader.load(getClass().getResource("isAlreadyMarkedPopUp.fxml"));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        PopUp.getContent().add(isAlreadyMarkedPopUpPane); //adds the popup (child) created in fxml file to the popup (parent) created
+
+        //show popup on primaryStage
+        PopUp.show(primaryStage);
+
+        Button dismissBtn = (Button) isAlreadyMarkedPopUpPane.lookup("#dismiss");
+        dismissBtn.setOnAction(event -> resume());
     }
 
     /**
