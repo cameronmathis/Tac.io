@@ -24,8 +24,8 @@
             <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" />
             </rowConstraints>
             <children>
-                <Button fx:id="exitBtn" mnemonicParsing="false" style="-fx-focus-traversable: false;" text="Exit" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
-                <Button fx:id="resumeBtn" mnemonicParsing="false" style="-fx-focus-traversable: false;" text="Resume" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+                <Button fx:id="exit" mnemonicParsing="false" style="-fx-focus-traversable: false;" text="Exit" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+                <Button fx:id="resume" mnemonicParsing="false" style="-fx-focus-traversable: false;" text="Resume" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
                 <Text opacity="0.55" strokeType="OUTSIDE" strokeWidth="0.0" text="Resume?" textAlignment="CENTER" wrappingWidth="235.63671875" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
             </children>
         </GridPane>
