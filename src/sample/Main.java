@@ -54,10 +54,11 @@ public class Main extends Application {
         primaryStage.setTitle("TicTacToe"); //sets the title of the app
         primaryStage.setScene(openingScene); //sets the scene on the stage
         primaryStage.setAlwaysOnTop(false); //set to false to show popups
-        primaryStage.setMinWidth(600); //set the minimum width
-        primaryStage.setMinHeight(500); //set the minimum height
+        primaryStage.setMinWidth(700); //set the minimum width
+        primaryStage.setMinHeight(700); //set the minimum height
         primaryStage.setResizable(true); //makes app able to be resized
         primaryStage.show(); //shows the primaryStage
+        enterNamesPopUp(); //ask for player names
 
         //ensure the window proportions remain the same
         primaryStage.isFullScreen();
@@ -72,9 +73,7 @@ public class Main extends Application {
         //initialize each quadrant
         setGame();
 
-        //initialize both players
-        player1.setPlayerName("player1");
-        player2.setPlayerName("player2");
+        //initialize both player games one
         player1.setGamesWon(0);
         player2.setGamesWon(0);
 
@@ -131,6 +130,44 @@ public class Main extends Application {
     }
 
     /**
+     * ENTER NAMES POPUP
+     * PopUp to ask for player names
+     */
+    private void enterNamesPopUp() {
+        PopUp = new Popup(); //creates new popup
+
+        TitledPane enterNamesPopPupPane = null; //calls popup menu created in 'enterNamesPopPup.fxml' file
+
+        try {
+            enterNamesPopPupPane = FXMLLoader.load(getClass().getResource("enterNamesPopUp.fxml"));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        PopUp.getContent().add(enterNamesPopPupPane); //adds the popup (child) created in fxml file to the popup (parent) created
+
+        //show popup on primaryStage
+        PopUp.show(primaryStage);
+
+        Button enterBtn = (Button) enterNamesPopPupPane.lookup("#enter");
+        TitledPane finalEnterNamesPopPupPane = enterNamesPopPupPane;
+        enterBtn.setOnAction(browseDismissEvent -> {
+            if (finalEnterNamesPopPupPane.lookup("player1Name") != null) {
+                String name1 = finalEnterNamesPopPupPane.lookup("player1Name").toString();
+                player1.setPlayerName(name1);
+            } else {
+                player1.setPlayerName("player1");
+            }
+            if (finalEnterNamesPopPupPane.lookup("player2Name") != null) {
+                String name2 = finalEnterNamesPopPupPane.lookup("player2Name").toString();
+                player2.setPlayerName(name2);
+            } else {
+                player2.setPlayerName("player2");
+            }
+            resume();
+        });
+    }
+
+    /**
      * START METHOD
      * Starts the game
      */
@@ -175,7 +212,7 @@ public class Main extends Application {
     private void pausedPopUp() {
         PopUp = new Popup(); //creates new popup
 
-        TitledPane pausedPupUpPane = null; //calls popup menu created in 'chooseZipErrorPopUp.fxml' file
+        TitledPane pausedPupUpPane = null; //calls popup menu created in 'pausePopUp.fxml' file
 
         try {
             pausedPupUpPane = FXMLLoader.load(getClass().getResource("pausedPopUp.fxml"));
