@@ -25,6 +25,8 @@ public class Main extends Application {
     private boolean paused;
     private Popup PopUp;
     private int counter;
+    private Player player1;
+    private Player player2;
 
     //The GUI interface scene
     @Override
