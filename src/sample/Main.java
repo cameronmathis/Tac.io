@@ -48,6 +48,7 @@ public class Main extends Application {
         primaryStage.show(); //shows the primaryStage
 
         //ensure the window proportions remain the same
+        primaryStage.isFullScreen();
 //        Pane pane = (Pane) openingScene.lookup("#openingPane");
 //        openingScene.widthProperty().addListener((obs, oldVal, newVal) -> {
 //            pane.setLayoutY(newVal.intValue());
@@ -129,7 +130,13 @@ public class Main extends Application {
      * Starts the game
      */
     private void start() {
+        boolean fullScreen = primaryStage.isFullScreen();
         primaryStage.setScene(gameScene); //sets the scene on the stage
+        if (fullScreen) {
+            primaryStage.setFullScreen(true);
+        } else {
+            primaryStage.setFullScreen(false);
+        }
         primaryStage.show(); //shows the primaryStage
     }
 
