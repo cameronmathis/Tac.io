@@ -24,6 +24,7 @@ public class Main extends Application {
     private Scene gameScene;
     private boolean paused;
     private Popup PopUp;
+    private int counter;
 
     //The GUI interface scene
     @Override
@@ -120,8 +121,32 @@ public class Main extends Application {
         /**
          * CHECK FOR PLAYS
          */
+        topLeft.setOnMouseClicked(event -> {
+            topLeftMarked.set(markBox(topLeft, topLeftMarked.get()));
+        });
+        topCenter.setOnMouseClicked(event -> {
+            topCenterMarked.set(markBox(topCenter, topCenterMarked.get()));
+        });
+        topRight.setOnMouseClicked(event -> {
+            topRightMarked.set(markBox(topRight, topRightMarked.get()));
+        });
+        centerLeft.setOnMouseClicked(event -> {
+            centerLeftMarked.set(markBox(centerLeft, centerLeftMarked.get()));
+        });
         center.setOnMouseClicked(event -> {
             centerMarked.set(markBox(center, centerMarked.get()));
+        });
+        centerRight.setOnMouseClicked(event -> {
+            centerRightMarked.set(markBox(centerRight, centerRightMarked.get()));
+        });
+        bottomLeft.setOnMouseClicked(event -> {
+            bottomLeftMarked.set(markBox(bottomLeft, bottomLeftMarked.get()));
+        });
+        bottomCenter.setOnMouseClicked(event -> {
+            bottomCenterMarked.set(markBox(bottomCenter, bottomCenterMarked.get()));
+        });
+        bottomRight.setOnMouseClicked(event -> {
+            bottomRightMarked.set(markBox(bottomRight, bottomRightMarked.get()));
         });
     }
 
@@ -202,8 +227,13 @@ public class Main extends Application {
      */
     private boolean markBox(Pane boxPane, boolean isMarked) {
         if (isMarked) {
-//            isAlreadyMarkedPopUp();
+            counter++;
+            if (counter >= 3) {
+                counter = 0;
+                isAlreadyMarkedPopUp();
+            }
         } else {
+            counter = 0;
             boxPane.setStyle("-fx-background-color: #ffffff");
         }
 
