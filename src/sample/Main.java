@@ -8,11 +8,11 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Main extends Application {
 
@@ -24,9 +24,18 @@ public class Main extends Application {
     private Scene gameScene;
     private boolean paused;
     private Popup PopUp;
+    private Quadrant topLeft;
+    private Quadrant topCenter;
+    private Quadrant topRight;
+    private Quadrant centerLeft;
+    private Quadrant center;
+    private Quadrant centerRight;
+    private Quadrant bottomLeft;
+    private Quadrant bottomCenter;
+    private Quadrant bottomRight;
+    private Player player1 = new Player();
+    private Player player2 = new Player();
     private int counter;
-    private Player player1;
-    private Player player2;
 
     //The GUI interface scene
     @Override
@@ -61,26 +70,13 @@ public class Main extends Application {
 //        });
 
         //initialize each quadrant
-        Pane topLeft = (Pane) gameScene.lookup("#topLeftPane");
-        Pane topCenter = (Pane) gameScene.lookup("#topCenterPane");
-        Pane topRight = (Pane) gameScene.lookup("#topRightPane");
-        Pane centerLeft = (Pane) gameScene.lookup("#centerLeftPane");
-        Pane center = (Pane) gameScene.lookup("#centerPane");
-        Pane centerRight = (Pane) gameScene.lookup("#centerRightPane");
-        Pane bottomLeft = (Pane) gameScene.lookup("#bottomLeftPane");
-        Pane bottomCenter = (Pane) gameScene.lookup("#bottomCenterPane");
-        Pane bottomRight = (Pane) gameScene.lookup("#bottomRightPane");
+        setGame();
 
-        //initialize boolean values for if quadrant has been marked
-        AtomicBoolean topLeftMarked = new AtomicBoolean(false);
-        AtomicBoolean topCenterMarked = new AtomicBoolean(false);
-        AtomicBoolean topRightMarked = new AtomicBoolean(false);
-        AtomicBoolean centerLeftMarked = new AtomicBoolean(false);
-        AtomicBoolean centerMarked = new AtomicBoolean(false);
-        AtomicBoolean centerRightMarked = new AtomicBoolean(false);
-        AtomicBoolean bottomLeftMarked = new AtomicBoolean(false);
-        AtomicBoolean bottomCenterMarked = new AtomicBoolean(false);
-        AtomicBoolean bottomRightMarked = new AtomicBoolean(false);
+        //initialize both players
+        player1.setPlayerName("player1");
+        player2.setPlayerName("player2");
+        player1.setGamesWon(0);
+        player2.setGamesWon(0);
 
         /**
          * BUTTON INITIALIZATION
@@ -123,33 +119,15 @@ public class Main extends Application {
         /**
          * CHECK FOR PLAYS
          */
-        topLeft.setOnMouseClicked(event -> {
-            topLeftMarked.set(markBox(topLeft, topLeftMarked.get()));
-        });
-        topCenter.setOnMouseClicked(event -> {
-            topCenterMarked.set(markBox(topCenter, topCenterMarked.get()));
-        });
-        topRight.setOnMouseClicked(event -> {
-            topRightMarked.set(markBox(topRight, topRightMarked.get()));
-        });
-        centerLeft.setOnMouseClicked(event -> {
-            centerLeftMarked.set(markBox(centerLeft, centerLeftMarked.get()));
-        });
-        center.setOnMouseClicked(event -> {
-            centerMarked.set(markBox(center, centerMarked.get()));
-        });
-        centerRight.setOnMouseClicked(event -> {
-            centerRightMarked.set(markBox(centerRight, centerRightMarked.get()));
-        });
-        bottomLeft.setOnMouseClicked(event -> {
-            bottomLeftMarked.set(markBox(bottomLeft, bottomLeftMarked.get()));
-        });
-        bottomCenter.setOnMouseClicked(event -> {
-            bottomCenterMarked.set(markBox(bottomCenter, bottomCenterMarked.get()));
-        });
-        bottomRight.setOnMouseClicked(event -> {
-            bottomRightMarked.set(markBox(bottomRight, bottomRightMarked.get()));
-        });
+        topLeft.getPane().setOnMouseClicked(event -> markQuadrant(topLeft, topLeft.getIsMarked()));
+        topCenter.getPane().setOnMouseClicked(event -> markQuadrant(topCenter, topCenter.getIsMarked()));
+        topRight.getPane().setOnMouseClicked(event -> markQuadrant(topRight, topRight.getIsMarked()));
+        centerLeft.getPane().setOnMouseClicked(event -> markQuadrant(centerLeft, centerLeft.getIsMarked()));
+        center.getPane().setOnMouseClicked(event -> markQuadrant(center, center.getIsMarked()));
+        centerRight.getPane().setOnMouseClicked(event -> markQuadrant(centerRight, centerRight.getIsMarked()));
+        bottomLeft.getPane().setOnMouseClicked(event -> markQuadrant(bottomLeft, bottomLeft.getIsMarked()));
+        bottomCenter.getPane().setOnMouseClicked(event -> markQuadrant(bottomCenter, bottomCenter.getIsMarked()));
+        bottomRight.getPane().setOnMouseClicked(event -> markQuadrant(bottomRight, bottomRight.getIsMarked()));
     }
 
     /**
@@ -227,7 +205,7 @@ public class Main extends Application {
      * CHECK MARKED METHOD
      * Check if square is playable and responds accordingly
      */
-    private boolean markBox(Pane boxPane, boolean isMarked) {
+    private boolean markQuadrant(Quadrant quadrant, boolean isMarked) {
         if (isMarked) {
             counter++;
             if (counter >= 3) {
@@ -236,7 +214,21 @@ public class Main extends Application {
             }
         } else {
             counter = 0;
-            boxPane.setStyle("-fx-background-color: #ffffff");
+            if (player1.getTurn()) {
+                quadrant.getPane().setStyle("-fx-background-color: #ff0000");
+                quadrant.setIsMarked(true);
+                quadrant.setPlayerPlayed(player1);
+                player1.setTurn(false);
+                player2.setTurn(true);
+                checkIfWon(quadrant, player1);
+            } else if (player2.getTurn()) {
+                quadrant.getPane().setStyle("-fx-background-color: #0000ff");
+                quadrant.setIsMarked(true);
+                quadrant.setPlayerPlayed(player2);
+                player2.setTurn(false);
+                player1.setTurn(true);
+                checkIfWon(quadrant, player2);
+            }
         }
 
         return true;
@@ -263,6 +255,275 @@ public class Main extends Application {
 
         Button dismissBtn = (Button) isAlreadyMarkedPopUpPane.lookup("#dismiss");
         dismissBtn.setOnAction(event -> resume());
+    }
+
+    /**
+     * CHECK IF WON METHOD
+     * Check if player won
+     */
+    private void checkIfWon(Quadrant quadrant, Player player) {
+        boolean won = false;
+
+        if (quadrant.getPane().getId().equals("topLeftPane")) {
+            if (topCenter.getPlayerPlayed() != null && topCenter.getPlayerPlayed().equals(player)) {
+                if (topRight.getPlayerPlayed() != null && topRight.getPlayerPlayed().equals(player)) {
+                    won = true;
+                } else {
+                    return;
+                }
+            } else if (centerLeft.getPlayerPlayed() != null && centerLeft.getPlayerPlayed().equals(player)) {
+                if (bottomLeft.getPlayerPlayed() != null && bottomLeft.getPlayerPlayed().equals(player)) {
+                    won = true;
+                } else {
+                    return;
+                }
+            } else if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player)) {
+                if (bottomRight.getPlayerPlayed() != null && bottomRight.getPlayerPlayed().equals(player)) {
+                    won = true;
+                } else {
+                    return;
+                }
+            } else {
+                return;
+            }
+        } else if (quadrant.getPane().getId().equals("topCenterPane")) {
+            if (topLeft.getPlayerPlayed() != null && topLeft.getPlayerPlayed().equals(player)) {
+                if (topRight.getPlayerPlayed() != null && topRight.getPlayerPlayed().equals(player)) {
+                    won = true;
+                } else return;
+            } else if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player)) {
+                if (bottomCenter.getPlayerPlayed() != null && bottomCenter.getPlayerPlayed().equals(player)) {
+                    won = true;
+                } else {
+                    return;
+                }
+            } else {
+                return;
+            }
+        } else if (quadrant.getPane().getId().equals("topRightPane")) {
+            if (topCenter.getPlayerPlayed() != null && topCenter.getPlayerPlayed().equals(player)) {
+                if (topLeft.getPlayerPlayed() != null && topLeft.getPlayerPlayed().equals(player)) {
+                    won = true;
+                } else {
+                    return;
+                }
+            } else if (centerRight.getPlayerPlayed() != null && centerRight.getPlayerPlayed().equals(player)) {
+                if (bottomRight.getPlayerPlayed() != null && bottomRight.getPlayerPlayed().equals(player)) {
+                    won = true;
+                } else {
+                    return;
+                }
+            } else if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player)) {
+                if (bottomLeft.getPlayerPlayed() != null && bottomLeft.getPlayerPlayed().equals(player)) {
+                    won = true;
+                } else {
+                    return;
+                }
+            } else {
+                return;
+            }
+        } else if (quadrant.getPane().getId().equals("centerLeftPane")) {
+            if (topLeft.getPlayerPlayed() != null && topLeft.getPlayerPlayed().equals(player)) {
+                if (bottomLeft.getPlayerPlayed() != null && bottomLeft.getPlayerPlayed().equals(player)) {
+                    won = true;
+                } else return;
+            } else if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player)) {
+                if (centerRight.getPlayerPlayed() != null && centerRight.getPlayerPlayed().equals(player)) {
+                    won = true;
+                } else {
+                    return;
+                }
+            } else {
+                return;
+            }
+        } else if (quadrant.getPane().getId().equals("centerPane")) {
+            if (topLeft.getPlayerPlayed() != null && topLeft.getPlayerPlayed().equals(player)) {
+                if (bottomRight.getPlayerPlayed() != null && bottomRight.getPlayerPlayed().equals(player)) {
+                    won = true;
+                } else return;
+            } else if (topRight.getPlayerPlayed() != null && topRight.getPlayerPlayed().equals(player)) {
+                if (bottomLeft.getPlayerPlayed() != null && bottomLeft.getPlayerPlayed().equals(player)) {
+                    won = true;
+                } else {
+                    return;
+                }
+            } else if (topCenter.getPlayerPlayed() != null && topCenter.getPlayerPlayed().equals(player)) {
+                if (bottomCenter.getPlayerPlayed() != null && bottomCenter.getPlayerPlayed().equals(player)) {
+                    won = true;
+                } else {
+                    return;
+                }
+            } else if (centerLeft.getPlayerPlayed() != null && centerLeft.getPlayerPlayed().equals(player)) {
+                if (centerRight.getPlayerPlayed() != null && centerRight.getPlayerPlayed().equals(player)) {
+                    won = true;
+                } else {
+                    return;
+                }
+            } else {
+                return;
+            }
+        } else if (quadrant.getPane().getId().equals("centerRightPane")) {
+            if (topRight.getPlayerPlayed() != null && topRight.getPlayerPlayed().equals(player)) {
+                if (bottomRight.getPlayerPlayed() != null && bottomRight.getPlayerPlayed().equals(player)) {
+                    won = true;
+                } else return;
+            } else if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player)) {
+                if (centerLeft.getPlayerPlayed() != null && centerLeft.getPlayerPlayed().equals(player)) {
+                    won = true;
+                } else {
+                    return;
+                }
+            } else {
+                return;
+            }
+        } else if (quadrant.getPane().getId().equals("bottomLeftPane")) {
+            if (bottomCenter.getPlayerPlayed() != null && bottomCenter.getPlayerPlayed().equals(player)) {
+                if (bottomRight.getPlayerPlayed() != null && bottomRight.getPlayerPlayed().equals(player)) {
+                    won = true;
+                } else {
+                    return;
+                }
+            } else if (centerLeft.getPlayerPlayed() != null && centerLeft.getPlayerPlayed().equals(player)) {
+                if (topLeft.getPlayerPlayed() != null && topLeft.getPlayerPlayed().equals(player)) {
+                    won = true;
+                } else {
+                    return;
+                }
+            } else if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player)) {
+                if (topRight.getPlayerPlayed() != null && topRight.getPlayerPlayed().equals(player)) {
+                    won = true;
+                } else {
+                    return;
+                }
+            } else {
+                return;
+            }
+        } else if (quadrant.getPane().getId().equals("bottomCenterPane")) {
+            if (bottomLeft.getPlayerPlayed() != null && bottomLeft.getPlayerPlayed().equals(player)) {
+                if (bottomRight.getPlayerPlayed() != null && bottomRight.getPlayerPlayed().equals(player)) {
+                    won = true;
+                } else return;
+            } else if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player)) {
+                if (topCenter.getPlayerPlayed() != null && topCenter.getPlayerPlayed().equals(player)) {
+                    won = true;
+                } else {
+                    return;
+                }
+            } else {
+                return;
+            }
+        } else if (quadrant.getPane().getId().equals("bottomRightPane")) {
+            if (bottomCenter.getPlayerPlayed() != null && bottomCenter.getPlayerPlayed().equals(player)) {
+                if (bottomLeft.getPlayerPlayed() != null && bottomLeft.getPlayerPlayed().equals(player)) {
+                    won = true;
+                } else {
+                    return;
+                }
+            } else if (centerRight.getPlayerPlayed() != null && centerRight.getPlayerPlayed().equals(player)) {
+                if (topRight.getPlayerPlayed() != null && topRight.getPlayerPlayed().equals(player)) {
+                    won = true;
+                } else {
+                    return;
+                }
+            } else if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player)) {
+                if (topLeft.getPlayerPlayed() != null && topLeft.getPlayerPlayed().equals(player)) {
+                    won = true;
+                } else {
+                    return;
+                }
+            } else {
+                return;
+            }
+        }
+        if (won) {
+            player.setGamesWon(player.getGamesWon() + 1);
+            gameOverPopUp(player);
+        }
+    }
+
+    /**
+     * Paused POPUP
+     * PopUp for when the game is paused
+     */
+    private void gameOverPopUp(Player player) {
+        PopUp = new Popup(); //creates new popup
+
+        TitledPane gameOverPopUpPane = null; //calls popup menu created in 'gameOverPopUp.fxml' file
+
+        try {
+            gameOverPopUpPane = FXMLLoader.load(getClass().getResource("gameOverPopUp.fxml"));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        PopUp.getContent().add(gameOverPopUpPane); //adds the popup (child) created in fxml file to the popup (parent) created
+
+        Text text = (Text) gameOverPopUpPane.lookup("#gameOverMessage");
+//        text.setText("Congratulations " + player.getPlayerName() + "! You won!");
+
+        //show popup on primaryStage
+        PopUp.show(primaryStage);
+
+        Button playAgainBtn = (Button) gameOverPopUpPane.lookup("#playAgain");
+        playAgainBtn.setOnAction(event -> {
+            setGame();
+            resume();
+        });
+
+        Button exitBtn = (Button) gameOverPopUpPane.lookup("#exit");
+        exitBtn.setOnAction(event -> {
+            try {
+                System.exit(0);
+                PopUp.hide();
+            } catch (Exception ex) {
+                System.out.println(ex.getMessage());
+            }
+        });
+    }
+
+    /**
+     * SET GAME METHOD
+     * Sets the board for a new game
+     */
+    private void setGame() {
+        player1.setTurn(true);
+        player2.setTurn(false);
+
+        topLeft = new Quadrant();
+        topLeft.setPane((Pane) gameScene.lookup("#topLeftPane"));
+        topLeft.setIsMarked(false);
+        topLeft.getPane().setStyle("-fx-background-color: #404040");
+        topCenter = new Quadrant();
+        topCenter.setPane((Pane) gameScene.lookup("#topCenterPane"));
+        topCenter.setIsMarked(false);
+        topCenter.getPane().setStyle("-fx-background-color: #404040");
+        topRight = new Quadrant();
+        topRight.setPane((Pane) gameScene.lookup("#topRightPane"));
+        topRight.setIsMarked(false);
+        topRight.getPane().setStyle("-fx-background-color: #404040");
+        centerLeft = new Quadrant();
+        centerLeft.setPane((Pane) gameScene.lookup("#centerLeftPane"));
+        centerLeft.setIsMarked(false);
+        centerLeft.getPane().setStyle("-fx-background-color: #404040");
+        center = new Quadrant();
+        center.setPane((Pane) gameScene.lookup("#centerPane"));
+        center.setIsMarked(false);
+        center.getPane().setStyle("-fx-background-color: #404040");
+        centerRight = new Quadrant();
+        centerRight.setPane((Pane) gameScene.lookup("#centerRightPane"));
+        centerRight.setIsMarked(false);
+        centerRight.getPane().setStyle("-fx-background-color: #404040");
+        bottomLeft = new Quadrant();
+        bottomLeft.setPane((Pane) gameScene.lookup("#bottomLeftPane"));
+        bottomLeft.setIsMarked(false);
+        bottomLeft.getPane().setStyle("-fx-background-color: #404040");
+        bottomCenter = new Quadrant();
+        bottomCenter.setPane((Pane) gameScene.lookup("#bottomCenterPane"));
+        bottomCenter.setIsMarked(false);
+        bottomCenter.getPane().setStyle("-fx-background-color: #404040");
+        bottomRight = new Quadrant();
+        bottomRight.setPane((Pane) gameScene.lookup("#bottomRightPane"));
+        bottomRight.setIsMarked(false);
+        bottomRight.getPane().setStyle("-fx-background-color: #404040");
     }
 
     /**
