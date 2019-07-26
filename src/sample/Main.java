@@ -24,7 +24,6 @@ public class Main extends Application {
     private Scene gameScene;
     private boolean paused;
     private Popup PopUp;
-    private boolean markedError;
 
     //The GUI interface scene
     @Override
@@ -196,7 +195,6 @@ public class Main extends Application {
      */
     private boolean markBox(Pane boxPane, boolean isMarked) {
         if (isMarked) {
-            markedError = true;
 //            isAlreadyMarkedPopUp();
         } else {
             boxPane.setStyle("-fx-background-color: #ffffff");
