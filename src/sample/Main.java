@@ -328,8 +328,9 @@ public class Main extends Application {
                 quadrant.setPlayerPlayed(player1);
                 player1.setTurn(false);
                 player2.setTurn(true);
-                checkIfWon(quadrant, player1);
-                checkIfTie();
+                if (!checkIfWon(quadrant,player1)) {
+                    checkIfTie();
+                }
                 if (numberOfPlayers == 1 && player2.getTurn()) {
                     getQuadrantToMark(quadrant);
                 }
@@ -374,7 +375,7 @@ public class Main extends Application {
      * CHECK IF WON METHOD
      * Check if player won
      */
-    private void checkIfWon(Quadrant quadrant, Player player) {
+    private boolean checkIfWon(Quadrant quadrant, Player player) {
         boolean won = false;
 
         if (quadrant.getPane().getId().equals("topLeftPane") && quadrant.getPlayerPlayed().equals(player)) {
@@ -382,182 +383,183 @@ public class Main extends Application {
                 if (topRight.getPlayerPlayed() != null && topRight.getPlayerPlayed().equals(player)) {
                     won = true;
                 } else {
-                    return;
+                    return false;
                 }
             } else if (centerLeft.getPlayerPlayed() != null && centerLeft.getPlayerPlayed().equals(player)) {
                 if (bottomLeft.getPlayerPlayed() != null && bottomLeft.getPlayerPlayed().equals(player)) {
                     won = true;
                 } else {
-                    return;
+                    return false;
                 }
             } else if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player)) {
                 if (bottomRight.getPlayerPlayed() != null && bottomRight.getPlayerPlayed().equals(player)) {
                     won = true;
                 } else {
-                    return;
+                    return false;
                 }
             } else {
-                return;
+                return false;
             }
         } else if (quadrant.getPane().getId().equals("topCenterPane") && quadrant.getPlayerPlayed().equals(player)) {
             if (topLeft.getPlayerPlayed() != null && topLeft.getPlayerPlayed().equals(player)) {
                 if (topRight.getPlayerPlayed() != null && topRight.getPlayerPlayed().equals(player)) {
                     won = true;
                 } else {
-                    return;
+                    return false;
                 }
             } else if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player)) {
                 if (bottomCenter.getPlayerPlayed() != null && bottomCenter.getPlayerPlayed().equals(player)) {
                     won = true;
                 } else {
-                    return;
+                    return false;
                 }
             } else {
-                return;
+                return false;
             }
         } else if (quadrant.getPane().getId().equals("topRightPane") && quadrant.getPlayerPlayed().equals(player)) {
             if (topCenter.getPlayerPlayed() != null && topCenter.getPlayerPlayed().equals(player)) {
                 if (topLeft.getPlayerPlayed() != null && topLeft.getPlayerPlayed().equals(player)) {
                     won = true;
                 } else {
-                    return;
+                    return false;
                 }
             } else if (centerRight.getPlayerPlayed() != null && centerRight.getPlayerPlayed().equals(player)) {
                 if (bottomRight.getPlayerPlayed() != null && bottomRight.getPlayerPlayed().equals(player)) {
                     won = true;
                 } else {
-                    return;
+                    return false;
                 }
             } else if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player)) {
                 if (bottomLeft.getPlayerPlayed() != null && bottomLeft.getPlayerPlayed().equals(player)) {
                     won = true;
                 } else {
-                    return;
+                    return false;
                 }
             } else {
-                return;
+                return false;
             }
         } else if (quadrant.getPane().getId().equals("centerLeftPane") && quadrant.getPlayerPlayed().equals(player)) {
             if (topLeft.getPlayerPlayed() != null && topLeft.getPlayerPlayed().equals(player)) {
                 if (bottomLeft.getPlayerPlayed() != null && bottomLeft.getPlayerPlayed().equals(player)) {
                     won = true;
-                } else return;
+                } else return false;
             } else if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player)) {
                 if (centerRight.getPlayerPlayed() != null && centerRight.getPlayerPlayed().equals(player)) {
                     won = true;
                 } else {
-                    return;
+                    return false;
                 }
             } else {
-                return;
+                return false;
             }
         } else if (quadrant.getPane().getId().equals("centerPane") && quadrant.getPlayerPlayed().equals(player)) {
             if (topLeft.getPlayerPlayed() != null && topLeft.getPlayerPlayed().equals(player)) {
                 if (bottomRight.getPlayerPlayed() != null && bottomRight.getPlayerPlayed().equals(player)) {
                     won = true;
-                } else return;
+                } else return false;
             } else if (topRight.getPlayerPlayed() != null && topRight.getPlayerPlayed().equals(player)) {
                 if (bottomLeft.getPlayerPlayed() != null && bottomLeft.getPlayerPlayed().equals(player)) {
                     won = true;
                 } else {
-                    return;
+                    return false;
                 }
             } else if (topCenter.getPlayerPlayed() != null && topCenter.getPlayerPlayed().equals(player)) {
                 if (bottomCenter.getPlayerPlayed() != null && bottomCenter.getPlayerPlayed().equals(player)) {
                     won = true;
                 } else {
-                    return;
+                    return false;
                 }
             } else if (centerLeft.getPlayerPlayed() != null && centerLeft.getPlayerPlayed().equals(player)) {
                 if (centerRight.getPlayerPlayed() != null && centerRight.getPlayerPlayed().equals(player)) {
                     won = true;
                 } else {
-                    return;
+                    return false;
                 }
             } else {
-                return;
+                return false;
             }
         } else if (quadrant.getPane().getId().equals("centerRightPane") && quadrant.getPlayerPlayed().equals(player)) {
             if (topRight.getPlayerPlayed() != null && topRight.getPlayerPlayed().equals(player)) {
                 if (bottomRight.getPlayerPlayed() != null && bottomRight.getPlayerPlayed().equals(player)) {
                     won = true;
                 } else {
-                    return;
+                    return false;
                 }
             } else if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player)) {
                 if (centerLeft.getPlayerPlayed() != null && centerLeft.getPlayerPlayed().equals(player)) {
                     won = true;
                 } else {
-                    return;
+                    return false;
                 }
             } else {
-                return;
+                return false;
             }
         } else if (quadrant.getPane().getId().equals("bottomLeftPane") && quadrant.getPlayerPlayed().equals(player)) {
             if (bottomCenter.getPlayerPlayed() != null && bottomCenter.getPlayerPlayed().equals(player)) {
                 if (bottomRight.getPlayerPlayed() != null && bottomRight.getPlayerPlayed().equals(player)) {
                     won = true;
                 } else {
-                    return;
+                    return false;
                 }
             } else if (centerLeft.getPlayerPlayed() != null && centerLeft.getPlayerPlayed().equals(player)) {
                 if (topLeft.getPlayerPlayed() != null && topLeft.getPlayerPlayed().equals(player)) {
                     won = true;
                 } else {
-                    return;
+                    return false;
                 }
             } else if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player)) {
                 if (topRight.getPlayerPlayed() != null && topRight.getPlayerPlayed().equals(player)) {
                     won = true;
                 } else {
-                    return;
+                    return false;
                 }
             } else {
-                return;
+                return false;
             }
         } else if (quadrant.getPane().getId().equals("bottomCenterPane") && quadrant.getPlayerPlayed().equals(player)) {
             if (bottomLeft.getPlayerPlayed() != null && bottomLeft.getPlayerPlayed().equals(player)) {
                 if (bottomRight.getPlayerPlayed() != null && bottomRight.getPlayerPlayed().equals(player)) {
                     won = true;
                 } else {
-                    return;
+                    return false;
                 }
             } else if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player)) {
                 if (topCenter.getPlayerPlayed() != null && topCenter.getPlayerPlayed().equals(player)) {
                     won = true;
                 } else {
-                    return;
+                    return false;
                 }
             } else {
-                return;
+                return false;
             }
         } else if (quadrant.getPane().getId().equals("bottomRightPane") && quadrant.getPlayerPlayed().equals(player)) {
             if (bottomCenter.getPlayerPlayed() != null && bottomCenter.getPlayerPlayed().equals(player)) {
                 if (bottomLeft.getPlayerPlayed() != null && bottomLeft.getPlayerPlayed().equals(player)) {
                     won = true;
                 } else {
-                    return;
+                    return false;
                 }
             } else if (centerRight.getPlayerPlayed() != null && centerRight.getPlayerPlayed().equals(player)) {
                 if (topRight.getPlayerPlayed() != null && topRight.getPlayerPlayed().equals(player)) {
                     won = true;
                 } else {
-                    return;
+                    return false;
                 }
             } else if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player)) {
                 if (topLeft.getPlayerPlayed() != null && topLeft.getPlayerPlayed().equals(player)) {
                     won = true;
                 } else {
-                    return;
+                    return false;
                 }
             } else {
-                return;
+                return false;
             }
         }
         if (won) {
             player.setGamesWon(player.getGamesWon() + 1);
             gameOverPopUp(player);
         }
+        return won;
     }
 
     /**
