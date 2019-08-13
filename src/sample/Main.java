@@ -26,7 +26,9 @@ public class Main extends Application {
     private AnchorPane gamePane;
     private Scene gameScene;
     private boolean paused;
+    private boolean enterNamePopUpShown;
     private Popup PopUp;
+    private Button startBtn;
     private Button pauseBtn;
     private Button undoBtn;
     private Quadrant topLeft;
@@ -40,7 +42,7 @@ public class Main extends Application {
     private Quadrant bottomRight;
     private Player player1 = new Player();
     private Player player2 = new Player();
-    private int numberOfPlayers = 0;
+    private int numberOfPlayers;
     private boolean ableToUndo = false;
     private Quadrant currentQuadrant;
     private Quadrant previousQuadrant;
@@ -69,9 +71,6 @@ public class Main extends Application {
         primaryStage.show(); //shows the primaryStage
         numberOfPlayersPopUp(); //ask for number of players
 
-        //initialize each quadrant
-        setGame();
-
         //initialize both player games one
         player1.setGamesWon(0);
         player2.setGamesWon(0);
@@ -80,9 +79,13 @@ public class Main extends Application {
          * BUTTON INITIALIZATION
          * Initialize all the buttons
          */
-        Button startBtn = (Button) openingScene.lookup("#start");
+        startBtn = (Button) openingScene.lookup("#start");
+        startBtn.setDisable(true);
         pauseBtn = (Button) gameScene.lookup("#pause");
         undoBtn = (Button) gameScene.lookup("#undo");
+
+        //initialize each quadrant
+        setGame();
 
         /**
          * SHORTCUT KEYS
@@ -92,7 +95,7 @@ public class Main extends Application {
         openingScene.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER && PopUp == null) {
                 start();
-            } else if (event.getCode() == KeyCode.ENTER && PopUp != null) {
+            } else if (event.getCode() == KeyCode.ENTER && enterNamePopUpShown) {
                 if (numberOfPlayers == 1) {
                     if (enterOneNamePopUpPane.lookup("#player1Name") != null) {
                         TextField name1 = (TextField) enterOneNamePopUpPane.lookup("#player1Name");
@@ -115,6 +118,8 @@ public class Main extends Application {
                     }
                 }
                 resume();
+                enterNamePopUpShown = false;
+                startBtn.setDisable(false);
                 pauseBtn.setDisable(false);
                 pauseBtn.setDisable(false);
             }
@@ -201,6 +206,8 @@ public class Main extends Application {
      * PopUp to ask for one player name
      */
     private void enterOneNamePopUp() {
+        enterNamePopUpShown = true;
+
         PopUp = new Popup(); //creates new popup
 
         enterOneNamePopUpPane = null; //calls popup menu created in 'enterOneNamePopUp.fxml' file
@@ -224,6 +231,8 @@ public class Main extends Application {
                 player1.setPlayerName("player1");
             }
             resume();
+            enterNamePopUpShown = false;
+            startBtn.setDisable(false);
         });
     }
 
@@ -232,6 +241,7 @@ public class Main extends Application {
      * PopUp to ask for both player names
      */
     private void enterTwoNamesPopUp() {
+        enterNamePopUpShown = true;
         PopUp = new Popup(); //creates new popup
 
         enterTwoNamesPopUpPane = null; //calls popup menu created in 'enterTwoNamesPopUp.fxml' file
@@ -261,6 +271,8 @@ public class Main extends Application {
                 player2.setPlayerName("player2");
             }
             resume();
+            enterNamePopUpShown = false;
+            startBtn.setDisable(false);
         });
     }
 
@@ -269,13 +281,8 @@ public class Main extends Application {
      * Starts the game
      */
     private void start() {
-        boolean fullScreen = primaryStage.isFullScreen();
+        setGame();
         primaryStage.setScene(gameScene); //sets the scene on the stage
-        if (fullScreen) {
-            primaryStage.setFullScreen(true);
-        } else {
-            primaryStage.setFullScreen(false);
-        }
         primaryStage.show(); //shows the primaryStage
     }
 
@@ -376,12 +383,11 @@ public class Main extends Application {
 
         Button exitBtn = (Button) pausedPupUpPane.lookup("#exit");
         exitBtn.setOnAction(event -> {
-            try {
-                System.exit(0);
-                PopUp.hide();
-            } catch (Exception ex) {
-                System.out.println(ex.getMessage());
-            }
+            startBtn.setDisable(true);
+            primaryStage.setScene(openingScene); //sets the scene on the stage
+            primaryStage.show(); //shows the primaryStage
+            resume();
+            numberOfPlayersPopUp();
         });
     }
 
@@ -707,12 +713,12 @@ public class Main extends Application {
             }
         }
         if (won) {
+            gameOver = true;
             pauseBtn.setDisable(true);
             undoBtn.setDisable(true);
             player.setGamesWon(player.getGamesWon() + 1);
             gameOverPopUp(player);
         }
-        gameOver = won;
         return won;
     }
 
@@ -729,7 +735,6 @@ public class Main extends Application {
             tiePopUp();
             gameOver = true;
         }
-        gameOver = false;
     }
 
     /**
@@ -1992,8 +1997,8 @@ public class Main extends Application {
             resume();
         });
 
-        Button exitBtn = (Button) gameOverPopUpPane.lookup("#exit");
-        exitBtn.setOnAction(event -> {
+        Button quitBtn = (Button) gameOverPopUpPane.lookup("#quit");
+        quitBtn.setOnAction(event -> {
             try {
                 System.exit(0);
                 PopUp.hide();
@@ -2030,8 +2035,8 @@ public class Main extends Application {
             resume();
         });
 
-        Button exitBtn = (Button) tiePopUpPane.lookup("#exit");
-        exitBtn.setOnAction(event -> {
+        Button quitBtn = (Button) tiePopUpPane.lookup("#quit");
+        quitBtn.setOnAction(event -> {
             try {
                 System.exit(0);
                 PopUp.hide();
@@ -2049,42 +2054,38 @@ public class Main extends Application {
         player1.setTurn(true);
         player2.setTurn(false);
 
+        pauseBtn.setDisable(false);
+        undoBtn.setDisable(false);
+
         topLeft = new Quadrant();
         topLeft.setPane((Pane) gameScene.lookup("#topLeftPane"));
         topLeft.setIsMarked(false);
-        topLeft.getPane().setStyle("-fx-background-color: #404040");
         topCenter = new Quadrant();
         topCenter.setPane((Pane) gameScene.lookup("#topCenterPane"));
         topCenter.setIsMarked(false);
-        topCenter.getPane().setStyle("-fx-background-color: #404040");
         topRight = new Quadrant();
         topRight.setPane((Pane) gameScene.lookup("#topRightPane"));
         topRight.setIsMarked(false);
-        topRight.getPane().setStyle("-fx-background-color: #404040");
         centerLeft = new Quadrant();
         centerLeft.setPane((Pane) gameScene.lookup("#centerLeftPane"));
         centerLeft.setIsMarked(false);
-        centerLeft.getPane().setStyle("-fx-background-color: #404040");
         center = new Quadrant();
         center.setPane((Pane) gameScene.lookup("#centerPane"));
         center.setIsMarked(false);
-        center.getPane().setStyle("-fx-background-color: #404040");
         centerRight = new Quadrant();
         centerRight.setPane((Pane) gameScene.lookup("#centerRightPane"));
         centerRight.setIsMarked(false);
-        centerRight.getPane().setStyle("-fx-background-color: #404040");
         bottomLeft = new Quadrant();
         bottomLeft.setPane((Pane) gameScene.lookup("#bottomLeftPane"));
         bottomLeft.setIsMarked(false);
-        bottomLeft.getPane().setStyle("-fx-background-color: #404040");
         bottomCenter = new Quadrant();
         bottomCenter.setPane((Pane) gameScene.lookup("#bottomCenterPane"));
         bottomCenter.setIsMarked(false);
-        bottomCenter.getPane().setStyle("-fx-background-color: #404040");
         bottomRight = new Quadrant();
         bottomRight.setPane((Pane) gameScene.lookup("#bottomRightPane"));
         bottomRight.setIsMarked(false);
-        bottomRight.getPane().setStyle("-fx-background-color: #404040");
+
+        gameOver = false;
     }
 
     /**
