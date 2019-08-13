@@ -27,7 +27,7 @@ public class Main extends Application {
     private AnchorPane gamePane;
     private Scene gameScene;
     private boolean paused;
-    private boolean enterNamePopUpShown;
+    private boolean enterNamePopUpShown = false;
     private Popup PopUp;
     private Button startBtn;
     private Button pauseBtn;
@@ -158,6 +158,28 @@ public class Main extends Application {
         /**
          * CHECK FOR PLAYS
          */
+        gameScene.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.NUMPAD7 && !paused && PopUp == null) {
+                markQuadrant(topLeft, topLeft.getIsMarked());
+            } else if (event.getCode() == KeyCode.NUMPAD8 && !paused && PopUp == null) {
+                markQuadrant(topCenter, topCenter.getIsMarked());
+            } else if (event.getCode() == KeyCode.NUMPAD9 && !paused && PopUp == null) {
+                markQuadrant(topRight, topRight.getIsMarked());
+            } else if (event.getCode() == KeyCode.NUMPAD4 && !paused && PopUp == null) {
+                markQuadrant(centerLeft, centerLeft.getIsMarked());
+            } else if (event.getCode() == KeyCode.NUMPAD5 && !paused && PopUp == null) {
+                markQuadrant(center, center.getIsMarked());
+            } else if (event.getCode() == KeyCode.NUMPAD6 && !paused && PopUp == null) {
+                markQuadrant(centerRight, centerRight.getIsMarked());
+            } else if (event.getCode() == KeyCode.NUMPAD1 && !paused && PopUp == null) {
+                markQuadrant(bottomLeft, bottomLeft.getIsMarked());
+            } else if (event.getCode() == KeyCode.NUMPAD2 && !paused && PopUp == null) {
+                markQuadrant(bottomCenter, bottomCenter.getIsMarked());
+            } else if (event.getCode() == KeyCode.NUMPAD3 && !paused && PopUp == null) {
+                markQuadrant(bottomRight, bottomRight.getIsMarked());
+            }
+        });
+
         topLeft.getPane().setOnMouseClicked(event -> markQuadrant(topLeft, topLeft.getIsMarked()));
         topCenter.getPane().setOnMouseClicked(event -> markQuadrant(topCenter, topCenter.getIsMarked()));
         topRight.getPane().setOnMouseClicked(event -> markQuadrant(topRight, topRight.getIsMarked()));
@@ -487,8 +509,10 @@ public class Main extends Application {
                 if (!checkIfWon(quadrant, player1)) {
                     checkIfTie();
                     if (!gameOver && numberOfPlayers == 1 && player2.getTurn()) {
-                        getQuadrantToMark(quadrant);
-                        checkIfTie();
+                        quadrant = getQuadrantToMark(quadrant);
+                        if (!checkIfWon(quadrant, player2)) {
+                            checkIfTie();
+                        }
                     }
                 }
             } else if (!gameOver && numberOfPlayers == 2 && player2.getTurn()) {
@@ -497,7 +521,9 @@ public class Main extends Application {
                 quadrant.setPlayerPlayed(player2);
                 player2.setTurn(false);
                 player1.setTurn(true);
-                checkIfWon(quadrant, player2);
+                if (!checkIfWon(quadrant, player2)) {
+                    checkIfTie();
+                }
             }
         }
 
@@ -536,26 +562,35 @@ public class Main extends Application {
      * Check if player won
      */
     private boolean checkIfWon(Quadrant quadrant, Player player) {
-        boolean won = false;
-
         if (quadrant.getPane().getId().equals("topLeftPane") && quadrant.getPlayerPlayed().equals(player)) {
             if (topCenter.getPlayerPlayed() != null && topCenter.getPlayerPlayed().equals(player)) {
                 if (topRight.getPlayerPlayed() != null && topRight.getPlayerPlayed().equals(player)) {
-                    won = true;
-                } else {
-                    return false;
+                    gameOver = true;
+                    pauseBtn.setDisable(true);
+                    undoBtn.setDisable(true);
+                    player.setGamesWon(player.getGamesWon() + 1);
+                    gameOverPopUp(player);
+                    return true;
                 }
-            } else if (centerLeft.getPlayerPlayed() != null && centerLeft.getPlayerPlayed().equals(player)) {
+            }
+            if (centerLeft.getPlayerPlayed() != null && centerLeft.getPlayerPlayed().equals(player)) {
                 if (bottomLeft.getPlayerPlayed() != null && bottomLeft.getPlayerPlayed().equals(player)) {
-                    won = true;
-                } else {
-                    return false;
+                    gameOver = true;
+                    pauseBtn.setDisable(true);
+                    undoBtn.setDisable(true);
+                    player.setGamesWon(player.getGamesWon() + 1);
+                    gameOverPopUp(player);
+                    return true;
                 }
-            } else if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player)) {
+            }
+            if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player)) {
                 if (bottomRight.getPlayerPlayed() != null && bottomRight.getPlayerPlayed().equals(player)) {
-                    won = true;
-                } else {
-                    return false;
+                    gameOver = true;
+                    pauseBtn.setDisable(true);
+                    undoBtn.setDisable(true);
+                    player.setGamesWon(player.getGamesWon() + 1);
+                    gameOverPopUp(player);
+                    return true;
                 }
             } else {
                 return false;
@@ -563,15 +598,21 @@ public class Main extends Application {
         } else if (quadrant.getPane().getId().equals("topCenterPane") && quadrant.getPlayerPlayed().equals(player)) {
             if (topLeft.getPlayerPlayed() != null && topLeft.getPlayerPlayed().equals(player)) {
                 if (topRight.getPlayerPlayed() != null && topRight.getPlayerPlayed().equals(player)) {
-                    won = true;
-                } else {
-                    return false;
+                    gameOver = true;
+                    pauseBtn.setDisable(true);
+                    undoBtn.setDisable(true);
+                    player.setGamesWon(player.getGamesWon() + 1);
+                    gameOverPopUp(player);
+                    return true;
                 }
-            } else if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player)) {
+            } if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player)) {
                 if (bottomCenter.getPlayerPlayed() != null && bottomCenter.getPlayerPlayed().equals(player)) {
-                    won = true;
-                } else {
-                    return false;
+                    gameOver = true;
+                    pauseBtn.setDisable(true);
+                    undoBtn.setDisable(true);
+                    player.setGamesWon(player.getGamesWon() + 1);
+                    gameOverPopUp(player);
+                    return true;
                 }
             } else {
                 return false;
@@ -579,21 +620,30 @@ public class Main extends Application {
         } else if (quadrant.getPane().getId().equals("topRightPane") && quadrant.getPlayerPlayed().equals(player)) {
             if (topCenter.getPlayerPlayed() != null && topCenter.getPlayerPlayed().equals(player)) {
                 if (topLeft.getPlayerPlayed() != null && topLeft.getPlayerPlayed().equals(player)) {
-                    won = true;
-                } else {
-                    return false;
+                    gameOver = true;
+                    pauseBtn.setDisable(true);
+                    undoBtn.setDisable(true);
+                    player.setGamesWon(player.getGamesWon() + 1);
+                    gameOverPopUp(player);
+                    return true;
                 }
-            } else if (centerRight.getPlayerPlayed() != null && centerRight.getPlayerPlayed().equals(player)) {
+            } if (centerRight.getPlayerPlayed() != null && centerRight.getPlayerPlayed().equals(player)) {
                 if (bottomRight.getPlayerPlayed() != null && bottomRight.getPlayerPlayed().equals(player)) {
-                    won = true;
-                } else {
-                    return false;
+                    gameOver = true;
+                    pauseBtn.setDisable(true);
+                    undoBtn.setDisable(true);
+                    player.setGamesWon(player.getGamesWon() + 1);
+                    gameOverPopUp(player);
+                    return true;
                 }
-            } else if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player)) {
+            } if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player)) {
                 if (bottomLeft.getPlayerPlayed() != null && bottomLeft.getPlayerPlayed().equals(player)) {
-                    won = true;
-                } else {
-                    return false;
+                    gameOver = true;
+                    pauseBtn.setDisable(true);
+                    undoBtn.setDisable(true);
+                    player.setGamesWon(player.getGamesWon() + 1);
+                    gameOverPopUp(player);
+                    return true;
                 }
             } else {
                 return false;
@@ -601,13 +651,21 @@ public class Main extends Application {
         } else if (quadrant.getPane().getId().equals("centerLeftPane") && quadrant.getPlayerPlayed().equals(player)) {
             if (topLeft.getPlayerPlayed() != null && topLeft.getPlayerPlayed().equals(player)) {
                 if (bottomLeft.getPlayerPlayed() != null && bottomLeft.getPlayerPlayed().equals(player)) {
-                    won = true;
-                } else return false;
-            } else if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player)) {
+                    gameOver = true;
+                    pauseBtn.setDisable(true);
+                    undoBtn.setDisable(true);
+                    player.setGamesWon(player.getGamesWon() + 1);
+                    gameOverPopUp(player);
+                    return true;
+                }
+            } if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player)) {
                 if (centerRight.getPlayerPlayed() != null && centerRight.getPlayerPlayed().equals(player)) {
-                    won = true;
-                } else {
-                    return false;
+                    gameOver = true;
+                    pauseBtn.setDisable(true);
+                    undoBtn.setDisable(true);
+                    player.setGamesWon(player.getGamesWon() + 1);
+                    gameOverPopUp(player);
+                    return true;
                 }
             } else {
                 return false;
@@ -615,25 +673,39 @@ public class Main extends Application {
         } else if (quadrant.getPane().getId().equals("centerPane") && quadrant.getPlayerPlayed().equals(player)) {
             if (topLeft.getPlayerPlayed() != null && topLeft.getPlayerPlayed().equals(player)) {
                 if (bottomRight.getPlayerPlayed() != null && bottomRight.getPlayerPlayed().equals(player)) {
-                    won = true;
-                } else return false;
-            } else if (topRight.getPlayerPlayed() != null && topRight.getPlayerPlayed().equals(player)) {
+                    gameOver = true;
+                    pauseBtn.setDisable(true);
+                    undoBtn.setDisable(true);
+                    player.setGamesWon(player.getGamesWon() + 1);
+                    gameOverPopUp(player);
+                    return true;
+                }
+            } if (topRight.getPlayerPlayed() != null && topRight.getPlayerPlayed().equals(player)) {
                 if (bottomLeft.getPlayerPlayed() != null && bottomLeft.getPlayerPlayed().equals(player)) {
-                    won = true;
-                } else {
-                    return false;
+                    gameOver = true;
+                    pauseBtn.setDisable(true);
+                    undoBtn.setDisable(true);
+                    player.setGamesWon(player.getGamesWon() + 1);
+                    gameOverPopUp(player);
+                    return true;
                 }
-            } else if (topCenter.getPlayerPlayed() != null && topCenter.getPlayerPlayed().equals(player)) {
+            } if (topCenter.getPlayerPlayed() != null && topCenter.getPlayerPlayed().equals(player)) {
                 if (bottomCenter.getPlayerPlayed() != null && bottomCenter.getPlayerPlayed().equals(player)) {
-                    won = true;
-                } else {
-                    return false;
+                    gameOver = true;
+                    pauseBtn.setDisable(true);
+                    undoBtn.setDisable(true);
+                    player.setGamesWon(player.getGamesWon() + 1);
+                    gameOverPopUp(player);
+                    return true;
                 }
-            } else if (centerLeft.getPlayerPlayed() != null && centerLeft.getPlayerPlayed().equals(player)) {
+            } if (centerLeft.getPlayerPlayed() != null && centerLeft.getPlayerPlayed().equals(player)) {
                 if (centerRight.getPlayerPlayed() != null && centerRight.getPlayerPlayed().equals(player)) {
-                    won = true;
-                } else {
-                    return false;
+                    gameOver = true;
+                    pauseBtn.setDisable(true);
+                    undoBtn.setDisable(true);
+                    player.setGamesWon(player.getGamesWon() + 1);
+                    gameOverPopUp(player);
+                    return true;
                 }
             } else {
                 return false;
@@ -641,15 +713,21 @@ public class Main extends Application {
         } else if (quadrant.getPane().getId().equals("centerRightPane") && quadrant.getPlayerPlayed().equals(player)) {
             if (topRight.getPlayerPlayed() != null && topRight.getPlayerPlayed().equals(player)) {
                 if (bottomRight.getPlayerPlayed() != null && bottomRight.getPlayerPlayed().equals(player)) {
-                    won = true;
-                } else {
-                    return false;
+                    gameOver = true;
+                    pauseBtn.setDisable(true);
+                    undoBtn.setDisable(true);
+                    player.setGamesWon(player.getGamesWon() + 1);
+                    gameOverPopUp(player);
+                    return true;
                 }
-            } else if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player)) {
+            } if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player)) {
                 if (centerLeft.getPlayerPlayed() != null && centerLeft.getPlayerPlayed().equals(player)) {
-                    won = true;
-                } else {
-                    return false;
+                    gameOver = true;
+                    pauseBtn.setDisable(true);
+                    undoBtn.setDisable(true);
+                    player.setGamesWon(player.getGamesWon() + 1);
+                    gameOverPopUp(player);
+                    return true;
                 }
             } else {
                 return false;
@@ -657,21 +735,30 @@ public class Main extends Application {
         } else if (quadrant.getPane().getId().equals("bottomLeftPane") && quadrant.getPlayerPlayed().equals(player)) {
             if (bottomCenter.getPlayerPlayed() != null && bottomCenter.getPlayerPlayed().equals(player)) {
                 if (bottomRight.getPlayerPlayed() != null && bottomRight.getPlayerPlayed().equals(player)) {
-                    won = true;
-                } else {
-                    return false;
+                    gameOver = true;
+                    pauseBtn.setDisable(true);
+                    undoBtn.setDisable(true);
+                    player.setGamesWon(player.getGamesWon() + 1);
+                    gameOverPopUp(player);
+                    return true;
                 }
-            } else if (centerLeft.getPlayerPlayed() != null && centerLeft.getPlayerPlayed().equals(player)) {
+            } if (centerLeft.getPlayerPlayed() != null && centerLeft.getPlayerPlayed().equals(player)) {
                 if (topLeft.getPlayerPlayed() != null && topLeft.getPlayerPlayed().equals(player)) {
-                    won = true;
-                } else {
-                    return false;
+                    gameOver = true;
+                    pauseBtn.setDisable(true);
+                    undoBtn.setDisable(true);
+                    player.setGamesWon(player.getGamesWon() + 1);
+                    gameOverPopUp(player);
+                    return true;
                 }
-            } else if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player)) {
+            } if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player)) {
                 if (topRight.getPlayerPlayed() != null && topRight.getPlayerPlayed().equals(player)) {
-                    won = true;
-                } else {
-                    return false;
+                    gameOver = true;
+                    pauseBtn.setDisable(true);
+                    undoBtn.setDisable(true);
+                    player.setGamesWon(player.getGamesWon() + 1);
+                    gameOverPopUp(player);
+                    return true;
                 }
             } else {
                 return false;
@@ -679,15 +766,21 @@ public class Main extends Application {
         } else if (quadrant.getPane().getId().equals("bottomCenterPane") && quadrant.getPlayerPlayed().equals(player)) {
             if (bottomLeft.getPlayerPlayed() != null && bottomLeft.getPlayerPlayed().equals(player)) {
                 if (bottomRight.getPlayerPlayed() != null && bottomRight.getPlayerPlayed().equals(player)) {
-                    won = true;
-                } else {
-                    return false;
+                    gameOver = true;
+                    pauseBtn.setDisable(true);
+                    undoBtn.setDisable(true);
+                    player.setGamesWon(player.getGamesWon() + 1);
+                    gameOverPopUp(player);
+                    return true;
                 }
-            } else if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player)) {
+            } if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player)) {
                 if (topCenter.getPlayerPlayed() != null && topCenter.getPlayerPlayed().equals(player)) {
-                    won = true;
-                } else {
-                    return false;
+                    gameOver = true;
+                    pauseBtn.setDisable(true);
+                    undoBtn.setDisable(true);
+                    player.setGamesWon(player.getGamesWon() + 1);
+                    gameOverPopUp(player);
+                    return true;
                 }
             } else {
                 return false;
@@ -695,34 +788,37 @@ public class Main extends Application {
         } else if (quadrant.getPane().getId().equals("bottomRightPane") && quadrant.getPlayerPlayed().equals(player)) {
             if (bottomCenter.getPlayerPlayed() != null && bottomCenter.getPlayerPlayed().equals(player)) {
                 if (bottomLeft.getPlayerPlayed() != null && bottomLeft.getPlayerPlayed().equals(player)) {
-                    won = true;
-                } else {
-                    return false;
+                    gameOver = true;
+                    pauseBtn.setDisable(true);
+                    undoBtn.setDisable(true);
+                    player.setGamesWon(player.getGamesWon() + 1);
+                    gameOverPopUp(player);
+                    return true;
                 }
-            } else if (centerRight.getPlayerPlayed() != null && centerRight.getPlayerPlayed().equals(player)) {
+            } if (centerRight.getPlayerPlayed() != null && centerRight.getPlayerPlayed().equals(player)) {
                 if (topRight.getPlayerPlayed() != null && topRight.getPlayerPlayed().equals(player)) {
-                    won = true;
-                } else {
-                    return false;
+                    gameOver = true;
+                    pauseBtn.setDisable(true);
+                    undoBtn.setDisable(true);
+                    player.setGamesWon(player.getGamesWon() + 1);
+                    gameOverPopUp(player);
+                    return true;
                 }
-            } else if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player)) {
+            } if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player)) {
                 if (topLeft.getPlayerPlayed() != null && topLeft.getPlayerPlayed().equals(player)) {
-                    won = true;
-                } else {
-                    return false;
+                    gameOver = true;
+                    pauseBtn.setDisable(true);
+                    undoBtn.setDisable(true);
+                    player.setGamesWon(player.getGamesWon() + 1);
+                    gameOverPopUp(player);
+                    return true;
                 }
             } else {
                 return false;
             }
         }
-        if (won) {
-            gameOver = true;
-            pauseBtn.setDisable(true);
-            undoBtn.setDisable(true);
-            player.setGamesWon(player.getGamesWon() + 1);
-            gameOverPopUp(player);
-        }
-        return won;
+
+        return false;
     }
 
     /**
@@ -744,7 +840,7 @@ public class Main extends Application {
      * GET QUADRANT TO MARK METHOD
      * Find the best quadrant to mark
      */
-    private void getQuadrantToMark(Quadrant quadrant) {
+    private Quadrant getQuadrantToMark(Quadrant quadrant) {
         previousPreviousQuadrant = previousQuadrant;
         previousQuadrant = quadrant;
 
@@ -759,7 +855,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(topRight, player2);
-                    return;
+                    return topRight;
                 }
             } else if (topRight.getPlayerPlayed() != null && topRight.getPlayerPlayed().equals(player2)) {
                 if (!topCenter.getIsMarked()) {
@@ -770,7 +866,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(topCenter, player2);
-                    return;
+                    return topCenter;
                 }
             } else if (centerLeft.getPlayerPlayed() != null && centerLeft.getPlayerPlayed().equals(player2)) {
                 if (!bottomLeft.getIsMarked()) {
@@ -781,7 +877,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(bottomLeft, player2);
-                    return;
+                    return bottomLeft;
                 }
             } else if (bottomLeft.getPlayerPlayed() != null && bottomLeft.getPlayerPlayed().equals(player2)) {
                 if (!centerLeft.getIsMarked()) {
@@ -792,7 +888,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(centerLeft, player2);
-                    return;
+                    return centerLeft;
                 }
             } else if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player2)) {
                 if (!bottomRight.getIsMarked()) {
@@ -803,7 +899,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(bottomRight, player2);
-                    return;
+                    return bottomRight;
                 }
             } else if (bottomRight.getPlayerPlayed() != null && bottomRight.getPlayerPlayed().equals(player2)) {
                 if (!center.getIsMarked()) {
@@ -814,7 +910,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(center, player2);
-                    return;
+                    return center;
                 }
             }
         } else if (topCenter.getPlayerPlayed() != null && topCenter.getPlayerPlayed().equals(player2)) {
@@ -827,7 +923,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(topRight, player2);
-                    return;
+                    return topRight;
                 }
             } else if (topRight.getPlayerPlayed() != null && topRight.getPlayerPlayed().equals(player2)) {
                 if (!topLeft.getIsMarked()) {
@@ -838,7 +934,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(topLeft, player2);
-                    return;
+                    return topLeft;
                 }
             } else if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player2)) {
                 if (!bottomCenter.getIsMarked()) {
@@ -849,7 +945,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(bottomCenter, player2);
-                    return;
+                    return bottomCenter;
                 }
             } else if (bottomCenter.getPlayerPlayed() != null && bottomCenter.getPlayerPlayed().equals(player2)) {
                 if (!center.getIsMarked()) {
@@ -860,7 +956,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(center, player2);
-                    return;
+                    return center;
                 }
             }
         } else if (topRight.getPlayerPlayed() != null && topRight.getPlayerPlayed().equals(player2)) {
@@ -873,7 +969,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(topLeft, player2);
-                    return;
+                    return topLeft;
                 }
             } else if (topLeft.getPlayerPlayed() != null && topLeft.getPlayerPlayed().equals(player2)) {
                 if (!topCenter.getIsMarked()) {
@@ -884,7 +980,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(topCenter, player2);
-                    return;
+                    return topCenter;
                 }
             } else if (centerRight.getPlayerPlayed() != null && centerRight.getPlayerPlayed().equals(player2)) {
                 if (!bottomRight.getIsMarked()) {
@@ -895,7 +991,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(bottomRight, player2);
-                    return;
+                    return bottomRight;
                 }
             } else if (bottomRight.getPlayerPlayed() != null && bottomRight.getPlayerPlayed().equals(player2)) {
                 if (!centerRight.getIsMarked()) {
@@ -906,7 +1002,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(centerRight, player2);
-                    return;
+                    return centerRight;
                 }
             } else if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player2)) {
                 if (!bottomLeft.getIsMarked()) {
@@ -917,7 +1013,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(bottomLeft, player2);
-                    return;
+                    return bottomLeft;
                 }
             } else if (bottomLeft.getPlayerPlayed() != null && bottomLeft.getPlayerPlayed().equals(player2)) {
                 if (!center.getIsMarked()) {
@@ -928,7 +1024,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(center, player2);
-                    return;
+                    return center;
                 }
             }
         } else if (centerLeft.getPlayerPlayed() != null && centerLeft.getPlayerPlayed().equals(player2)) {
@@ -941,7 +1037,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(bottomLeft, player2);
-                    return;
+                    return bottomLeft;
                 }
             } else if (bottomLeft.getPlayerPlayed() != null && bottomLeft.getPlayerPlayed().equals(player2)) {
                 if (!topLeft.getIsMarked()) {
@@ -952,7 +1048,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(topLeft, player2);
-                    return;
+                    return topLeft;
                 }
             } else if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player2)) {
                 if (!centerRight.getIsMarked()) {
@@ -963,7 +1059,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(centerRight, player2);
-                    return;
+                    return centerRight;
                 }
             } else if (centerRight.getPlayerPlayed() != null && centerRight.getPlayerPlayed().equals(player2)) {
                 if (!center.getIsMarked()) {
@@ -974,7 +1070,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(center, player2);
-                    return;
+                    return center;
                 }
             }
         } else if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player2)) {
@@ -987,7 +1083,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(bottomRight, player2);
-                    return;
+                    return bottomRight;
                 }
             } else if (bottomRight.getPlayerPlayed() != null && bottomRight.getPlayerPlayed().equals(player2)) {
                 if (!topLeft.getIsMarked()) {
@@ -998,7 +1094,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(topLeft, player2);
-                    return;
+                    return topLeft;
                 }
             } else if (topRight.getPlayerPlayed() != null && topRight.getPlayerPlayed().equals(player2)) {
                 if (!bottomLeft.getIsMarked()) {
@@ -1009,7 +1105,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(bottomLeft, player2);
-                    return;
+                    return bottomLeft;
                 }
             } else if (bottomLeft.getPlayerPlayed() != null && bottomLeft.getPlayerPlayed().equals(player2)) {
                 if (!topRight.getIsMarked()) {
@@ -1020,7 +1116,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(topRight, player2);
-                    return;
+                    return topRight;
                 }
             } else if (topCenter.getPlayerPlayed() != null && topCenter.getPlayerPlayed().equals(player2)) {
                 if (!bottomCenter.getIsMarked()) {
@@ -1031,7 +1127,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(bottomCenter, player2);
-                    return;
+                    return bottomCenter;
                 }
             } else if (bottomCenter.getPlayerPlayed() != null && bottomCenter.getPlayerPlayed().equals(player2)) {
                 if (!topCenter.getIsMarked()) {
@@ -1042,7 +1138,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(topCenter, player2);
-                    return;
+                    return topCenter;
                 }
             } else if (centerLeft.getPlayerPlayed() != null && centerLeft.getPlayerPlayed().equals(player2)) {
                 if (!centerRight.getIsMarked()) {
@@ -1053,7 +1149,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(centerRight, player2);
-                    return;
+                    return centerRight;
                 }
             } else if (centerRight.getPlayerPlayed() != null && centerRight.getPlayerPlayed().equals(player2)) {
                 if (!centerLeft.getIsMarked()) {
@@ -1064,7 +1160,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(centerLeft, player2);
-                    return;
+                    return centerLeft;
                 }
             }
         } else if (centerRight.getPlayerPlayed() != null && centerRight.getPlayerPlayed().equals(player2)) {
@@ -1077,7 +1173,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(bottomRight, player2);
-                    return;
+                    return bottomRight;
                 }
             } else if (bottomRight.getPlayerPlayed() != null && bottomRight.getPlayerPlayed().equals(player2)) {
                 if (!topRight.getIsMarked()) {
@@ -1088,7 +1184,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(topRight, player2);
-                    return;
+                    return topRight;
                 }
             } else if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player2)) {
                 if (!centerLeft.getIsMarked()) {
@@ -1099,7 +1195,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(centerLeft, player2);
-                    return;
+                    return centerLeft;
                 }
             } else if (centerLeft.getPlayerPlayed() != null && centerLeft.getPlayerPlayed().equals(player2)) {
                 if (!center.getIsMarked()) {
@@ -1110,7 +1206,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(center, player2);
-                    return;
+                    return center;
                 }
             }
         } else if (bottomLeft.getPlayerPlayed() != null && bottomLeft.getPlayerPlayed().equals(player2)) {
@@ -1123,7 +1219,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(bottomRight, player2);
-                    return;
+                    return bottomRight;
                 }
             } else if (bottomRight.getPlayerPlayed() != null && bottomRight.getPlayerPlayed().equals(player2)) {
                 if (!bottomCenter.getIsMarked()) {
@@ -1134,7 +1230,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(bottomCenter, player2);
-                    return;
+                    return bottomCenter;
                 }
             } else if (centerLeft.getPlayerPlayed() != null && centerLeft.getPlayerPlayed().equals(player2)) {
                 if (!topLeft.getIsMarked()) {
@@ -1145,7 +1241,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(topLeft, player2);
-                    return;
+                    return topLeft;
                 }
             } else if (topLeft.getPlayerPlayed() != null && topLeft.getPlayerPlayed().equals(player2)) {
                 if (!centerLeft.getIsMarked()) {
@@ -1156,7 +1252,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(centerLeft, player2);
-                    return;
+                    return centerLeft;
                 }
             } else if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player2)) {
                 if (!topRight.getIsMarked()) {
@@ -1167,7 +1263,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(topRight, player2);
-                    return;
+                    return topRight;
                 }
             } else if (topRight.getPlayerPlayed() != null && topRight.getPlayerPlayed().equals(player2)) {
                 if (!center.getIsMarked()) {
@@ -1178,7 +1274,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(center, player2);
-                    return;
+                    return center;
                 }
             }
         } else if (bottomCenter.getPlayerPlayed() != null && bottomCenter.getPlayerPlayed().equals(player2)) {
@@ -1191,7 +1287,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(bottomRight, player2);
-                    return;
+                    return bottomRight;
                 }
             } else if (bottomRight.getPlayerPlayed() != null && bottomRight.getPlayerPlayed().equals(player2)) {
                 if (!bottomLeft.getIsMarked()) {
@@ -1202,7 +1298,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(bottomLeft, player2);
-                    return;
+                    return bottomLeft;
                 }
             } else if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player2)) {
                 if (!topCenter.getIsMarked()) {
@@ -1213,7 +1309,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(topCenter, player2);
-                    return;
+                    return topCenter;
                 }
             } else if (topCenter.getPlayerPlayed() != null && topCenter.getPlayerPlayed().equals(player2)) {
                 if (!center.getIsMarked()) {
@@ -1224,7 +1320,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(center, player2);
-                    return;
+                    return center;
                 }
             }
         } else if (bottomRight.getPlayerPlayed() != null && bottomRight.getPlayerPlayed().equals(player2)) {
@@ -1237,7 +1333,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(bottomLeft, player2);
-                    return;
+                    return bottomLeft;
                 }
             } else if (bottomLeft.getPlayerPlayed() != null && bottomLeft.getPlayerPlayed().equals(player2)) {
                 if (!bottomCenter.getIsMarked()) {
@@ -1248,7 +1344,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(bottomCenter, player2);
-                    return;
+                    return bottomCenter;
                 }
             } else if (centerRight.getPlayerPlayed() != null && centerRight.getPlayerPlayed().equals(player2)) {
                 if (!topRight.getIsMarked()) {
@@ -1259,7 +1355,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(topRight, player2);
-                    return;
+                    return topRight;
                 }
             } else if (topRight.getPlayerPlayed() != null && topRight.getPlayerPlayed().equals(player2)) {
                 if (!centerRight.getIsMarked()) {
@@ -1270,7 +1366,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(centerRight, player2);
-                    return;
+                    return centerRight;
                 }
             } else if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player2)) {
                 if (!topLeft.getIsMarked()) {
@@ -1281,7 +1377,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(topLeft, player2);
-                    return;
+                    return topLeft;
                 }
             } else if (topLeft.getPlayerPlayed() != null && topLeft.getPlayerPlayed().equals(player2)) {
                 if (!center.getIsMarked()) {
@@ -1292,7 +1388,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(center, player2);
-                    return;
+                    return center;
                 }
             }
         }
@@ -1308,7 +1404,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(quadrant, player2);
-                    return;
+                    return topRight;
                 }
             }
             if (topRight.getPlayerPlayed() != null && topRight.getPlayerPlayed().equals(player1)) {
@@ -1320,7 +1416,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(quadrant, player2);
-                    return;
+                    return topCenter;
                 }
             }
             if (centerLeft.getPlayerPlayed() != null && centerLeft.getPlayerPlayed().equals(player1)) {
@@ -1332,7 +1428,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(quadrant, player2);
-                    return;
+                    return bottomLeft;
                 }
             }
             if (bottomLeft.getPlayerPlayed() != null && bottomLeft.getPlayerPlayed().equals(player1)) {
@@ -1344,7 +1440,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(quadrant, player2);
-                    return;
+                    return centerLeft;
                 }
             }
             if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player1)) {
@@ -1356,7 +1452,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(quadrant, player2);
-                    return;
+                    return bottomLeft;
                 }
             }
             if (bottomRight.getPlayerPlayed() != null && bottomRight.getPlayerPlayed().equals(player1)) {
@@ -1368,7 +1464,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(quadrant, player2);
-                    return;
+                    return center;
                 }
             }
         } else if (quadrant.getPane().getId().equals("topCenterPane")) {
@@ -1381,7 +1477,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(quadrant, player2);
-                    return;
+                    return topRight;
                 }
             }
             if (topRight.getPlayerPlayed() != null && topRight.getPlayerPlayed().equals(player1)) {
@@ -1393,7 +1489,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(quadrant, player2);
-                    return;
+                    return topLeft;
                 }
             }
             if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player1)) {
@@ -1405,7 +1501,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(quadrant, player2);
-                    return;
+                    return bottomCenter;
                 }
             }
             if (bottomCenter.getPlayerPlayed() != null && bottomCenter.getPlayerPlayed().equals(player1)) {
@@ -1417,7 +1513,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(quadrant, player2);
-                    return;
+                    return center;
                 }
             }
         } else if (quadrant.getPane().getId().equals("topRightPane")) {
@@ -1430,7 +1526,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(quadrant, player2);
-                    return;
+                    return topLeft;
                 }
             }
             if (topLeft.getPlayerPlayed() != null && topLeft.getPlayerPlayed().equals(player1)) {
@@ -1442,7 +1538,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(quadrant, player2);
-                    return;
+                    return topCenter;
                 }
             }
             if (centerRight.getPlayerPlayed() != null && centerRight.getPlayerPlayed().equals(player1)) {
@@ -1454,7 +1550,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(quadrant, player2);
-                    return;
+                    return bottomRight;
                 }
             }
             if (bottomRight.getPlayerPlayed() != null && bottomRight.getPlayerPlayed().equals(player1)) {
@@ -1466,7 +1562,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(quadrant, player2);
-                    return;
+                    return centerRight;
                 }
             }
             if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player1)) {
@@ -1478,7 +1574,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(quadrant, player2);
-                    return;
+                    return bottomLeft;
                 }
             }
             if (bottomLeft.getPlayerPlayed() != null && bottomLeft.getPlayerPlayed().equals(player1)) {
@@ -1490,7 +1586,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(quadrant, player2);
-                    return;
+                    return center;
                 }
             }
         } else if (quadrant.getPane().getId().equals("centerLeftPane")) {
@@ -1503,7 +1599,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(quadrant, player2);
-                    return;
+                    return bottomLeft;
                 }
             }
             if (bottomLeft.getPlayerPlayed() != null && bottomLeft.getPlayerPlayed().equals(player1)) {
@@ -1515,7 +1611,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(quadrant, player2);
-                    return;
+                    return topLeft;
                 }
             }
             if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player1)) {
@@ -1527,7 +1623,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(quadrant, player2);
-                    return;
+                    return centerRight;
                 }
             }
             if (centerRight.getPlayerPlayed() != null && centerRight.getPlayerPlayed().equals(player1)) {
@@ -1539,7 +1635,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(quadrant, player2);
-                    return;
+                    return center;
                 }
             }
         } else if (quadrant.getPane().getId().equals("centerPane")) {
@@ -1552,7 +1648,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(quadrant, player2);
-                    return;
+                    return bottomRight;
                 }
             }
             if (bottomRight.getPlayerPlayed() != null && bottomRight.getPlayerPlayed().equals(player1)) {
@@ -1564,7 +1660,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(quadrant, player2);
-                    return;
+                    return topLeft;
                 }
             }
             if (topRight.getPlayerPlayed() != null && topRight.getPlayerPlayed().equals(player1)) {
@@ -1576,7 +1672,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(quadrant, player2);
-                    return;
+                    return bottomLeft;
                 }
             }
             if (bottomLeft.getPlayerPlayed() != null && bottomLeft.getPlayerPlayed().equals(player1)) {
@@ -1588,7 +1684,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(quadrant, player2);
-                    return;
+                    return topRight;
                 }
             }
             if (topCenter.getPlayerPlayed() != null && topCenter.getPlayerPlayed().equals(player1)) {
@@ -1600,7 +1696,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(quadrant, player2);
-                    return;
+                    return bottomCenter;
                 }
             }
             if (bottomCenter.getPlayerPlayed() != null && bottomCenter.getPlayerPlayed().equals(player1)) {
@@ -1612,7 +1708,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(quadrant, player2);
-                    return;
+                    return topCenter;
                 }
             }
             if (centerLeft.getPlayerPlayed() != null && centerLeft.getPlayerPlayed().equals(player1)) {
@@ -1624,7 +1720,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(quadrant, player2);
-                    return;
+                    return centerRight;
                 }
             }
             if (centerRight.getPlayerPlayed() != null && centerRight.getPlayerPlayed().equals(player1)) {
@@ -1636,7 +1732,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(quadrant, player2);
-                    return;
+                    return centerLeft;
                 }
             }
         } else if (quadrant.getPane().getId().equals("centerRightPane")) {
@@ -1649,7 +1745,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(quadrant, player2);
-                    return;
+                    return bottomRight;
                 }
             }
             if (bottomRight.getPlayerPlayed() != null && bottomRight.getPlayerPlayed().equals(player1)) {
@@ -1661,7 +1757,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(quadrant, player2);
-                    return;
+                    return topRight;
                 }
             }
             if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player1)) {
@@ -1673,7 +1769,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(quadrant, player2);
-                    return;
+                    return centerLeft;
                 }
             }
             if (centerLeft.getPlayerPlayed() != null && centerLeft.getPlayerPlayed().equals(player1)) {
@@ -1685,7 +1781,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(quadrant, player2);
-                    return;
+                    return center;
                 }
             }
         } else if (quadrant.getPane().getId().equals("bottomLeftPane")) {
@@ -1698,7 +1794,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(quadrant, player2);
-                    return;
+                    return bottomRight;
                 }
             }
             if (bottomRight.getPlayerPlayed() != null && bottomRight.getPlayerPlayed().equals(player1)) {
@@ -1710,7 +1806,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(quadrant, player2);
-                    return;
+                    return bottomCenter;
                 }
             }
             if (centerLeft.getPlayerPlayed() != null && centerLeft.getPlayerPlayed().equals(player1)) {
@@ -1722,7 +1818,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(quadrant, player2);
-                    return;
+                    return topLeft;
                 }
             }
             if (topLeft.getPlayerPlayed() != null && topLeft.getPlayerPlayed().equals(player1)) {
@@ -1734,7 +1830,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(quadrant, player2);
-                    return;
+                    return centerLeft;
                 }
             }
             if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player1)) {
@@ -1746,7 +1842,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(quadrant, player2);
-                    return;
+                    return topRight;
                 }
             }
             if (topRight.getPlayerPlayed() != null && topRight.getPlayerPlayed().equals(player1)) {
@@ -1758,7 +1854,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(quadrant, player2);
-                    return;
+                    return center;
                 }
             }
         } else if (quadrant.getPane().getId().equals("bottomCenterPane")) {
@@ -1771,7 +1867,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(quadrant, player2);
-                    return;
+                    return bottomRight;
                 }
             }
             if (bottomRight.getPlayerPlayed() != null && bottomRight.getPlayerPlayed().equals(player1)) {
@@ -1783,7 +1879,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(quadrant, player2);
-                    return;
+                    return bottomLeft;
                 }
             }
             if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player1)) {
@@ -1795,7 +1891,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(quadrant, player2);
-                    return;
+                    return topCenter;
                 }
             }
             if (topCenter.getPlayerPlayed() != null && topCenter.getPlayerPlayed().equals(player1)) {
@@ -1807,7 +1903,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(quadrant, player2);
-                    return;
+                    return center;
                 }
             }
         } else if (quadrant.getPane().getId().equals("bottomRightPane")) {
@@ -1820,7 +1916,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(quadrant, player2);
-                    return;
+                    return bottomLeft;
                 }
             }
             if (bottomLeft.getPlayerPlayed() != null && bottomLeft.getPlayerPlayed().equals(player1)) {
@@ -1832,7 +1928,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(quadrant, player2);
-                    return;
+                    return bottomCenter;
                 }
             }
             if (centerRight.getPlayerPlayed() != null && centerRight.getPlayerPlayed().equals(player1)) {
@@ -1844,7 +1940,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(quadrant, player2);
-                    return;
+                    return topRight;
                 }
             }
             if (topRight.getPlayerPlayed() != null && topRight.getPlayerPlayed().equals(player1)) {
@@ -1856,7 +1952,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(quadrant, player2);
-                    return;
+                    return centerRight;
                 }
             }
             if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player1)) {
@@ -1868,7 +1964,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(quadrant, player2);
-                    return;
+                    return topLeft;
                 }
             }
             if (topLeft.getPlayerPlayed() != null && topLeft.getPlayerPlayed().equals(player1)) {
@@ -1880,7 +1976,7 @@ public class Main extends Application {
                     player2.setTurn(false);
                     this.player1.setTurn(true);
                     checkIfWon(quadrant, player2);
-                    return;
+                    return center;
                 }
             }
         }
@@ -1902,7 +1998,7 @@ public class Main extends Application {
                         player2.setTurn(false);
                         this.player1.setTurn(true);
                         checkIfWon(center, player2);
-                        return;
+                        return center;
                     } else {
                         break;
                     }
@@ -1915,7 +2011,7 @@ public class Main extends Application {
                         player2.setTurn(false);
                         this.player1.setTurn(true);
                         checkIfWon(topLeft, player2);
-                        return;
+                        return topLeft;
                     } else {
                         break;
                     }
@@ -1928,7 +2024,7 @@ public class Main extends Application {
                         player2.setTurn(false);
                         this.player1.setTurn(true);
                         checkIfWon(topRight, player2);
-                        return;
+                        return topRight;
                     } else {
                         break;
                     }
@@ -1941,7 +2037,7 @@ public class Main extends Application {
                         player2.setTurn(false);
                         this.player1.setTurn(true);
                         checkIfWon(bottomLeft, player2);
-                        return;
+                        return bottomLeft;
                     } else {
                         break;
                     }
@@ -1954,11 +2050,11 @@ public class Main extends Application {
                         player2.setTurn(false);
                         this.player1.setTurn(true);
                         checkIfWon(bottomRight, player2);
-                        return;
+                        return bottomRight;
                     } else {
                         break;
                     }
-                case 5 :
+                case 5:
                     if (!topCenter.getIsMarked()) {
                         topCenter.getPane().setStyle("-fx-background-color: #0000ff");
                         topCenter.setIsMarked(true);
@@ -1967,11 +2063,11 @@ public class Main extends Application {
                         player2.setTurn(false);
                         this.player1.setTurn(true);
                         checkIfWon(topCenter, player2);
-                        return;
+                        return topCenter;
                     } else {
                         break;
                     }
-                case 6 :
+                case 6:
                     if (!centerLeft.getIsMarked()) {
                         centerLeft.getPane().setStyle("-fx-background-color: #0000ff");
                         centerLeft.setIsMarked(true);
@@ -1980,11 +2076,11 @@ public class Main extends Application {
                         player2.setTurn(false);
                         this.player1.setTurn(true);
                         checkIfWon(centerLeft, player2);
-                        return;
+                        return centerLeft;
                     } else {
                         break;
                     }
-                case 7 :
+                case 7:
                     if (!centerRight.getIsMarked()) {
                         centerRight.getPane().setStyle("-fx-background-color: #0000ff");
                         centerRight.setIsMarked(true);
@@ -1992,12 +2088,12 @@ public class Main extends Application {
                         currentQuadrant = centerRight;
                         player2.setTurn(false);
                         this.player1.setTurn(true);
-                        checkIfWon(centerLeft, player2);
-                        return;
+                        checkIfWon(centerRight, player2);
+                        return centerRight;
                     } else {
                         break;
                     }
-                case 8 :
+                case 8:
                     if (!bottomCenter.getIsMarked()) {
                         bottomCenter.getPane().setStyle("-fx-background-color: #0000ff");
                         bottomCenter.setIsMarked(true);
@@ -2006,12 +2102,14 @@ public class Main extends Application {
                         player2.setTurn(false);
                         this.player1.setTurn(true);
                         checkIfWon(bottomCenter, player2);
-                        return;
+                        return bottomCenter;
                     } else {
                         break;
                     }
             }
         }
+
+        return center;
     }
 
     /**
