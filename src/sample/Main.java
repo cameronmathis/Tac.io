@@ -1983,8 +1983,8 @@ public class Main extends Application {
         }
         PopUp.getContent().add(gameOverPopUpPane); //adds the popup (child) created in fxml file to the popup (parent) created
 
-        Text text = (Text) gameOverPopUpPane.lookup("#gameOverMessage");
-//        text.setText("Congratulations " + player.getPlayerName() + "! You won!");
+        Text text = (Text) gameOverPopUpPane.getContent().lookup("#gameOverMessage");
+        text.setText("Congratulations " + player.getPlayerName() + "! You won!");
 
         //show popup on primaryStage
         PopUp.show(primaryStage);
