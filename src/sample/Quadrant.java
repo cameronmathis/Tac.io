@@ -12,7 +12,13 @@ public class Quadrant {
 
     public Pane getPane() { return pane; }
 
-    public void setIsMarked(boolean isMarked) { this.isMarked = isMarked; }
+    public void setIsMarked(boolean isMarked) {
+        this.isMarked = isMarked;
+        if (isMarked == false) {
+            this.setPlayerPlayed(null);
+            this.getPane().setStyle("-fx-background-color: #404040");
+        }
+    }
 
     public boolean getIsMarked() { return isMarked; }
 

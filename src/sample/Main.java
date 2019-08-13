@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
@@ -24,6 +25,8 @@ public class Main extends Application {
     private Scene gameScene;
     private boolean paused;
     private Popup PopUp;
+    private Button pauseBtn;
+    private Button undoBtn;
     private Quadrant topLeft;
     private Quadrant topCenter;
     private Quadrant topRight;
@@ -36,8 +39,12 @@ public class Main extends Application {
     private Player player1 = new Player();
     private Player player2 = new Player();
     private int numberOfPlayers = 0;
+    private boolean ableToUndo = false;
+    private Quadrant currentQuadrant;
     private Quadrant previousQuadrant;
+    private Quadrant previousPreviousQuadrant;
     private int counter;
+    private boolean gameOver;
 
     //The GUI interface scene
     @Override
@@ -56,21 +63,9 @@ public class Main extends Application {
         primaryStage.setTitle("TicTacToe"); //sets the title of the app
         primaryStage.setScene(openingScene); //sets the scene on the stage
         primaryStage.setAlwaysOnTop(false); //set to false to show popups
-        primaryStage.setMinWidth(700); //set the minimum width
-        primaryStage.setMinHeight(700); //set the minimum height
         primaryStage.setResizable(false); //makes app able to be resized
         primaryStage.show(); //shows the primaryStage
         numberOfPlayersPopUp(); //ask for number of players
-
-        //ensure the window proportions remain the same
-        primaryStage.isFullScreen();
-//        Pane pane = (Pane) openingScene.lookup("#openingPane");
-//        openingScene.widthProperty().addListener((obs, oldVal, newVal) -> {
-//            pane.setLayoutY(newVal.intValue());
-//        });
-//        openingScene.heightProperty().addListener((obs, oldVal, newVal) -> {
-//            pane.setLayoutX(newVal.intValue() + 100);
-//        });
 
         //initialize each quadrant
         setGame();
@@ -84,7 +79,8 @@ public class Main extends Application {
          * Initialize all the buttons
          */
         Button startBtn = (Button) openingScene.lookup("#start");
-        Button pauseBtn = (Button) gameScene.lookup("#pause");
+        pauseBtn = (Button) gameScene.lookup("#pause");
+        undoBtn = (Button) gameScene.lookup("#undo");
 
         /**
          * SHORTCUT KEYS
@@ -118,6 +114,12 @@ public class Main extends Application {
         pauseBtn.setOnAction(event -> pause());
 
         /**
+         * UNDO BUTTON
+         * Undo the last move
+         */
+        undoBtn.setOnAction(event -> undo());
+
+        /**
          * CHECK FOR PLAYS
          */
         topLeft.getPane().setOnMouseClicked(event -> markQuadrant(topLeft, topLeft.getIsMarked()));
@@ -138,26 +140,26 @@ public class Main extends Application {
     private void numberOfPlayersPopUp() {
         PopUp = new Popup(); //creates new popup
 
-        TitledPane numberOfPlayersPopPupPane = null; //calls popup menu created in 'numberOfPlayersPopUp.fxml' file
+        TitledPane numberOfPlayersPopUpPane = null; //calls popup menu created in 'numberOfPlayersPopUp.fxml' file
 
         try {
-            numberOfPlayersPopPupPane = FXMLLoader.load(getClass().getResource("numberOfPlayersPopUp.fxml"));
+            numberOfPlayersPopUpPane = FXMLLoader.load(getClass().getResource("numberOfPlayersPopUp.fxml"));
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        PopUp.getContent().add(numberOfPlayersPopPupPane); //adds the popup (child) created in fxml file to the popup (parent) created
+        PopUp.getContent().add(numberOfPlayersPopUpPane); //adds the popup (child) created in fxml file to the popup (parent) created
 
         //show popup on primaryStage
         PopUp.show(primaryStage);
 
-        Button onePlayerBtn = (Button) numberOfPlayersPopPupPane.lookup("#onePlayer");
+        Button onePlayerBtn = (Button) numberOfPlayersPopUpPane.lookup("#onePlayer");
         onePlayerBtn.setOnAction(event -> {
             numberOfPlayers = 1;
             resume();
             enterOneNamePopUp();
             player2.setPlayerName("Computer");
         });
-        Button twoPlayersBtn = (Button) numberOfPlayersPopPupPane.lookup("#twoPlayers");
+        Button twoPlayersBtn = (Button) numberOfPlayersPopUpPane.lookup("#twoPlayers");
         twoPlayersBtn.setOnAction(event -> {
             numberOfPlayers = 2;
             resume();
@@ -172,24 +174,24 @@ public class Main extends Application {
     private void enterOneNamePopUp() {
         PopUp = new Popup(); //creates new popup
 
-        TitledPane enterOneNamePopPupPane = null; //calls popup menu created in 'enterOneNamePopPup.fxml' file
+        TitledPane enterOneNamePopUpPane = null; //calls popup menu created in 'enterOneNamePopUp.fxml' file
 
         try {
-            enterOneNamePopPupPane = FXMLLoader.load(getClass().getResource("enterOneNamePopUp.fxml"));
+            enterOneNamePopUpPane = FXMLLoader.load(getClass().getResource("enterOneNamePopUp.fxml"));
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        PopUp.getContent().add(enterOneNamePopPupPane); //adds the popup (child) created in fxml file to the popup (parent) created
+        PopUp.getContent().add(enterOneNamePopUpPane); //adds the popup (child) created in fxml file to the popup (parent) created
 
         //show popup on primaryStage
         PopUp.show(primaryStage);
 
-        Button enterBtn = (Button) enterOneNamePopPupPane.lookup("#enter");
-        TitledPane finalEnterNamesPopPupPane = enterOneNamePopPupPane;
+        Button enterBtn = (Button) enterOneNamePopUpPane.lookup("#enter");
+        TitledPane finalEnterNamesPopUpPane = enterOneNamePopUpPane;
         enterBtn.setOnAction(event -> {
-            if (finalEnterNamesPopPupPane.lookup("player1Name") != null) {
-                String name1 = finalEnterNamesPopPupPane.lookup("player1Name").toString();
-                player1.setPlayerName(name1);
+            if (finalEnterNamesPopUpPane.lookup("#player1Name") != null) {
+                TextField name1 = (TextField) finalEnterNamesPopUpPane.lookup("#player1Name");
+                player1.setPlayerName(name1.getText());
             } else {
                 player1.setPlayerName("player1");
             }
@@ -204,30 +206,30 @@ public class Main extends Application {
     private void enterTwoNamesPopUp() {
         PopUp = new Popup(); //creates new popup
 
-        TitledPane enterTwoNamesPopPupPane = null; //calls popup menu created in 'enterTwoNamesPopPup.fxml' file
+        TitledPane enterTwoNamesPopUpPane = null; //calls popup menu created in 'enterTwoNamesPopUp.fxml' file
 
         try {
-            enterTwoNamesPopPupPane = FXMLLoader.load(getClass().getResource("enterTwoNamesPopUp.fxml"));
+            enterTwoNamesPopUpPane = FXMLLoader.load(getClass().getResource("enterTwoNamesPopUp.fxml"));
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        PopUp.getContent().add(enterTwoNamesPopPupPane); //adds the popup (child) created in fxml file to the popup (parent) created
+        PopUp.getContent().add(enterTwoNamesPopUpPane); //adds the popup (child) created in fxml file to the popup (parent) created
 
         //show popup on primaryStage
         PopUp.show(primaryStage);
 
-        Button enterBtn = (Button) enterTwoNamesPopPupPane.lookup("#enter");
-        TitledPane finalEnterNamesPopPupPane = enterTwoNamesPopPupPane;
+        Button enterBtn = (Button) enterTwoNamesPopUpPane.lookup("#enter");
+        TitledPane finalEnterNamesPopUpPane = enterTwoNamesPopUpPane;
         enterBtn.setOnAction(event -> {
-            if (finalEnterNamesPopPupPane.lookup("player1Name") != null) {
-                String name1 = finalEnterNamesPopPupPane.lookup("player1Name").toString();
-                player1.setPlayerName(name1);
+            if (finalEnterNamesPopUpPane.lookup("#player1Name") != null) {
+                TextField name1 = (TextField) finalEnterNamesPopUpPane.lookup("#player1Name");
+                player1.setPlayerName(name1.getText());
             } else {
                 player1.setPlayerName("player1");
             }
-            if (finalEnterNamesPopPupPane.lookup("player2Name") != null) {
-                String name2 = finalEnterNamesPopPupPane.lookup("player2Name").toString();
-                player2.setPlayerName(name2);
+            if (finalEnterNamesPopUpPane.lookup("#player2Name") != null) {
+                TextField name2 = (TextField) finalEnterNamesPopUpPane.lookup("#player1Name");
+                player1.setPlayerName(name2.getText());
             } else {
                 player2.setPlayerName("player2");
             }
@@ -256,7 +258,53 @@ public class Main extends Application {
      */
     private void pause() {
         paused = true;
+        pauseBtn.setDisable(true);
+        undoBtn.setDisable(true);
         pausedPopUp();
+    }
+
+    /**
+     * UNDO METHOD
+     * Undo the last move
+     */
+    private void undo() {
+        if (ableToUndo && numberOfPlayers == 2) {
+            currentQuadrant.setIsMarked(false);
+            currentQuadrant = previousQuadrant;
+            previousQuadrant = null;
+            if (player1.getTurn()) {
+                player1.setTurn(false);
+                player2.setTurn(true);
+            } else if (player2.getTurn()) {
+                player2.setTurn(false);
+                player1.setTurn(true);
+            }
+        } else if (ableToUndo && numberOfPlayers == 1) {
+            if (player1.getTurn()) {
+                currentQuadrant.setIsMarked(false);
+                currentQuadrant = previousPreviousQuadrant;
+                previousQuadrant.setIsMarked(false);
+                previousQuadrant = null;
+                previousPreviousQuadrant = null;
+            } else if (player2.getTurn()) {
+                currentQuadrant.setIsMarked(false);
+                currentQuadrant = previousQuadrant;
+                previousQuadrant = null;
+                previousPreviousQuadrant = null;
+                player2.setTurn(false);
+                player1.setTurn(true);
+            }
+        } else if (currentQuadrant == null) {
+            pauseBtn.setDisable(true);
+            undoBtn.setDisable(true);
+            undoStartPopUp();
+        } else if (previousQuadrant == null) {
+            pauseBtn.setDisable(true);
+            undoBtn.setDisable(true);
+            undoTwicePopUp();
+        }
+
+        ableToUndo = false;
     }
 
     /**
@@ -293,7 +341,11 @@ public class Main extends Application {
         PopUp.show(primaryStage);
 
         Button resumeBtn = (Button) pausedPupUpPane.lookup("#resume");
-        resumeBtn.setOnAction(browseDismissEvent -> resume());
+        resumeBtn.setOnAction(browseDismissEvent -> {
+            resume();
+            pauseBtn.setDisable(false);
+            undoBtn.setDisable(false);
+        });
 
         Button exitBtn = (Button) pausedPupUpPane.lookup("#exit");
         exitBtn.setOnAction(event -> {
@@ -307,10 +359,71 @@ public class Main extends Application {
     }
 
     /**
+     * UNDO POPUP
+     * PopUp for when you try and undo before a play is made
+     */
+    private void undoStartPopUp() {
+        PopUp = new Popup(); //creates new popup
+
+        TitledPane undoStartPopUpPane = null; //calls popup menu created in 'undoStartPopUp.fxml' file
+
+        try {
+            undoStartPopUpPane = FXMLLoader.load(getClass().getResource("undoStartPopUp.fxml"));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        PopUp.getContent().add(undoStartPopUpPane); //adds the popup (child) created in fxml file to the popup (parent) created
+
+        //show popup on primaryStage
+        PopUp.show(primaryStage);
+
+        Button dismissBtn = (Button) undoStartPopUpPane.lookup("#dismiss");
+        dismissBtn.setOnAction(browseDismissEvent -> {
+            resume();
+            pauseBtn.setDisable(false);
+            undoBtn.setDisable(false);
+        });
+    }
+
+    /**
+     * UNDO POPUP
+     * PopUp for when you try and undo twice
+     */
+    private void undoTwicePopUp() {
+        PopUp = new Popup(); //creates new popup
+
+        TitledPane undoTwicePopUpPane = null; //calls popup menu created in 'undoTwicePopUp.fxml' file
+
+        try {
+            undoTwicePopUpPane = FXMLLoader.load(getClass().getResource("undoTwicePopUp.fxml"));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        PopUp.getContent().add(undoTwicePopUpPane); //adds the popup (child) created in fxml file to the popup (parent) created
+
+        //show popup on primaryStage
+        PopUp.show(primaryStage);
+
+        Button dismissBtn = (Button) undoTwicePopUpPane.lookup("#dismiss");
+        dismissBtn.setOnAction(browseDismissEvent -> {
+            resume();
+            pauseBtn.setDisable(false);
+            undoBtn.setDisable(false);
+        });
+    }
+
+    /**
      * CHECK MARKED METHOD
      * Check if square is playable and responds accordingly
      */
     private boolean markQuadrant(Quadrant quadrant, boolean isMarked) {
+        boolean start = true;
+        if (currentQuadrant == null) {
+            start = true;
+        } else {
+            start = false;
+        }
+
         if ((numberOfPlayers == 2 && isMarked) || (player1.getTurn() && isMarked)) {
             if (!previousQuadrant.equals(quadrant)) {
                 counter = 0;
@@ -318,23 +431,31 @@ public class Main extends Application {
             counter++;
             if (counter >= 3) {
                 counter = 0;
+                pauseBtn.setDisable(true);
+                undoBtn.setDisable(true);
                 isAlreadyMarkedPopUp();
             }
         } else {
+            if (!start) {
+                previousPreviousQuadrant = previousQuadrant;
+                previousQuadrant = currentQuadrant;
+            }
+            currentQuadrant = quadrant;
+            ableToUndo = true;
             counter = 0;
-            if (player1.getTurn()) {
+            if (!gameOver && player1.getTurn()) {
                 quadrant.getPane().setStyle("-fx-background-color: #ff0000");
                 quadrant.setIsMarked(true);
                 quadrant.setPlayerPlayed(player1);
                 player1.setTurn(false);
                 player2.setTurn(true);
-                if (!checkIfWon(quadrant,player1)) {
+                if (!checkIfWon(quadrant, player1)) {
                     checkIfTie();
+                    if (!gameOver && numberOfPlayers == 1 && player2.getTurn()) {
+                        getQuadrantToMark(quadrant);
+                    }
                 }
-                if (numberOfPlayers == 1 && player2.getTurn()) {
-                    getQuadrantToMark(quadrant);
-                }
-            } else if (numberOfPlayers == 2 && player2.getTurn()) {
+            } else if (!gameOver && numberOfPlayers == 2 && player2.getTurn()) {
                 quadrant.getPane().setStyle("-fx-background-color: #0000ff");
                 quadrant.setIsMarked(true);
                 quadrant.setPlayerPlayed(player2);
@@ -344,13 +465,12 @@ public class Main extends Application {
             }
         }
 
-        previousQuadrant = quadrant;
         return true;
     }
 
     /**
-     * Paused POPUP
-     * PopUp for when the game is paused
+     * IS ALREADY MARKED POPUP
+     * PopUp for when a player tries to mark an already marked quadrant numerous times
      */
     private void isAlreadyMarkedPopUp() {
         PopUp = new Popup(); //creates new popup
@@ -368,7 +488,11 @@ public class Main extends Application {
         PopUp.show(primaryStage);
 
         Button dismissBtn = (Button) isAlreadyMarkedPopUpPane.lookup("#dismiss");
-        dismissBtn.setOnAction(event -> resume());
+        dismissBtn.setOnAction(event -> {
+            resume();
+            pauseBtn.setDisable(false);
+            undoBtn.setDisable(false);
+        });
     }
 
     /**
@@ -556,9 +680,12 @@ public class Main extends Application {
             }
         }
         if (won) {
+            pauseBtn.setDisable(true);
+            undoBtn.setDisable(true);
             player.setGamesWon(player.getGamesWon() + 1);
             gameOverPopUp(player);
         }
+        gameOver = won;
         return won;
     }
 
@@ -568,10 +695,14 @@ public class Main extends Application {
      */
     private void checkIfTie() {
         if (topLeft.getIsMarked() && topCenter.getIsMarked() && topRight.getIsMarked() && centerLeft.getIsMarked() &&
-            center.getIsMarked() && centerRight.getIsMarked() && bottomLeft.getIsMarked() && bottomCenter.getIsMarked() &&
-            bottomRight.getIsMarked()) {
+                center.getIsMarked() && centerRight.getIsMarked() && bottomLeft.getIsMarked() && bottomCenter.getIsMarked() &&
+                bottomRight.getIsMarked()) {
+            pauseBtn.setDisable(true);
+            undoBtn.setDisable(true);
             tiePopUp();
+            gameOver = true;
         }
+        gameOver = false;
     }
 
     /**
@@ -579,339 +710,1140 @@ public class Main extends Application {
      * Find the best quadrant to mark
      */
     private void getQuadrantToMark(Quadrant quadrant) {
-        Player player = player1;
+        previousPreviousQuadrant = previousQuadrant;
+        previousQuadrant = quadrant;
 
-        if (quadrant.getPane().getId().equals("topLeftPane")) {
-            if (topCenter.getPlayerPlayed() != null && topCenter.getPlayerPlayed().equals(player)) {
+        //Offensive Moves
+        if (topLeft.getPlayerPlayed() != null && topLeft.getPlayerPlayed().equals(player2)) {
+            if (topCenter.getPlayerPlayed() != null && topCenter.getPlayerPlayed().equals(player2)) {
                 if (!topRight.getIsMarked()) {
                     topRight.getPane().setStyle("-fx-background-color: #0000ff");
                     topRight.setIsMarked(true);
                     topRight.setPlayerPlayed(player2);
+                    currentQuadrant = topRight;
                     player2.setTurn(false);
-                    player1.setTurn(true);
-                    checkIfWon(quadrant, player2);
+                    this.player1.setTurn(true);
+                    checkIfWon(topRight, player2);
                     return;
                 }
-            } else if (centerLeft.getPlayerPlayed() != null && centerLeft.getPlayerPlayed().equals(player)) {
+            } else if (topRight.getPlayerPlayed() != null && topRight.getPlayerPlayed().equals(player2)) {
+                if (!topCenter.getIsMarked()) {
+                    topCenter.getPane().setStyle("-fx-background-color: #0000ff");
+                    topCenter.setIsMarked(true);
+                    topCenter.setPlayerPlayed(player2);
+                    currentQuadrant = topCenter;
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(topCenter, player2);
+                    return;
+                }
+            } else if (centerLeft.getPlayerPlayed() != null && centerLeft.getPlayerPlayed().equals(player2)) {
                 if (!bottomLeft.getIsMarked()) {
                     bottomLeft.getPane().setStyle("-fx-background-color: #0000ff");
                     bottomLeft.setIsMarked(true);
                     bottomLeft.setPlayerPlayed(player2);
+                    currentQuadrant = bottomLeft;
                     player2.setTurn(false);
-                    player1.setTurn(true);
-                    checkIfWon(quadrant, player2);
+                    this.player1.setTurn(true);
+                    checkIfWon(bottomLeft, player2);
                     return;
                 }
-            } else if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player)) {
-                if (!bottomLeft.getIsMarked()) {
-                    bottomRight.getPane().setStyle("-fx-background-color: #0000ff");
-                    bottomRight.setIsMarked(true);
-                    bottomRight.setPlayerPlayed(player2);
-                    player2.setTurn(false);
-                    player1.setTurn(true);
-                    checkIfWon(quadrant, player2);
-                    return;
-                }
-            }
-        } else if (quadrant.getPane().getId().equals("topCenterPane")) {
-            if (topLeft.getPlayerPlayed() != null && topLeft.getPlayerPlayed().equals(player)) {
-                if (!topRight.getIsMarked()) {
-                    topRight.getPane().setStyle("-fx-background-color: #0000ff");
-                    topRight.setIsMarked(true);
-                    topRight.setPlayerPlayed(player2);
-                    player2.setTurn(false);
-                    player1.setTurn(true);
-                    checkIfWon(quadrant, player2);
-                    return;
-                }
-            } else if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player)) {
-                if (!bottomCenter.getIsMarked()) {
-                    bottomCenter.getPane().setStyle("-fx-background-color: #0000ff");
-                    bottomCenter.setIsMarked(true);
-                    bottomCenter.setPlayerPlayed(player2);
-                    player2.setTurn(false);
-                    player1.setTurn(true);
-                    checkIfWon(quadrant, player2);
-                    return;
-                }
-            }
-        } else if (quadrant.getPane().getId().equals("topRightPane")) {
-            if (topCenter.getPlayerPlayed() != null && topCenter.getPlayerPlayed().equals(player)) {
-                if (!topLeft.getIsMarked()) {
-                    topLeft.getPane().setStyle("-fx-background-color: #0000ff");
-                    topLeft.setIsMarked(true);
-                    topLeft.setPlayerPlayed(player2);
-                    player2.setTurn(false);
-                    player1.setTurn(true);
-                    checkIfWon(quadrant, player2);
-                    return;
-                }
-            } else if (centerRight.getPlayerPlayed() != null && centerRight.getPlayerPlayed().equals(player)) {
-                if (!bottomRight.getIsMarked()) {
-                    bottomRight.getPane().setStyle("-fx-background-color: #0000ff");
-                    bottomRight.setIsMarked(true);
-                    bottomRight.setPlayerPlayed(player2);
-                    player2.setTurn(false);
-                    player1.setTurn(true);
-                    checkIfWon(quadrant, player2);
-                    return;
-                }
-            } else if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player)) {
-                if (!bottomLeft.getIsMarked()) {
-                    bottomLeft.getPane().setStyle("-fx-background-color: #0000ff");
-                    bottomLeft.setIsMarked(true);
-                    bottomLeft.setPlayerPlayed(player2);
-                    player2.setTurn(false);
-                    player1.setTurn(true);
-                    checkIfWon(quadrant, player2);
-                    return;
-                }
-            }
-        } else if (quadrant.getPane().getId().equals("centerLeftPane")) {
-            if (topLeft.getPlayerPlayed() != null && topLeft.getPlayerPlayed().equals(player)) {
-                if (!bottomLeft.getIsMarked()) {
-                    bottomLeft.getPane().setStyle("-fx-background-color: #0000ff");
-                    bottomLeft.setIsMarked(true);
-                    bottomLeft.setPlayerPlayed(player2);
-                    player2.setTurn(false);
-                    player1.setTurn(true);
-                    checkIfWon(quadrant, player2);
-                    return;
-                }
-            } else if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player)) {
-                if (!centerRight.getIsMarked()) {
-                    centerRight.getPane().setStyle("-fx-background-color: #0000ff");
-                    centerRight.setIsMarked(true);
-                    centerRight.setPlayerPlayed(player2);
-                    player2.setTurn(false);
-                    player1.setTurn(true);
-                    checkIfWon(quadrant, player2);
-                    return;
-                }
-            }
-        } else if (quadrant.getPane().getId().equals("centerPane")) {
-            if (topLeft.getPlayerPlayed() != null && topLeft.getPlayerPlayed().equals(player)) {
-                if (!bottomRight.getIsMarked()) {
-                    bottomRight.getPane().setStyle("-fx-background-color: #0000ff");
-                    bottomRight.setIsMarked(true);
-                    bottomRight.setPlayerPlayed(player2);
-                    player2.setTurn(false);
-                    player1.setTurn(true);
-                    checkIfWon(quadrant, player2);
-                    return;
-                }
-            } else if (topRight.getPlayerPlayed() != null && topRight.getPlayerPlayed().equals(player)) {
-                if (!bottomLeft.getIsMarked()) {
-                    bottomLeft.getPane().setStyle("-fx-background-color: #0000ff");
-                    bottomLeft.setIsMarked(true);
-                    bottomLeft.setPlayerPlayed(player2);
-                    player2.setTurn(false);
-                    player1.setTurn(true);
-                    checkIfWon(quadrant, player2);
-                    return;
-                }
-            } else if (topCenter.getPlayerPlayed() != null && topCenter.getPlayerPlayed().equals(player)) {
-                if (!bottomCenter.getIsMarked()) {
-                    bottomCenter.getPane().setStyle("-fx-background-color: #0000ff");
-                    bottomCenter.setIsMarked(true);
-                    bottomCenter.setPlayerPlayed(player2);
-                    player2.setTurn(false);
-                    player1.setTurn(true);
-                    checkIfWon(quadrant, player2);
-                    return;
-                }
-            } else if (centerLeft.getPlayerPlayed() != null && centerLeft.getPlayerPlayed().equals(player)) {
-                if (!centerRight.getIsMarked()) {
-                    centerRight.getPane().setStyle("-fx-background-color: #0000ff");
-                    centerRight.setIsMarked(true);
-                    centerRight.setPlayerPlayed(player2);
-                    player2.setTurn(false);
-                    player1.setTurn(true);
-                    checkIfWon(quadrant, player2);
-                    return;
-                }
-            }
-        } else if (quadrant.getPane().getId().equals("centerRightPane")) {
-            if (topRight.getPlayerPlayed() != null && topRight.getPlayerPlayed().equals(player)) {
-                if (!bottomRight.getIsMarked()) {
-                    bottomRight.getPane().setStyle("-fx-background-color: #0000ff");
-                    bottomRight.setIsMarked(true);
-                    bottomRight.setPlayerPlayed(player2);
-                    player2.setTurn(false);
-                    player1.setTurn(true);
-                    checkIfWon(quadrant, player2);
-                    return;
-                }
-            } else if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player)) {
+            } else if (bottomLeft.getPlayerPlayed() != null && bottomLeft.getPlayerPlayed().equals(player2)) {
                 if (!centerLeft.getIsMarked()) {
                     centerLeft.getPane().setStyle("-fx-background-color: #0000ff");
                     centerLeft.setIsMarked(true);
                     centerLeft.setPlayerPlayed(player2);
+                    currentQuadrant = centerLeft;
                     player2.setTurn(false);
-                    player1.setTurn(true);
-                    checkIfWon(quadrant, player2);
+                    this.player1.setTurn(true);
+                    checkIfWon(centerLeft, player2);
                     return;
                 }
-            }
-        } else if (quadrant.getPane().getId().equals("bottomLeftPane")) {
-            if (bottomCenter.getPlayerPlayed() != null && bottomCenter.getPlayerPlayed().equals(player)) {
-                if (!bottomRight.getIsMarked()) {
+            } else if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player2)) {
+                if (!bottomLeft.getIsMarked()) {
                     bottomRight.getPane().setStyle("-fx-background-color: #0000ff");
                     bottomRight.setIsMarked(true);
                     bottomRight.setPlayerPlayed(player2);
+                    currentQuadrant = bottomRight;
                     player2.setTurn(false);
-                    player1.setTurn(true);
-                    checkIfWon(quadrant, player2);
+                    this.player1.setTurn(true);
+                    checkIfWon(bottomRight, player2);
                     return;
                 }
-            } else if (centerLeft.getPlayerPlayed() != null && centerLeft.getPlayerPlayed().equals(player)) {
+            } else if (bottomRight.getPlayerPlayed() != null && bottomRight.getPlayerPlayed().equals(player2)) {
+                if (!center.getIsMarked()) {
+                    center.getPane().setStyle("-fx-background-color: #0000ff");
+                    center.setIsMarked(true);
+                    center.setPlayerPlayed(player2);
+                    currentQuadrant = center;
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(center, player2);
+                    return;
+                }
+            }
+        } else if (topCenter.getPlayerPlayed() != null && topCenter.getPlayerPlayed().equals(player2)) {
+            if (topLeft.getPlayerPlayed() != null && topLeft.getPlayerPlayed().equals(player2)) {
+                if (!topRight.getIsMarked()) {
+                    topRight.getPane().setStyle("-fx-background-color: #0000ff");
+                    topRight.setIsMarked(true);
+                    topRight.setPlayerPlayed(player2);
+                    currentQuadrant = topRight;
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(topRight, player2);
+                    return;
+                }
+            } else if (topRight.getPlayerPlayed() != null && topRight.getPlayerPlayed().equals(player2)) {
                 if (!topLeft.getIsMarked()) {
                     topLeft.getPane().setStyle("-fx-background-color: #0000ff");
                     topLeft.setIsMarked(true);
                     topLeft.setPlayerPlayed(player2);
+                    currentQuadrant = topLeft;
                     player2.setTurn(false);
-                    player1.setTurn(true);
-                    checkIfWon(quadrant, player2);
+                    this.player1.setTurn(true);
+                    checkIfWon(topLeft, player2);
                     return;
                 }
-            } else if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player)) {
+            } else if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player2)) {
+                if (!bottomCenter.getIsMarked()) {
+                    bottomCenter.getPane().setStyle("-fx-background-color: #0000ff");
+                    bottomCenter.setIsMarked(true);
+                    bottomCenter.setPlayerPlayed(player2);
+                    currentQuadrant = bottomCenter;
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(bottomCenter, player2);
+                    return;
+                }
+            } else if (bottomCenter.getPlayerPlayed() != null && bottomCenter.getPlayerPlayed().equals(player2)) {
+                if (!center.getIsMarked()) {
+                    center.getPane().setStyle("-fx-background-color: #0000ff");
+                    center.setIsMarked(true);
+                    center.setPlayerPlayed(player2);
+                    currentQuadrant = center;
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(center, player2);
+                    return;
+                }
+            }
+        } else if (topRight.getPlayerPlayed() != null && topRight.getPlayerPlayed().equals(player2)) {
+            if (topCenter.getPlayerPlayed() != null && topCenter.getPlayerPlayed().equals(player2)) {
+                if (!topLeft.getIsMarked()) {
+                    topLeft.getPane().setStyle("-fx-background-color: #0000ff");
+                    topLeft.setIsMarked(true);
+                    topLeft.setPlayerPlayed(player2);
+                    currentQuadrant = topLeft;
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(topLeft, player2);
+                    return;
+                }
+            } else if (topLeft.getPlayerPlayed() != null && topLeft.getPlayerPlayed().equals(player2)) {
+                if (!topCenter.getIsMarked()) {
+                    topCenter.getPane().setStyle("-fx-background-color: #0000ff");
+                    topCenter.setIsMarked(true);
+                    topCenter.setPlayerPlayed(player2);
+                    currentQuadrant = topCenter;
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(topCenter, player2);
+                    return;
+                }
+            } else if (centerRight.getPlayerPlayed() != null && centerRight.getPlayerPlayed().equals(player2)) {
+                if (!bottomRight.getIsMarked()) {
+                    bottomRight.getPane().setStyle("-fx-background-color: #0000ff");
+                    bottomRight.setIsMarked(true);
+                    bottomRight.setPlayerPlayed(player2);
+                    currentQuadrant = bottomRight;
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(bottomRight, player2);
+                    return;
+                }
+            } else if (bottomRight.getPlayerPlayed() != null && bottomRight.getPlayerPlayed().equals(player2)) {
+                if (!centerRight.getIsMarked()) {
+                    centerRight.getPane().setStyle("-fx-background-color: #0000ff");
+                    centerRight.setIsMarked(true);
+                    centerRight.setPlayerPlayed(player2);
+                    currentQuadrant = centerRight;
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(centerRight, player2);
+                    return;
+                }
+            } else if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player2)) {
+                if (!bottomLeft.getIsMarked()) {
+                    bottomLeft.getPane().setStyle("-fx-background-color: #0000ff");
+                    bottomLeft.setIsMarked(true);
+                    bottomLeft.setPlayerPlayed(player2);
+                    currentQuadrant = bottomLeft;
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(bottomLeft, player2);
+                    return;
+                }
+            } else if (bottomLeft.getPlayerPlayed() != null && bottomLeft.getPlayerPlayed().equals(player2)) {
+                if (!center.getIsMarked()) {
+                    center.getPane().setStyle("-fx-background-color: #0000ff");
+                    center.setIsMarked(true);
+                    center.setPlayerPlayed(player2);
+                    currentQuadrant = center;
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(center, player2);
+                    return;
+                }
+            }
+        } else if (centerLeft.getPlayerPlayed() != null && centerLeft.getPlayerPlayed().equals(player2)) {
+            if (topLeft.getPlayerPlayed() != null && topLeft.getPlayerPlayed().equals(player2)) {
+                if (!bottomLeft.getIsMarked()) {
+                    bottomLeft.getPane().setStyle("-fx-background-color: #0000ff");
+                    bottomLeft.setIsMarked(true);
+                    bottomLeft.setPlayerPlayed(player2);
+                    currentQuadrant = bottomLeft;
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(bottomLeft, player2);
+                    return;
+                }
+            } else if (bottomLeft.getPlayerPlayed() != null && bottomLeft.getPlayerPlayed().equals(player2)) {
+                if (!topLeft.getIsMarked()) {
+                    topLeft.getPane().setStyle("-fx-background-color: #0000ff");
+                    topLeft.setIsMarked(true);
+                    topLeft.setPlayerPlayed(player2);
+                    currentQuadrant = topLeft;
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(topLeft, player2);
+                    return;
+                }
+            } else if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player2)) {
+                if (!centerRight.getIsMarked()) {
+                    centerRight.getPane().setStyle("-fx-background-color: #0000ff");
+                    centerRight.setIsMarked(true);
+                    centerRight.setPlayerPlayed(player2);
+                    currentQuadrant = centerRight;
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(centerRight, player2);
+                    return;
+                }
+            } else if (centerRight.getPlayerPlayed() != null && centerRight.getPlayerPlayed().equals(player2)) {
+                if (!center.getIsMarked()) {
+                    center.getPane().setStyle("-fx-background-color: #0000ff");
+                    center.setIsMarked(true);
+                    center.setPlayerPlayed(player2);
+                    currentQuadrant = center;
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(center, player2);
+                    return;
+                }
+            }
+        } else if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player2)) {
+            if (topLeft.getPlayerPlayed() != null && topLeft.getPlayerPlayed().equals(player2)) {
+                if (!bottomRight.getIsMarked()) {
+                    bottomRight.getPane().setStyle("-fx-background-color: #0000ff");
+                    bottomRight.setIsMarked(true);
+                    bottomRight.setPlayerPlayed(player2);
+                    currentQuadrant = bottomRight;
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(bottomRight, player2);
+                    return;
+                }
+            } else if (bottomRight.getPlayerPlayed() != null && bottomRight.getPlayerPlayed().equals(player2)) {
+                if (!topLeft.getIsMarked()) {
+                    topLeft.getPane().setStyle("-fx-background-color: #0000ff");
+                    topLeft.setIsMarked(true);
+                    topLeft.setPlayerPlayed(player2);
+                    currentQuadrant = topLeft;
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(topLeft, player2);
+                    return;
+                }
+            } else if (topRight.getPlayerPlayed() != null && topRight.getPlayerPlayed().equals(player2)) {
+                if (!bottomLeft.getIsMarked()) {
+                    bottomLeft.getPane().setStyle("-fx-background-color: #0000ff");
+                    bottomLeft.setIsMarked(true);
+                    bottomLeft.setPlayerPlayed(player2);
+                    currentQuadrant = bottomLeft;
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(bottomLeft, player2);
+                    return;
+                }
+            } else if (bottomLeft.getPlayerPlayed() != null && bottomLeft.getPlayerPlayed().equals(player2)) {
+                if (!topRight.getIsMarked()) {
+                    topRight.getPane().setStyle("-fx-background-color: #0000ff");
+                    topRight.setIsMarked(true);
+                    topRight.setPlayerPlayed(player2);
+                    currentQuadrant = topRight;
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(topRight, player2);
+                    return;
+                }
+            } else if (topCenter.getPlayerPlayed() != null && topCenter.getPlayerPlayed().equals(player2)) {
+                if (!bottomCenter.getIsMarked()) {
+                    bottomCenter.getPane().setStyle("-fx-background-color: #0000ff");
+                    bottomCenter.setIsMarked(true);
+                    bottomCenter.setPlayerPlayed(player2);
+                    currentQuadrant = bottomCenter;
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(bottomCenter, player2);
+                    return;
+                }
+            } else if (bottomCenter.getPlayerPlayed() != null && bottomCenter.getPlayerPlayed().equals(player2)) {
+                if (!topCenter.getIsMarked()) {
+                    topCenter.getPane().setStyle("-fx-background-color: #0000ff");
+                    topCenter.setIsMarked(true);
+                    topCenter.setPlayerPlayed(player2);
+                    currentQuadrant = topCenter;
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(topCenter, player2);
+                    return;
+                }
+            } else if (centerLeft.getPlayerPlayed() != null && centerLeft.getPlayerPlayed().equals(player2)) {
+                if (!centerRight.getIsMarked()) {
+                    centerRight.getPane().setStyle("-fx-background-color: #0000ff");
+                    centerRight.setIsMarked(true);
+                    centerRight.setPlayerPlayed(player2);
+                    currentQuadrant = centerRight;
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(centerRight, player2);
+                    return;
+                }
+            } else if (centerRight.getPlayerPlayed() != null && centerRight.getPlayerPlayed().equals(player2)) {
+                if (!centerLeft.getIsMarked()) {
+                    centerLeft.getPane().setStyle("-fx-background-color: #0000ff");
+                    centerLeft.setIsMarked(true);
+                    centerLeft.setPlayerPlayed(player2);
+                    currentQuadrant = centerLeft;
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(centerLeft, player2);
+                    return;
+                }
+            }
+        } else if (centerRight.getPlayerPlayed() != null && centerRight.getPlayerPlayed().equals(player2)) {
+            if (topRight.getPlayerPlayed() != null && topRight.getPlayerPlayed().equals(player2)) {
+                if (!bottomRight.getIsMarked()) {
+                    bottomRight.getPane().setStyle("-fx-background-color: #0000ff");
+                    bottomRight.setIsMarked(true);
+                    bottomRight.setPlayerPlayed(player2);
+                    currentQuadrant = bottomRight;
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(bottomRight, player2);
+                    return;
+                }
+            } else if (bottomRight.getPlayerPlayed() != null && bottomRight.getPlayerPlayed().equals(player2)) {
+                if (!topRight.getIsMarked()) {
+                    topRight.getPane().setStyle("-fx-background-color: #0000ff");
+                    topRight.setIsMarked(true);
+                    topRight.setPlayerPlayed(player2);
+                    currentQuadrant = topRight;
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(topRight, player2);
+                    return;
+                }
+            } else if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player2)) {
+                if (!centerLeft.getIsMarked()) {
+                    centerLeft.getPane().setStyle("-fx-background-color: #0000ff");
+                    centerLeft.setIsMarked(true);
+                    centerLeft.setPlayerPlayed(player2);
+                    currentQuadrant = centerLeft;
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(centerLeft, player2);
+                    return;
+                }
+            } else if (centerLeft.getPlayerPlayed() != null && centerLeft.getPlayerPlayed().equals(player2)) {
+                if (!center.getIsMarked()) {
+                    center.getPane().setStyle("-fx-background-color: #0000ff");
+                    center.setIsMarked(true);
+                    center.setPlayerPlayed(player2);
+                    currentQuadrant = center;
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(center, player2);
+                    return;
+                }
+            }
+        } else if (bottomLeft.getPlayerPlayed() != null && bottomLeft.getPlayerPlayed().equals(player2)) {
+            if (bottomCenter.getPlayerPlayed() != null && bottomCenter.getPlayerPlayed().equals(player2)) {
+                if (!bottomRight.getIsMarked()) {
+                    bottomRight.getPane().setStyle("-fx-background-color: #0000ff");
+                    bottomRight.setIsMarked(true);
+                    bottomRight.setPlayerPlayed(player2);
+                    currentQuadrant = bottomRight;
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(bottomRight, player2);
+                    return;
+                }
+            } else if (bottomRight.getPlayerPlayed() != null && bottomRight.getPlayerPlayed().equals(player2)) {
+                if (!bottomCenter.getIsMarked()) {
+                    bottomCenter.getPane().setStyle("-fx-background-color: #0000ff");
+                    bottomCenter.setIsMarked(true);
+                    bottomCenter.setPlayerPlayed(player2);
+                    currentQuadrant = bottomCenter;
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(bottomCenter, player2);
+                    return;
+                }
+            } else if (centerLeft.getPlayerPlayed() != null && centerLeft.getPlayerPlayed().equals(player2)) {
+                if (!topLeft.getIsMarked()) {
+                    topLeft.getPane().setStyle("-fx-background-color: #0000ff");
+                    topLeft.setIsMarked(true);
+                    topLeft.setPlayerPlayed(player2);
+                    currentQuadrant = topLeft;
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(topLeft, player2);
+                    return;
+                }
+            } else if (topLeft.getPlayerPlayed() != null && topLeft.getPlayerPlayed().equals(player2)) {
+                if (!centerLeft.getIsMarked()) {
+                    centerLeft.getPane().setStyle("-fx-background-color: #0000ff");
+                    centerLeft.setIsMarked(true);
+                    centerLeft.setPlayerPlayed(player2);
+                    currentQuadrant = centerLeft;
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(centerLeft, player2);
+                    return;
+                }
+            } else if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player2)) {
+                if (!topRight.getIsMarked()) {
+                    topRight.getPane().setStyle("-fx-background-color: #0000ff");
+                    topRight.setIsMarked(true);
+                    topRight.setPlayerPlayed(player2);
+                    currentQuadrant = topRight;
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(topRight, player2);
+                    return;
+                }
+            } else if (topRight.getPlayerPlayed() != null && topRight.getPlayerPlayed().equals(player2)) {
+                if (!center.getIsMarked()) {
+                    center.getPane().setStyle("-fx-background-color: #0000ff");
+                    center.setIsMarked(true);
+                    center.setPlayerPlayed(player2);
+                    currentQuadrant = center;
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(center, player2);
+                    return;
+                }
+            }
+        } else if (bottomCenter.getPlayerPlayed() != null && bottomCenter.getPlayerPlayed().equals(player2)) {
+            if (bottomLeft.getPlayerPlayed() != null && bottomLeft.getPlayerPlayed().equals(player2)) {
+                if (!bottomRight.getIsMarked()) {
+                    bottomRight.getPane().setStyle("-fx-background-color: #0000ff");
+                    bottomRight.setIsMarked(true);
+                    bottomRight.setPlayerPlayed(player2);
+                    currentQuadrant = bottomRight;
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(bottomRight, player2);
+                    return;
+                }
+            } else if (bottomRight.getPlayerPlayed() != null && bottomRight.getPlayerPlayed().equals(player2)) {
+                if (!bottomLeft.getIsMarked()) {
+                    bottomLeft.getPane().setStyle("-fx-background-color: #0000ff");
+                    bottomLeft.setIsMarked(true);
+                    bottomLeft.setPlayerPlayed(player2);
+                    currentQuadrant = bottomLeft;
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(bottomLeft, player2);
+                    return;
+                }
+            } else if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player2)) {
+                if (!topCenter.getIsMarked()) {
+                    topCenter.getPane().setStyle("-fx-background-color: #0000ff");
+                    topCenter.setIsMarked(true);
+                    topCenter.setPlayerPlayed(player2);
+                    currentQuadrant = topCenter;
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(topCenter, player2);
+                    return;
+                }
+            } else if (topCenter.getPlayerPlayed() != null && topCenter.getPlayerPlayed().equals(player2)) {
+                if (!center.getIsMarked()) {
+                    center.getPane().setStyle("-fx-background-color: #0000ff");
+                    center.setIsMarked(true);
+                    center.setPlayerPlayed(player2);
+                    currentQuadrant = center;
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(center, player2);
+                    return;
+                }
+            }
+        } else if (bottomRight.getPlayerPlayed() != null && bottomRight.getPlayerPlayed().equals(player2)) {
+            if (bottomCenter.getPlayerPlayed() != null && bottomCenter.getPlayerPlayed().equals(player2)) {
+                if (!bottomLeft.getIsMarked()) {
+                    bottomLeft.getPane().setStyle("-fx-background-color: #0000ff");
+                    bottomLeft.setIsMarked(true);
+                    bottomLeft.setPlayerPlayed(player2);
+                    currentQuadrant = bottomLeft;
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(bottomLeft, player2);
+                    return;
+                }
+            } else if (bottomLeft.getPlayerPlayed() != null && bottomLeft.getPlayerPlayed().equals(player2)) {
+                if (!bottomCenter.getIsMarked()) {
+                    bottomCenter.getPane().setStyle("-fx-background-color: #0000ff");
+                    bottomCenter.setIsMarked(true);
+                    bottomCenter.setPlayerPlayed(player2);
+                    currentQuadrant = bottomCenter;
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(bottomCenter, player2);
+                    return;
+                }
+            } else if (centerRight.getPlayerPlayed() != null && centerRight.getPlayerPlayed().equals(player2)) {
+                if (!topRight.getIsMarked()) {
+                    topRight.getPane().setStyle("-fx-background-color: #0000ff");
+                    topRight.setIsMarked(true);
+                    topRight.setPlayerPlayed(player2);
+                    currentQuadrant = topRight;
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(topRight, player2);
+                    return;
+                }
+            } else if (topRight.getPlayerPlayed() != null && topRight.getPlayerPlayed().equals(player2)) {
+                if (!centerRight.getIsMarked()) {
+                    centerRight.getPane().setStyle("-fx-background-color: #0000ff");
+                    centerRight.setIsMarked(true);
+                    centerRight.setPlayerPlayed(player2);
+                    currentQuadrant = centerRight;
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(centerRight, player2);
+                    return;
+                }
+            } else if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player2)) {
+                if (!topLeft.getIsMarked()) {
+                    topLeft.getPane().setStyle("-fx-background-color: #0000ff");
+                    topLeft.setIsMarked(true);
+                    topLeft.setPlayerPlayed(player2);
+                    currentQuadrant = topLeft;
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(topLeft, player2);
+                    return;
+                }
+            } else if (topLeft.getPlayerPlayed() != null && topLeft.getPlayerPlayed().equals(player2)) {
+                if (!center.getIsMarked()) {
+                    center.getPane().setStyle("-fx-background-color: #0000ff");
+                    center.setIsMarked(true);
+                    center.setPlayerPlayed(player2);
+                    currentQuadrant = center;
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(center, player2);
+                    return;
+                }
+            }
+        }
+
+        //Defensive Moves
+        if (quadrant.getPane().getId().equals("topLeftPane")) {
+            if (topCenter.getPlayerPlayed() != null && topCenter.getPlayerPlayed().equals(player1)) {
                 if (!topRight.getIsMarked()) {
                     topRight.getPane().setStyle("-fx-background-color: #0000ff");
                     topRight.setIsMarked(true);
                     topRight.setPlayerPlayed(player2);
                     player2.setTurn(false);
-                    player1.setTurn(true);
+                    this.player1.setTurn(true);
                     checkIfWon(quadrant, player2);
                     return;
                 }
-            }
-        } else if (quadrant.getPane().getId().equals("bottomCenterPane")) {
-            if (bottomLeft.getPlayerPlayed() != null && bottomLeft.getPlayerPlayed().equals(player)) {
-                if (!bottomRight.getIsMarked()) {
-                    bottomRight.getPane().setStyle("-fx-background-color: #0000ff");
-                    bottomRight.setIsMarked(true);
-                    bottomRight.setPlayerPlayed(player2);
-                    player2.setTurn(false);
-                    player1.setTurn(true);
-                    checkIfWon(quadrant, player2);
-                    return;
-                }
-            } else if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player)) {
+            } else if (topRight.getPlayerPlayed() != null && topRight.getPlayerPlayed().equals(player1)) {
                 if (!topCenter.getIsMarked()) {
                     topCenter.getPane().setStyle("-fx-background-color: #0000ff");
                     topCenter.setIsMarked(true);
                     topCenter.setPlayerPlayed(player2);
                     player2.setTurn(false);
-                    player1.setTurn(true);
+                    this.player1.setTurn(true);
                     checkIfWon(quadrant, player2);
                     return;
                 }
-            }
-        } else if (quadrant.getPane().getId().equals("bottomRightPane")) {
-            if (bottomCenter.getPlayerPlayed() != null && bottomCenter.getPlayerPlayed().equals(player)) {
+            } else if (centerLeft.getPlayerPlayed() != null && centerLeft.getPlayerPlayed().equals(player1)) {
                 if (!bottomLeft.getIsMarked()) {
                     bottomLeft.getPane().setStyle("-fx-background-color: #0000ff");
                     bottomLeft.setIsMarked(true);
                     bottomLeft.setPlayerPlayed(player2);
                     player2.setTurn(false);
-                    player1.setTurn(true);
+                    this.player1.setTurn(true);
                     checkIfWon(quadrant, player2);
                     return;
                 }
-            } else if (centerRight.getPlayerPlayed() != null && centerRight.getPlayerPlayed().equals(player)) {
+            } else if (bottomLeft.getPlayerPlayed() != null && bottomLeft.getPlayerPlayed().equals(player1)) {
+                if (!centerLeft.getIsMarked()) {
+                    centerLeft.getPane().setStyle("-fx-background-color: #0000ff");
+                    centerLeft.setIsMarked(true);
+                    centerLeft.setPlayerPlayed(player2);
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(quadrant, player2);
+                    return;
+                }
+            } else if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player1)) {
+                if (!bottomLeft.getIsMarked()) {
+                    bottomRight.getPane().setStyle("-fx-background-color: #0000ff");
+                    bottomRight.setIsMarked(true);
+                    bottomRight.setPlayerPlayed(player2);
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(quadrant, player2);
+                    return;
+                }
+            } else if (bottomRight.getPlayerPlayed() != null && bottomRight.getPlayerPlayed().equals(player1)) {
+                if (!center.getIsMarked()) {
+                    center.getPane().setStyle("-fx-background-color: #0000ff");
+                    center.setIsMarked(true);
+                    center.setPlayerPlayed(player2);
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(quadrant, player2);
+                    return;
+                }
+            }
+        } else if (quadrant.getPane().getId().equals("topCenterPane")) {
+            if (topLeft.getPlayerPlayed() != null && topLeft.getPlayerPlayed().equals(player1)) {
                 if (!topRight.getIsMarked()) {
                     topRight.getPane().setStyle("-fx-background-color: #0000ff");
                     topRight.setIsMarked(true);
                     topRight.setPlayerPlayed(player2);
                     player2.setTurn(false);
-                    player1.setTurn(true);
+                    this.player1.setTurn(true);
                     checkIfWon(quadrant, player2);
                     return;
                 }
-            } else if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player)) {
+            } else if (topRight.getPlayerPlayed() != null && topRight.getPlayerPlayed().equals(player1)) {
                 if (!topLeft.getIsMarked()) {
                     topLeft.getPane().setStyle("-fx-background-color: #0000ff");
                     topLeft.setIsMarked(true);
                     topLeft.setPlayerPlayed(player2);
                     player2.setTurn(false);
-                    player1.setTurn(true);
+                    this.player1.setTurn(true);
+                    checkIfWon(quadrant, player2);
+                    return;
+                }
+            } else if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player1)) {
+                if (!bottomCenter.getIsMarked()) {
+                    bottomCenter.getPane().setStyle("-fx-background-color: #0000ff");
+                    bottomCenter.setIsMarked(true);
+                    bottomCenter.setPlayerPlayed(player2);
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(quadrant, player2);
+                    return;
+                }
+            } else if (bottomCenter.getPlayerPlayed() != null && bottomCenter.getPlayerPlayed().equals(player1)) {
+                if (!center.getIsMarked()) {
+                    center.getPane().setStyle("-fx-background-color: #0000ff");
+                    center.setIsMarked(true);
+                    center.setPlayerPlayed(player2);
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(quadrant, player2);
+                    return;
+                }
+            }
+        } else if (quadrant.getPane().getId().equals("topRightPane")) {
+            if (topCenter.getPlayerPlayed() != null && topCenter.getPlayerPlayed().equals(player1)) {
+                if (!topLeft.getIsMarked()) {
+                    topLeft.getPane().setStyle("-fx-background-color: #0000ff");
+                    topLeft.setIsMarked(true);
+                    topLeft.setPlayerPlayed(player2);
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(quadrant, player2);
+                    return;
+                }
+            } else if (topLeft.getPlayerPlayed() != null && topLeft.getPlayerPlayed().equals(player1)) {
+                if (!topCenter.getIsMarked()) {
+                    topCenter.getPane().setStyle("-fx-background-color: #0000ff");
+                    topCenter.setIsMarked(true);
+                    topCenter.setPlayerPlayed(player2);
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(quadrant, player2);
+                    return;
+                }
+            } else if (centerRight.getPlayerPlayed() != null && centerRight.getPlayerPlayed().equals(player1)) {
+                if (!bottomRight.getIsMarked()) {
+                    bottomRight.getPane().setStyle("-fx-background-color: #0000ff");
+                    bottomRight.setIsMarked(true);
+                    bottomRight.setPlayerPlayed(player2);
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(quadrant, player2);
+                    return;
+                }
+            } else if (bottomRight.getPlayerPlayed() != null && bottomRight.getPlayerPlayed().equals(player1)) {
+                if (!centerRight.getIsMarked()) {
+                    centerRight.getPane().setStyle("-fx-background-color: #0000ff");
+                    centerRight.setIsMarked(true);
+                    centerRight.setPlayerPlayed(player2);
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(quadrant, player2);
+                    return;
+                }
+            } else if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player1)) {
+                if (!bottomLeft.getIsMarked()) {
+                    bottomLeft.getPane().setStyle("-fx-background-color: #0000ff");
+                    bottomLeft.setIsMarked(true);
+                    bottomLeft.setPlayerPlayed(player2);
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(quadrant, player2);
+                    return;
+                }
+            } else if (bottomLeft.getPlayerPlayed() != null && bottomLeft.getPlayerPlayed().equals(player1)) {
+                if (!center.getIsMarked()) {
+                    center.getPane().setStyle("-fx-background-color: #0000ff");
+                    center.setIsMarked(true);
+                    center.setPlayerPlayed(player2);
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(quadrant, player2);
+                    return;
+                }
+            }
+        } else if (quadrant.getPane().getId().equals("centerLeftPane")) {
+            if (topLeft.getPlayerPlayed() != null && topLeft.getPlayerPlayed().equals(player1)) {
+                if (!bottomLeft.getIsMarked()) {
+                    bottomLeft.getPane().setStyle("-fx-background-color: #0000ff");
+                    bottomLeft.setIsMarked(true);
+                    bottomLeft.setPlayerPlayed(player2);
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(quadrant, player2);
+                    return;
+                }
+            } else if (bottomLeft.getPlayerPlayed() != null && bottomLeft.getPlayerPlayed().equals(player1)) {
+                if (!topLeft.getIsMarked()) {
+                    topLeft.getPane().setStyle("-fx-background-color: #0000ff");
+                    topLeft.setIsMarked(true);
+                    topLeft.setPlayerPlayed(player2);
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(quadrant, player2);
+                    return;
+                }
+            } else if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player1)) {
+                if (!centerRight.getIsMarked()) {
+                    centerRight.getPane().setStyle("-fx-background-color: #0000ff");
+                    centerRight.setIsMarked(true);
+                    centerRight.setPlayerPlayed(player2);
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(quadrant, player2);
+                    return;
+                }
+            } else if (centerRight.getPlayerPlayed() != null && centerRight.getPlayerPlayed().equals(player1)) {
+                if (!center.getIsMarked()) {
+                    center.getPane().setStyle("-fx-background-color: #0000ff");
+                    center.setIsMarked(true);
+                    center.setPlayerPlayed(player2);
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(quadrant, player2);
+                    return;
+                }
+            }
+        } else if (quadrant.getPane().getId().equals("centerPane")) {
+            if (topLeft.getPlayerPlayed() != null && topLeft.getPlayerPlayed().equals(player1)) {
+                if (!bottomRight.getIsMarked()) {
+                    bottomRight.getPane().setStyle("-fx-background-color: #0000ff");
+                    bottomRight.setIsMarked(true);
+                    bottomRight.setPlayerPlayed(player2);
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(quadrant, player2);
+                    return;
+                }
+            } else if (bottomRight.getPlayerPlayed() != null && bottomRight.getPlayerPlayed().equals(player1)) {
+                if (!topLeft.getIsMarked()) {
+                    topLeft.getPane().setStyle("-fx-background-color: #0000ff");
+                    topLeft.setIsMarked(true);
+                    topLeft.setPlayerPlayed(player2);
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(quadrant, player2);
+                    return;
+                }
+            } else if (topRight.getPlayerPlayed() != null && topRight.getPlayerPlayed().equals(player1)) {
+                if (!bottomLeft.getIsMarked()) {
+                    bottomLeft.getPane().setStyle("-fx-background-color: #0000ff");
+                    bottomLeft.setIsMarked(true);
+                    bottomLeft.setPlayerPlayed(player2);
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(quadrant, player2);
+                    return;
+                }
+            } else if (bottomLeft.getPlayerPlayed() != null && bottomLeft.getPlayerPlayed().equals(player1)) {
+                if (!topRight.getIsMarked()) {
+                    topRight.getPane().setStyle("-fx-background-color: #0000ff");
+                    topRight.setIsMarked(true);
+                    topRight.setPlayerPlayed(player2);
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(quadrant, player2);
+                    return;
+                }
+            } else if (topCenter.getPlayerPlayed() != null && topCenter.getPlayerPlayed().equals(player1)) {
+                if (!bottomCenter.getIsMarked()) {
+                    bottomCenter.getPane().setStyle("-fx-background-color: #0000ff");
+                    bottomCenter.setIsMarked(true);
+                    bottomCenter.setPlayerPlayed(player2);
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(quadrant, player2);
+                    return;
+                }
+            } else if (bottomCenter.getPlayerPlayed() != null && bottomCenter.getPlayerPlayed().equals(player1)) {
+                if (!topCenter.getIsMarked()) {
+                    topCenter.getPane().setStyle("-fx-background-color: #0000ff");
+                    topCenter.setIsMarked(true);
+                    topCenter.setPlayerPlayed(player2);
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(quadrant, player2);
+                    return;
+                }
+            } else if (centerLeft.getPlayerPlayed() != null && centerLeft.getPlayerPlayed().equals(player1)) {
+                if (!centerRight.getIsMarked()) {
+                    centerRight.getPane().setStyle("-fx-background-color: #0000ff");
+                    centerRight.setIsMarked(true);
+                    centerRight.setPlayerPlayed(player2);
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(quadrant, player2);
+                    return;
+                }
+            } else if (centerRight.getPlayerPlayed() != null && centerRight.getPlayerPlayed().equals(player1)) {
+                if (!centerLeft.getIsMarked()) {
+                    centerLeft.getPane().setStyle("-fx-background-color: #0000ff");
+                    centerLeft.setIsMarked(true);
+                    centerLeft.setPlayerPlayed(player2);
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(quadrant, player2);
+                    return;
+                }
+            }
+        } else if (quadrant.getPane().getId().equals("centerRightPane")) {
+            if (topRight.getPlayerPlayed() != null && topRight.getPlayerPlayed().equals(player1)) {
+                if (!bottomRight.getIsMarked()) {
+                    bottomRight.getPane().setStyle("-fx-background-color: #0000ff");
+                    bottomRight.setIsMarked(true);
+                    bottomRight.setPlayerPlayed(player2);
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(quadrant, player2);
+                    return;
+                }
+            } else if (bottomRight.getPlayerPlayed() != null && bottomRight.getPlayerPlayed().equals(player1)) {
+                if (!topRight.getIsMarked()) {
+                    topRight.getPane().setStyle("-fx-background-color: #0000ff");
+                    topRight.setIsMarked(true);
+                    topRight.setPlayerPlayed(player2);
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(quadrant, player2);
+                    return;
+                }
+            } else if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player1)) {
+                if (!centerLeft.getIsMarked()) {
+                    centerLeft.getPane().setStyle("-fx-background-color: #0000ff");
+                    centerLeft.setIsMarked(true);
+                    centerLeft.setPlayerPlayed(player2);
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(quadrant, player2);
+                    return;
+                }
+            } else if (centerLeft.getPlayerPlayed() != null && centerLeft.getPlayerPlayed().equals(player1)) {
+                if (!center.getIsMarked()) {
+                    center.getPane().setStyle("-fx-background-color: #0000ff");
+                    center.setIsMarked(true);
+                    center.setPlayerPlayed(player2);
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(quadrant, player2);
+                    return;
+                }
+            }
+        } else if (quadrant.getPane().getId().equals("bottomLeftPane")) {
+            if (bottomCenter.getPlayerPlayed() != null && bottomCenter.getPlayerPlayed().equals(player1)) {
+                if (!bottomRight.getIsMarked()) {
+                    bottomRight.getPane().setStyle("-fx-background-color: #0000ff");
+                    bottomRight.setIsMarked(true);
+                    bottomRight.setPlayerPlayed(player2);
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(quadrant, player2);
+                    return;
+                }
+            } else if (bottomRight.getPlayerPlayed() != null && bottomRight.getPlayerPlayed().equals(player1)) {
+                if (!bottomCenter.getIsMarked()) {
+                    bottomCenter.getPane().setStyle("-fx-background-color: #0000ff");
+                    bottomCenter.setIsMarked(true);
+                    bottomCenter.setPlayerPlayed(player2);
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(quadrant, player2);
+                    return;
+                }
+            } else if (centerLeft.getPlayerPlayed() != null && centerLeft.getPlayerPlayed().equals(player1)) {
+                if (!topLeft.getIsMarked()) {
+                    topLeft.getPane().setStyle("-fx-background-color: #0000ff");
+                    topLeft.setIsMarked(true);
+                    topLeft.setPlayerPlayed(player2);
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(quadrant, player2);
+                    return;
+                }
+            } else if (topLeft.getPlayerPlayed() != null && topLeft.getPlayerPlayed().equals(player1)) {
+                if (!centerLeft.getIsMarked()) {
+                    centerLeft.getPane().setStyle("-fx-background-color: #0000ff");
+                    centerLeft.setIsMarked(true);
+                    centerLeft.setPlayerPlayed(player2);
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(quadrant, player2);
+                    return;
+                }
+            } else if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player1)) {
+                if (!topRight.getIsMarked()) {
+                    topRight.getPane().setStyle("-fx-background-color: #0000ff");
+                    topRight.setIsMarked(true);
+                    topRight.setPlayerPlayed(player2);
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(quadrant, player2);
+                    return;
+                }
+            } else if (topRight.getPlayerPlayed() != null && topRight.getPlayerPlayed().equals(player1)) {
+                if (!center.getIsMarked()) {
+                    center.getPane().setStyle("-fx-background-color: #0000ff");
+                    center.setIsMarked(true);
+                    center.setPlayerPlayed(player2);
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(quadrant, player2);
+                    return;
+                }
+            }
+        } else if (quadrant.getPane().getId().equals("bottomCenterPane")) {
+            if (bottomLeft.getPlayerPlayed() != null && bottomLeft.getPlayerPlayed().equals(player1)) {
+                if (!bottomRight.getIsMarked()) {
+                    bottomRight.getPane().setStyle("-fx-background-color: #0000ff");
+                    bottomRight.setIsMarked(true);
+                    bottomRight.setPlayerPlayed(player2);
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(quadrant, player2);
+                    return;
+                }
+            } else if (bottomRight.getPlayerPlayed() != null && bottomRight.getPlayerPlayed().equals(player1)) {
+                if (!bottomLeft.getIsMarked()) {
+                    bottomLeft.getPane().setStyle("-fx-background-color: #0000ff");
+                    bottomLeft.setIsMarked(true);
+                    bottomLeft.setPlayerPlayed(player2);
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(quadrant, player2);
+                    return;
+                }
+            } else if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player1)) {
+                if (!topCenter.getIsMarked()) {
+                    topCenter.getPane().setStyle("-fx-background-color: #0000ff");
+                    topCenter.setIsMarked(true);
+                    topCenter.setPlayerPlayed(player2);
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(quadrant, player2);
+                    return;
+                }
+            } else if (topCenter.getPlayerPlayed() != null && topCenter.getPlayerPlayed().equals(player1)) {
+                if (!center.getIsMarked()) {
+                    center.getPane().setStyle("-fx-background-color: #0000ff");
+                    center.setIsMarked(true);
+                    center.setPlayerPlayed(player2);
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(quadrant, player2);
+                    return;
+                }
+            }
+        } else if (quadrant.getPane().getId().equals("bottomRightPane")) {
+            if (bottomCenter.getPlayerPlayed() != null && bottomCenter.getPlayerPlayed().equals(player1)) {
+                if (!bottomLeft.getIsMarked()) {
+                    bottomLeft.getPane().setStyle("-fx-background-color: #0000ff");
+                    bottomLeft.setIsMarked(true);
+                    bottomLeft.setPlayerPlayed(player2);
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(quadrant, player2);
+                    return;
+                }
+            } else if (bottomLeft.getPlayerPlayed() != null && bottomLeft.getPlayerPlayed().equals(player1)) {
+                if (!bottomCenter.getIsMarked()) {
+                    bottomCenter.getPane().setStyle("-fx-background-color: #0000ff");
+                    bottomCenter.setIsMarked(true);
+                    bottomCenter.setPlayerPlayed(player2);
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(quadrant, player2);
+                    return;
+                }
+            } else if (centerRight.getPlayerPlayed() != null && centerRight.getPlayerPlayed().equals(player1)) {
+                if (!topRight.getIsMarked()) {
+                    topRight.getPane().setStyle("-fx-background-color: #0000ff");
+                    topRight.setIsMarked(true);
+                    topRight.setPlayerPlayed(player2);
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(quadrant, player2);
+                    return;
+                }
+            } else if (topRight.getPlayerPlayed() != null && topRight.getPlayerPlayed().equals(player1)) {
+                if (!centerRight.getIsMarked()) {
+                    centerRight.getPane().setStyle("-fx-background-color: #0000ff");
+                    centerRight.setIsMarked(true);
+                    centerRight.setPlayerPlayed(player2);
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(quadrant, player2);
+                    return;
+                }
+            } else if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player1)) {
+                if (!topLeft.getIsMarked()) {
+                    topLeft.getPane().setStyle("-fx-background-color: #0000ff");
+                    topLeft.setIsMarked(true);
+                    topLeft.setPlayerPlayed(player2);
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
+                    checkIfWon(quadrant, player2);
+                    return;
+                }
+            } else if (topLeft.getPlayerPlayed() != null && topLeft.getPlayerPlayed().equals(player1)) {
+                if (!center.getIsMarked()) {
+                    center.getPane().setStyle("-fx-background-color: #0000ff");
+                    center.setIsMarked(true);
+                    center.setPlayerPlayed(player2);
+                    player2.setTurn(false);
+                    this.player1.setTurn(true);
                     checkIfWon(quadrant, player2);
                     return;
                 }
             }
         }
 
+        //Random Moves
         if (!center.getIsMarked()) {
             center.getPane().setStyle("-fx-background-color: #0000ff");
             center.setIsMarked(true);
             center.setPlayerPlayed(player2);
+            currentQuadrant = center;
             player2.setTurn(false);
-            player1.setTurn(true);
-            checkIfWon(quadrant, player2);
+            this.player1.setTurn(true);
+            checkIfWon(center, player2);
             return;
         } else if (!topLeft.getIsMarked()) {
             topLeft.getPane().setStyle("-fx-background-color: #0000ff");
             topLeft.setIsMarked(true);
             topLeft.setPlayerPlayed(player2);
+            currentQuadrant = topLeft;
             player2.setTurn(false);
-            player1.setTurn(true);
-            checkIfWon(quadrant, player2);
+            this.player1.setTurn(true);
+            checkIfWon(topLeft, player2);
             return;
         } else if (!topRight.getIsMarked()) {
             topRight.getPane().setStyle("-fx-background-color: #0000ff");
             topRight.setIsMarked(true);
             topRight.setPlayerPlayed(player2);
+            currentQuadrant = topRight;
             player2.setTurn(false);
-            player1.setTurn(true);
-            checkIfWon(quadrant, player2);
+            this.player1.setTurn(true);
+            checkIfWon(topRight, player2);
             return;
         } else if (!bottomLeft.getIsMarked()) {
             bottomLeft.getPane().setStyle("-fx-background-color: #0000ff");
             bottomLeft.setIsMarked(true);
             bottomLeft.setPlayerPlayed(player2);
+            currentQuadrant = bottomLeft;
             player2.setTurn(false);
-            player1.setTurn(true);
-            checkIfWon(quadrant, player2);
+            this.player1.setTurn(true);
+            checkIfWon(bottomLeft, player2);
             return;
         } else if (!bottomRight.getIsMarked()) {
             bottomRight.getPane().setStyle("-fx-background-color: #0000ff");
             bottomRight.setIsMarked(true);
             bottomRight.setPlayerPlayed(player2);
+            currentQuadrant = bottomRight;
             player2.setTurn(false);
-            player1.setTurn(true);
-            checkIfWon(quadrant, player2);
+            this.player1.setTurn(true);
+            checkIfWon(bottomRight, player2);
             return;
         } else if (!topCenter.getIsMarked()) {
             topCenter.getPane().setStyle("-fx-background-color: #0000ff");
             topCenter.setIsMarked(true);
             topCenter.setPlayerPlayed(player2);
+            currentQuadrant = topCenter;
             player2.setTurn(false);
-            player1.setTurn(true);
-            checkIfWon(quadrant, player2);
+            this.player1.setTurn(true);
+            checkIfWon(topCenter, player2);
             return;
         } else if (!centerLeft.getIsMarked()) {
             centerLeft.getPane().setStyle("-fx-background-color: #0000ff");
             centerLeft.setIsMarked(true);
             centerLeft.setPlayerPlayed(player2);
+            currentQuadrant = centerLeft;
             player2.setTurn(false);
-            player1.setTurn(true);
-            checkIfWon(quadrant, player2);
+            this.player1.setTurn(true);
+            checkIfWon(centerLeft, player2);
             return;
         } else if (!centerRight.getIsMarked()) {
             centerRight.getPane().setStyle("-fx-background-color: #0000ff");
             centerRight.setIsMarked(true);
             centerRight.setPlayerPlayed(player2);
+            currentQuadrant = centerRight;
             player2.setTurn(false);
-            player1.setTurn(true);
-            checkIfWon(quadrant, player2);
+            this.player1.setTurn(true);
+            checkIfWon(centerLeft, player2);
             return;
         } else if (!bottomCenter.getIsMarked()) {
             bottomCenter.getPane().setStyle("-fx-background-color: #0000ff");
             bottomCenter.setIsMarked(true);
             bottomCenter.setPlayerPlayed(player2);
+            currentQuadrant = bottomCenter;
             player2.setTurn(false);
-            player1.setTurn(true);
-            checkIfWon(quadrant, player2);
+            this.player1.setTurn(true);
+            checkIfWon(bottomCenter, player2);
             return;
         }
     }
@@ -978,6 +1910,8 @@ public class Main extends Application {
         playAgainBtn.setOnAction(event -> {
             setGame();
             resume();
+            pauseBtn.setDisable(false);
+            undoBtn.setDisable(false);
         });
 
         Button exitBtn = (Button) tiePopUpPane.lookup("#exit");

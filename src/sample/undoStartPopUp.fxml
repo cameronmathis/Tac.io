@@ -4,7 +4,7 @@
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Text?>
-<TitledPane fx:id="isAlreadyMarkedPopUp" alignment="CENTER" animated="false" collapsible="false" maxHeight="-Infinity"
+<TitledPane fx:id="undoStartPopUp" alignment="CENTER" animated="false" collapsible="false" maxHeight="-Infinity"
             maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="155.0" prefWidth="345.0"
             text="Error" textAlignment="CENTER" xmlns="http://javafx.com/javafx/11.0.1"
             xmlns:fx="http://javafx.com/fxml/1">
@@ -25,7 +25,7 @@
             <children>
                 <Button fx:id="dismiss" mnemonicParsing="false" text="Dismiss" GridPane.columnIndex="2"
                         GridPane.halignment="CENTER" GridPane.rowIndex="2" style="-fx-focus-traversable: false;"/>
-                <Text opacity="0.55" strokeType="OUTSIDE" strokeWidth="0.0" text="This square has already been played in"
+                <Text opacity="0.55" strokeType="OUTSIDE" strokeWidth="0.0" text="There is nothing to undo"
                       textAlignment="CENTER" wrappingWidth="235.63671875" GridPane.columnIndex="2"
                       GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER"/>
             </children>
