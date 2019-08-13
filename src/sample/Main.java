@@ -50,6 +50,7 @@ public class Main extends Application {
     private Quadrant previousPreviousQuadrant;
     private int counter;
     private boolean gameOver;
+    private Player firstMovePlayer = player1;
 
     //The GUI interface scene
     @Override
@@ -487,6 +488,7 @@ public class Main extends Application {
                     checkIfTie();
                     if (!gameOver && numberOfPlayers == 1 && player2.getTurn()) {
                         getQuadrantToMark(quadrant);
+                        checkIfTie();
                     }
                 }
             } else if (!gameOver && numberOfPlayers == 2 && player2.getTurn()) {
@@ -1900,7 +1902,6 @@ public class Main extends Application {
                         player2.setTurn(false);
                         this.player1.setTurn(true);
                         checkIfWon(center, player2);
-                        success = true;
                         return;
                     } else {
                         break;
@@ -2101,8 +2102,15 @@ public class Main extends Application {
      * Sets the board for a new game
      */
     private void setGame() {
-        player1.setTurn(true);
-        player2.setTurn(false);
+        if (firstMovePlayer.equals(player1)) {
+            player1.setTurn(false);
+            player2.setTurn(true);
+            firstMovePlayer = player2;
+        } else if (firstMovePlayer.equals(player2)) {
+            player1.setTurn(true);
+            player2.setTurn(false);
+            firstMovePlayer = player1;
+        }
 
         pauseBtn.setDisable(false);
         undoBtn.setDisable(false);
@@ -2136,6 +2144,10 @@ public class Main extends Application {
         bottomRight.setIsMarked(false);
 
         gameOver = false;
+
+        if (firstMovePlayer.equals(player2) && numberOfPlayers == 1) {
+            getQuadrantToMark(center);
+        }
     }
 
     /**
