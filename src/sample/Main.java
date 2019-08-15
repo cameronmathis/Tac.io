@@ -1480,7 +1480,7 @@ public class Main extends Application {
         } else if (topCenter.getPlayerPlayed() != null && topCenter.getPlayerPlayed().equals(player2)) {
             while (true) {
                 Random rand = new Random();
-                int n = rand.nextInt(1);
+                int n = rand.nextInt(2);
 
                 switch (n) {
                     case 0:
@@ -1688,7 +1688,7 @@ public class Main extends Application {
         } else if (bottomCenter.getPlayerPlayed() != null && bottomCenter.getPlayerPlayed().equals(player2)) {
             while (true) {
                 Random rand = new Random();
-                int n = rand.nextInt(3);
+                int n = rand.nextInt(2);
 
                 switch (n) {
                     case 0:
