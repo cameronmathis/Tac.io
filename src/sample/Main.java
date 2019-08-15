@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -13,6 +14,9 @@ import javafx.scene.text.Text;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 
+import javafx.scene.image.ImageView;
+
+import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 
@@ -547,7 +551,11 @@ public class Main extends Application {
             ableToUndo = true;
             counter = 0;
             if (!gameOver && player1.getTurn()) {
-                quadrant.getPane().setStyle("-fx-background-color: #ff0000");
+                Object[] temp1 = quadrant.getPane().getChildren().toArray();
+                File imageFile1 = new File("src/sample/images/TicTacToeSingleX.png");
+                Image imageO1 = new Image(imageFile1.toURI().toString());
+                ImageView quadrantImageView1 = (ImageView) temp1[0];
+                quadrantImageView1.setImage(imageO1);
                 quadrant.setIsMarked(true);
                 quadrant.setPlayerPlayed(player1);
                 player1.setTurn(false);
@@ -556,7 +564,11 @@ public class Main extends Application {
                     checkIfTie();
                     if (!gameOver && numberOfPlayers == 1 && player2.getTurn()) {
                         quadrant = getQuadrantToMark(quadrant);
-                        quadrant.getPane().setStyle("-fx-background-color: #0000ff");
+                        Object[] temp2 = quadrant.getPane().getChildren().toArray();
+                        File imageFile2 = new File("src/sample/images/TicTacToeSingleO.png");
+                        Image imageO2 = new Image(imageFile2.toURI().toString());
+                        ImageView quadrantImageView2 = (ImageView) temp2[0];
+                        quadrantImageView2.setImage(imageO2);
                         quadrant.setIsMarked(true);
                         quadrant.setPlayerPlayed(player2);
                         currentQuadrant = quadrant;
@@ -568,7 +580,11 @@ public class Main extends Application {
                     }
                 }
             } else if (!gameOver && numberOfPlayers == 2 && player2.getTurn()) {
-                quadrant.getPane().setStyle("-fx-background-color: #0000ff");
+                Object[] temp = quadrant.getPane().getChildren().toArray();
+                File imageFile = new File("src/sample/images/TicTacToeSingleO.png");
+                Image imageO = new Image(imageFile.toURI().toString());
+                ImageView quadrantImageView = (ImageView) temp[0];
+                quadrantImageView.setImage(imageO);
                 quadrant.setIsMarked(true);
                 quadrant.setPlayerPlayed(player2);
                 player2.setTurn(false);
@@ -1431,31 +1447,31 @@ public class Main extends Application {
                 switch (n) {
                     case 0:
                         if (topCenter.getPlayerPlayed() == null && topRight.getPlayerPlayed() == null) {
-                            int n2 = rand.nextInt(1);
+                            int n2 = rand.nextInt(2);
                             switch (n2) {
-                                case 0 :
+                                case 0:
                                     return topCenter;
-                                case 1 :
+                                case 1:
                                     return topRight;
                             }
                         }
                     case 1:
                         if (centerLeft.getPlayerPlayed() == null && bottomLeft.getPlayerPlayed() == null) {
-                            int n2 = rand.nextInt(1);
+                            int n2 = rand.nextInt(2);
                             switch (n2) {
-                                case 0 :
+                                case 0:
                                     return centerLeft;
-                                case 1 :
+                                case 1:
                                     return bottomLeft;
                             }
                         }
                     case 2:
                         if (center.getPlayerPlayed() == null && bottomRight.getPlayerPlayed() == null) {
-                            int n2 = rand.nextInt(1);
+                            int n2 = rand.nextInt(2);
                             switch (n2) {
-                                case 0 :
+                                case 0:
                                     return center;
-                                case 1 :
+                                case 1:
                                     return bottomRight;
                             }
                         }
@@ -1469,21 +1485,21 @@ public class Main extends Application {
                 switch (n) {
                     case 0:
                         if (topLeft.getPlayerPlayed() == null && topRight.getPlayerPlayed() == null) {
-                            int n2 = rand.nextInt(1);
+                            int n2 = rand.nextInt(2);
                             switch (n2) {
-                                case 0 :
+                                case 0:
                                     return topLeft;
-                                case 1 :
+                                case 1:
                                     return topRight;
                             }
                         }
                     case 1:
-                        if (center.getPlayerPlayed() == null  && bottomCenter.getPlayerPlayed() == null) {
-                            int n2 = rand.nextInt(1);
+                        if (center.getPlayerPlayed() == null && bottomCenter.getPlayerPlayed() == null) {
+                            int n2 = rand.nextInt(2);
                             switch (n2) {
-                                case 0 :
+                                case 0:
                                     return center;
-                                case 1 :
+                                case 1:
                                     return bottomCenter;
                             }
                         }
@@ -1496,96 +1512,138 @@ public class Main extends Application {
 
                 switch (n) {
                     case 0:
-                        if (topCenter.getPlayerPlayed() == null) {
-                            return topCenter;
+                        if (topCenter.getPlayerPlayed() == null && topLeft.getPlayerPlayed() == null) {
+                            int n2 = rand.nextInt(2);
+                            switch (n2) {
+                                case 0:
+                                    return topCenter;
+                                case 1:
+                                    return topLeft;
+                            }
                         }
                     case 1:
-                        if (centerRight.getPlayerPlayed() == null) {
-                            return centerRight;
+                        if (centerRight.getPlayerPlayed() == null && bottomRight.getPlayerPlayed() == null) {
+                            int n2 = rand.nextInt(2);
+                            switch (n2) {
+                                case 0:
+                                    return centerRight;
+                                case 1:
+                                    return bottomRight;
+                            }
                         }
                     case 2:
-                        if (center.getPlayerPlayed() == null) {
-                            return center;
+                        if (center.getPlayerPlayed() == null && bottomLeft.getPlayerPlayed() == null) {
+                            int n2 = rand.nextInt(2);
+                            switch (n2) {
+                                case 0:
+                                    return center;
+                                case 1:
+                                    return bottomLeft;
+                            }
                         }
                 }
             }
         } else if (centerLeft.getPlayerPlayed() != null && centerLeft.getPlayerPlayed().equals(player2)) {
             while (true) {
                 Random rand = new Random();
-                int n = rand.nextInt(3);
+                int n = rand.nextInt(2);
 
                 switch (n) {
                     case 0:
-                        if (topLeft.getPlayerPlayed() == null) {
-                            return topLeft;
+                        if (topLeft.getPlayerPlayed() == null && bottomLeft.getPlayerPlayed() == null) {
+                            int n2 = rand.nextInt(2);
+                            switch (n2) {
+                                case 0:
+                                    return bottomLeft;
+                                case 1:
+                                    return topLeft;
+                            }
                         }
                     case 1:
-                        if (bottomLeft.getPlayerPlayed() == null) {
-                            return bottomLeft;
-                        }
-                    case 2:
-                        if (center.getPlayerPlayed() == null) {
-                            return center;
+                        if (center.getPlayerPlayed() == null && centerRight.getPlayerPlayed() == null) {
+                            int n2 = rand.nextInt(2);
+                            switch (n2) {
+                                case 0:
+                                    return centerRight;
+                                case 1:
+                                    return center;
+                            }
                         }
                 }
             }
         } else if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player2)) {
             while (true) {
                 Random rand = new Random();
-                int n = rand.nextInt(8);
+                int n = rand.nextInt(4);
 
                 switch (n) {
                     case 0:
-                        if (topLeft.getPlayerPlayed() == null) {
-                            return topLeft;
+                        if (topLeft.getPlayerPlayed() == null && bottomRight.getPlayerPlayed() == null) {
+                            int n2 = rand.nextInt(2);
+                            switch (n2) {
+                                case 0:
+                                    return bottomRight;
+                                case 1:
+                                    return topLeft;
+                            }
                         }
                     case 1:
-                        if (topCenter.getPlayerPlayed() == null) {
-                            return topCenter;
+                        if (topCenter.getPlayerPlayed() == null && bottomCenter.getPlayerPlayed() == null) {
+                            int n2 = rand.nextInt(2);
+                            switch (n2) {
+                                case 0:
+                                    return topCenter;
+                                case 1:
+                                    return bottomCenter;
+                            }
                         }
                     case 2:
-                        if (topRight.getPlayerPlayed() == null) {
-                            return topRight;
+                        if (topRight.getPlayerPlayed() == null && bottomLeft.getPlayerPlayed() == null) {
+                            int n2 = rand.nextInt(2);
+                            switch (n2) {
+                                case 0:
+                                    return topRight;
+                                case 1:
+                                    return bottomLeft;
+                            }
                         }
                     case 3:
-                        if (centerLeft.getPlayerPlayed() == null) {
-                            return centerLeft;
-                        }
-                    case 4:
-                        if (centerRight.getPlayerPlayed() == null) {
-                            return centerRight;
-                        }
-                    case 5:
-                        if (bottomLeft.getPlayerPlayed() == null) {
-                            return bottomLeft;
-                        }
-                    case 6:
-                        if (bottomCenter.getPlayerPlayed() == null) {
-                            return bottomCenter;
-                        }
-                    case 7:
-                        if (bottomRight.getPlayerPlayed() == null) {
-                            return bottomRight;
+                        if (centerLeft.getPlayerPlayed() == null && centerRight.getPlayerPlayed() == null) {
+                            int n2 = rand.nextInt(2);
+                            switch (n2) {
+                                case 0:
+                                    return centerRight;
+                                case 1:
+                                    return centerLeft;
+                            }
                         }
                 }
             }
         } else if (centerRight.getPlayerPlayed() != null && centerRight.getPlayerPlayed().equals(player2)) {
             while (true) {
                 Random rand = new Random();
-                int n = rand.nextInt(3);
+                int n = rand.nextInt(2);
 
                 switch (n) {
                     case 0:
-                        if (topRight.getPlayerPlayed() == null) {
-                            return topRight;
+                        if (topRight.getPlayerPlayed() == null && bottomRight.getPlayerPlayed() == null) {
+                            int n2 = rand.nextInt(2);
+                            switch (n2) {
+                                case 0:
+                                    return topRight;
+                                case 1:
+                                    return bottomRight;
+                            }
                         }
                     case 1:
-                        if (bottomRight.getPlayerPlayed() == null) {
-                            return bottomRight;
-                        }
-                    case 2:
-                        if (center.getPlayerPlayed() == null) {
-                            return center;
+                        if (center.getPlayerPlayed() == null && centerLeft.getPlayerPlayed() == null) {
+                            int n2 = rand.nextInt(2);
+                            switch (n2) {
+                                case 0:
+                                    return center;
+                                case 1:
+                                    return centerLeft;
+                            }
                         }
                 }
             }
@@ -1596,16 +1654,34 @@ public class Main extends Application {
 
                 switch (n) {
                     case 0:
-                        if (centerLeft.getPlayerPlayed() == null) {
-                            return centerLeft;
+                        if (centerLeft.getPlayerPlayed() == null && topLeft.getPlayerPlayed() == null) {
+                            int n2 = rand.nextInt(2);
+                            switch (n2) {
+                                case 0:
+                                    return centerLeft;
+                                case 1:
+                                    return topLeft;
+                            }
                         }
                     case 1:
-                        if (bottomCenter.getPlayerPlayed() == null) {
-                            return bottomCenter;
+                        if (bottomCenter.getPlayerPlayed() == null && bottomRight.getPlayerPlayed() == null) {
+                            int n2 = rand.nextInt(2);
+                            switch (n2) {
+                                case 0:
+                                    return bottomRight;
+                                case 1:
+                                    return bottomCenter;
+                            }
                         }
                     case 2:
-                        if (center.getPlayerPlayed() == null) {
-                            return center;
+                        if (center.getPlayerPlayed() == null && topRight.getPlayerPlayed() == null) {
+                            int n2 = rand.nextInt(2);
+                            switch (n2) {
+                                case 0:
+                                    return center;
+                                case 1:
+                                    return topRight;
+                            }
                         }
                 }
             }
@@ -1616,16 +1692,24 @@ public class Main extends Application {
 
                 switch (n) {
                     case 0:
-                        if (bottomLeft.getPlayerPlayed() == null) {
-                            return bottomLeft;
+                        if (bottomLeft.getPlayerPlayed() == null && bottomRight.getPlayerPlayed() == null) {
+                            int n2 = rand.nextInt(2);
+                            switch (n2) {
+                                case 0:
+                                    return bottomLeft;
+                                case 1:
+                                    return bottomRight;
+                            }
                         }
                     case 1:
-                        if (bottomRight.getPlayerPlayed() == null) {
-                            return bottomRight;
-                        }
-                    case 2:
-                        if (center.getPlayerPlayed() == null) {
-                            return center;
+                        if (center.getPlayerPlayed() == null && topCenter.getPlayerPlayed() == null) {
+                            int n2 = rand.nextInt(2);
+                            switch (n2) {
+                                case 0:
+                                    return topCenter;
+                                case 1:
+                                    return center;
+                            }
                         }
                 }
             }
@@ -1636,16 +1720,34 @@ public class Main extends Application {
 
                 switch (n) {
                     case 0:
-                        if (centerRight.getPlayerPlayed() == null) {
-                            return centerRight;
+                        if (centerRight.getPlayerPlayed() == null && topRight.getPlayerPlayed() == null) {
+                            int n2 = rand.nextInt(2);
+                            switch (n2) {
+                                case 0:
+                                    return topRight;
+                                case 1:
+                                    return centerRight;
+                            }
                         }
                     case 1:
-                        if (bottomCenter.getPlayerPlayed() == null) {
-                            return bottomCenter;
+                        if (bottomCenter.getPlayerPlayed() == null && bottomLeft.getPlayerPlayed() == null) {
+                            int n2 = rand.nextInt(2);
+                            switch (n2) {
+                                case 0:
+                                    return bottomCenter;
+                                case 1:
+                                    return bottomLeft;
+                            }
                         }
                     case 2:
-                        if (center.getPlayerPlayed() == null) {
-                            return center;
+                        if (center.getPlayerPlayed() == null && topLeft.getPlayerPlayed() == null) {
+                            int n2 = rand.nextInt(2);
+                            switch (n2) {
+                                case 0:
+                                    return center;
+                                case 1:
+                                    return topLeft;
+                            }
                         }
                 }
             }
@@ -1856,7 +1958,11 @@ public class Main extends Application {
 
         if (firstMovePlayer.equals(player2) && numberOfPlayers == 1) {
             Quadrant quadrant = getQuadrantToMark(topLeft);
-            quadrant.getPane().setStyle("-fx-background-color: #0000ff");
+            Object[] temp = quadrant.getPane().getChildren().toArray();
+            File imageFile = new File("src/sample/images/TicTacToeSingleO.png");
+            Image imageO = new Image(imageFile.toURI().toString());
+            ImageView quadrantImageView = (ImageView) temp[0];
+            quadrantImageView.setImage(imageO);
             quadrant.setIsMarked(true);
             quadrant.setPlayerPlayed(player2);
             currentQuadrant = quadrant;
