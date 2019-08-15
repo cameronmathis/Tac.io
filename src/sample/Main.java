@@ -27,11 +27,11 @@ public class Main extends Application {
     private AnchorPane gamePane;
     private Scene gameScene;
     private boolean paused;
+    private boolean enterNumberPopUpShown = false;
     private boolean enterNamePopUpShown = false;
     private boolean wonGamePopUpShown = false;
     private boolean tiedGamePopUpShown = false;
     private Popup PopUp;
-    private Button startBtn;
     private Button pauseBtn;
     private Button undoBtn;
     private Quadrant topLeft;
@@ -52,7 +52,7 @@ public class Main extends Application {
     private Quadrant previousPreviousQuadrant;
     private int counter;
     private boolean gameOver;
-    private Player firstMovePlayer = player1;
+    private Player firstMovePlayer;
 
     //The GUI interface scene
     @Override
@@ -83,13 +83,37 @@ public class Main extends Application {
          * BUTTON INITIALIZATION
          * Initialize all the buttons
          */
-        startBtn = (Button) openingScene.lookup("#start");
-        startBtn.setDisable(true);
         pauseBtn = (Button) gameScene.lookup("#pause");
         undoBtn = (Button) gameScene.lookup("#undo");
 
         //initialize each quadrant
-        setGame();
+        topLeft = new Quadrant();
+        topLeft.setPane((Pane) gameScene.lookup("#topLeftPane"));
+        topLeft.setIsMarked(false);
+        topCenter = new Quadrant();
+        topCenter.setPane((Pane) gameScene.lookup("#topCenterPane"));
+        topCenter.setIsMarked(false);
+        topRight = new Quadrant();
+        topRight.setPane((Pane) gameScene.lookup("#topRightPane"));
+        topRight.setIsMarked(false);
+        centerLeft = new Quadrant();
+        centerLeft.setPane((Pane) gameScene.lookup("#centerLeftPane"));
+        centerLeft.setIsMarked(false);
+        center = new Quadrant();
+        center.setPane((Pane) gameScene.lookup("#centerPane"));
+        center.setIsMarked(false);
+        centerRight = new Quadrant();
+        centerRight.setPane((Pane) gameScene.lookup("#centerRightPane"));
+        centerRight.setIsMarked(false);
+        bottomLeft = new Quadrant();
+        bottomLeft.setPane((Pane) gameScene.lookup("#bottomLeftPane"));
+        bottomLeft.setIsMarked(false);
+        bottomCenter = new Quadrant();
+        bottomCenter.setPane((Pane) gameScene.lookup("#bottomCenterPane"));
+        bottomCenter.setIsMarked(false);
+        bottomRight = new Quadrant();
+        bottomRight.setPane((Pane) gameScene.lookup("#bottomRightPane"));
+        bottomRight.setIsMarked(false);
 
         /**
          * SHORTCUT KEYS
@@ -98,7 +122,17 @@ public class Main extends Application {
 
         openingScene.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER && PopUp == null) {
-                start();
+            } else if ((event.getCode() == KeyCode.DIGIT1 || event.getCode() == KeyCode.NUMPAD1) && enterNumberPopUpShown) {
+                numberOfPlayers = 1;
+                resume();
+                enterNumberPopUpShown = false;
+                enterOneNamePopUp();
+                player2.setPlayerName("Computer");
+            } else if ((event.getCode() == KeyCode.DIGIT2 || event.getCode() == KeyCode.NUMPAD2) && enterNumberPopUpShown) {
+                numberOfPlayers = 2;
+                resume();
+                enterNumberPopUpShown = false;
+                enterTwoNamesPopUp();
             } else if (event.getCode() == KeyCode.ENTER && enterNamePopUpShown) {
                 if (numberOfPlayers == 1) {
                     if (enterOneNamePopUpPane.lookup("#player1Name") != null) {
@@ -122,8 +156,8 @@ public class Main extends Application {
                     }
                 }
                 resume();
+                start();
                 enterNamePopUpShown = false;
-                startBtn.setDisable(false);
                 pauseBtn.setDisable(false);
                 undoBtn.setDisable(false);
             }
@@ -162,18 +196,19 @@ public class Main extends Application {
                 undoBtn.setDisable(false);
             } else if (event.getCode() == KeyCode.SPACE && !paused) {
                 pause();
+            } else if (event.getCode() == KeyCode.BACK_SPACE && paused) {
+                primaryStage.setScene(openingScene); //sets the scene on the stage
+                primaryStage.show(); //shows the primaryStage
+                resume();
+                numberOfPlayersPopUp();
+            } else if (event.getCode() == KeyCode.BACK_SPACE && PopUp == null) {
+                undo();
             } else if (event.getCode() == KeyCode.ENTER && PopUp != null) {
                 resume();
                 pauseBtn.setDisable(false);
-                pauseBtn.setDisable(false);
+                undoBtn.setDisable(false);
             }
         });
-
-        /**
-         * BEGIN BUTTON
-         * Start the game
-         */
-        startBtn.setOnAction(event -> start());
 
         /**
          * PAUSE BUTTON
@@ -206,6 +241,8 @@ public class Main extends Application {
      * PopUp to ask for number of players
      */
     private void numberOfPlayersPopUp() {
+        enterNumberPopUpShown = true;
+
         PopUp = new Popup(); //creates new popup
 
         TitledPane numberOfPlayersPopUpPane = null; //calls popup menu created in 'numberOfPlayersPopUp.fxml' file
@@ -224,6 +261,7 @@ public class Main extends Application {
         onePlayerBtn.setOnAction(event -> {
             numberOfPlayers = 1;
             resume();
+            enterNumberPopUpShown = false;
             enterOneNamePopUp();
             player2.setPlayerName("Computer");
         });
@@ -231,6 +269,7 @@ public class Main extends Application {
         twoPlayersBtn.setOnAction(event -> {
             numberOfPlayers = 2;
             resume();
+            enterNumberPopUpShown = false;
             enterTwoNamesPopUp();
         });
     }
@@ -265,8 +304,8 @@ public class Main extends Application {
                 player1.setPlayerName("player1");
             }
             resume();
+            start();
             enterNamePopUpShown = false;
-            startBtn.setDisable(false);
         });
     }
 
@@ -305,8 +344,8 @@ public class Main extends Application {
                 player2.setPlayerName("player2");
             }
             resume();
+            start();
             enterNamePopUpShown = false;
-            startBtn.setDisable(false);
         });
     }
 
@@ -316,8 +355,10 @@ public class Main extends Application {
      */
     private void start() {
         setGame();
+        pauseBtn.setDisable(false);
+        undoBtn.setDisable(false);
         primaryStage.setScene(gameScene); //sets the scene on the stage
-        primaryStage.show(); //shows the primaryStage
+        primaryStage.show();
     }
 
     /**
@@ -417,7 +458,6 @@ public class Main extends Application {
 
         Button exitBtn = (Button) pausedPupUpPane.lookup("#exit");
         exitBtn.setOnAction(event -> {
-            startBtn.setDisable(true);
             primaryStage.setScene(openingScene); //sets the scene on the stage
             primaryStage.show(); //shows the primaryStage
             resume();
@@ -1144,8 +1184,8 @@ public class Main extends Application {
                     }
                 }
                 if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player1)) {
-                    if (!bottomLeft.getIsMarked()) {
-                        return bottomLeft;
+                    if (!bottomRight.getIsMarked()) {
+                        return bottomRight;
                     }
                 }
                 if (bottomRight.getPlayerPlayed() != null && bottomRight.getPlayerPlayed().equals(player1)) {
@@ -1742,7 +1782,11 @@ public class Main extends Application {
      * Sets the board for a new game
      */
     private void setGame() {
-        if (firstMovePlayer.equals(player1)) {
+        if (firstMovePlayer == null) {
+            player1.setTurn(true);
+            player2.setTurn(false);
+            firstMovePlayer = player1;
+        } else if (firstMovePlayer.equals(player1)) {
             player1.setTurn(false);
             player2.setTurn(true);
             firstMovePlayer = player2;

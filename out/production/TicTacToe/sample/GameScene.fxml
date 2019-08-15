@@ -8,9 +8,15 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: #404040;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<?import javafx.scene.image.Image?>
+<AnchorPane prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: TRANSPARENT;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <GridPane alignment="CENTER" depthTest="DISABLE" gridLinesVisible="true" layoutX="-0.5" layoutY="-0.5" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: #404040;">
+        <ImageView fitHeight="800.0" fitWidth="1200.0">
+            <image>
+                <Image url="@../../images/TicTacToeBoard.jpg" />
+            </image>
+        </ImageView>
+        <GridPane alignment="CENTER" depthTest="DISABLE" gridLinesVisible="true" layoutX="-0.5" layoutY="-0.5" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: TRANSPARENT;">
             <columnConstraints>
                 <ColumnConstraints hgrow="ALWAYS" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="250.0" />
                 <ColumnConstraints halignment="CENTER" hgrow="NEVER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="700.0" />

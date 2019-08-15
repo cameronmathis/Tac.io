@@ -16,7 +16,7 @@ public class Quadrant {
         this.isMarked = isMarked;
         if (isMarked == false) {
             this.setPlayerPlayed(null);
-            this.getPane().setStyle("-fx-background-color: #404040");
+            this.getPane().setStyle("-fx-background-color: TRANSPARENT");
         }
     }
 
