@@ -13,7 +13,7 @@
     <children>
         <ImageView fitHeight="800.0" fitWidth="1200.0">
             <image>
-                <Image url="@../../images/TicTacToeBoard.jpg" />
+                <Image url="@TicTacToeBoard.jpg" />
             </image>
         </ImageView>
         <GridPane alignment="CENTER" depthTest="DISABLE" gridLinesVisible="true" layoutX="-0.5" layoutY="-0.5" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: TRANSPARENT;">

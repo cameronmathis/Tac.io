@@ -1430,36 +1430,62 @@ public class Main extends Application {
 
                 switch (n) {
                     case 0:
-                        if (topCenter.getPlayerPlayed() == null) {
-                            return topCenter;
+                        if (topCenter.getPlayerPlayed() == null && topRight.getPlayerPlayed() == null) {
+                            int n2 = rand.nextInt(1);
+                            switch (n2) {
+                                case 0 :
+                                    return topCenter;
+                                case 1 :
+                                    return topRight;
+                            }
                         }
                     case 1:
-                        if (centerLeft.getPlayerPlayed() == null) {
-                            return centerLeft;
+                        if (centerLeft.getPlayerPlayed() == null && bottomLeft.getPlayerPlayed() == null) {
+                            int n2 = rand.nextInt(1);
+                            switch (n2) {
+                                case 0 :
+                                    return centerLeft;
+                                case 1 :
+                                    return bottomLeft;
+                            }
                         }
                     case 2:
-                        if (center.getPlayerPlayed() == null) {
-                            return center;
+                        if (center.getPlayerPlayed() == null && bottomRight.getPlayerPlayed() == null) {
+                            int n2 = rand.nextInt(1);
+                            switch (n2) {
+                                case 0 :
+                                    return center;
+                                case 1 :
+                                    return bottomRight;
+                            }
                         }
                 }
             }
         } else if (topCenter.getPlayerPlayed() != null && topCenter.getPlayerPlayed().equals(player2)) {
             while (true) {
                 Random rand = new Random();
-                int n = rand.nextInt(3);
+                int n = rand.nextInt(1);
 
                 switch (n) {
                     case 0:
-                        if (topLeft.getPlayerPlayed() == null) {
-                            return topLeft;
+                        if (topLeft.getPlayerPlayed() == null && topRight.getPlayerPlayed() == null) {
+                            int n2 = rand.nextInt(1);
+                            switch (n2) {
+                                case 0 :
+                                    return topLeft;
+                                case 1 :
+                                    return topRight;
+                            }
                         }
                     case 1:
-                        if (topRight.getPlayerPlayed() == null) {
-                            return topRight;
-                        }
-                    case 2:
-                        if (center.getPlayerPlayed() == null) {
-                            return center;
+                        if (center.getPlayerPlayed() == null  && bottomCenter.getPlayerPlayed() == null) {
+                            int n2 = rand.nextInt(1);
+                            switch (n2) {
+                                case 0 :
+                                    return center;
+                                case 1 :
+                                    return bottomCenter;
+                            }
                         }
                 }
             }
@@ -1723,7 +1749,6 @@ public class Main extends Application {
             undoBtn.setDisable(false);
             setGame();
             resume();
-            PopUp.hide();
         });
 
         Button quitBtn = (Button) gameOverPopUpPane.lookup("#quit");
