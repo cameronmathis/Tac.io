@@ -125,7 +125,6 @@ public class Main extends Application {
         paused = false;
 
         openingScene.setOnKeyPressed(event -> {
-            System.out.println("hey");
             if ((event.getCode() == KeyCode.DIGIT1 || event.getCode() == KeyCode.NUMPAD1) && enterNumberPopUpShown) {
                 numberOfPlayers = 1;
                 resume();
@@ -1440,7 +1439,10 @@ public class Main extends Application {
 
         //Secondary Offensive Moves
         if (topLeft.getPlayerPlayed() != null && topLeft.getPlayerPlayed().equals(player2)) {
-            while (true) {
+            boolean case0 = true;
+            boolean case1 = true;
+            boolean case2 = true;
+            while (case0 || case1 || case2) {
                 Random rand = new Random();
                 int n = rand.nextInt(3);
 
@@ -1454,6 +1456,8 @@ public class Main extends Application {
                                 case 1:
                                     return topRight;
                             }
+                        } else {
+                            case0 = false;
                         }
                     case 1:
                         if (centerLeft.getPlayerPlayed() == null && bottomLeft.getPlayerPlayed() == null) {
@@ -1464,6 +1468,8 @@ public class Main extends Application {
                                 case 1:
                                     return bottomLeft;
                             }
+                        } else {
+                            case1 = false;
                         }
                     case 2:
                         if (center.getPlayerPlayed() == null && bottomRight.getPlayerPlayed() == null) {
@@ -1474,11 +1480,15 @@ public class Main extends Application {
                                 case 1:
                                     return bottomRight;
                             }
+                        } else {
+                            case2 = false;
                         }
                 }
             }
         } else if (topCenter.getPlayerPlayed() != null && topCenter.getPlayerPlayed().equals(player2)) {
-            while (true) {
+            boolean case0 = true;
+            boolean case1 = true;
+            while (case0 || case1) {
                 Random rand = new Random();
                 int n = rand.nextInt(2);
 
@@ -1492,6 +1502,8 @@ public class Main extends Application {
                                 case 1:
                                     return topRight;
                             }
+                        } else {
+                            case0 = false;
                         }
                     case 1:
                         if (center.getPlayerPlayed() == null && bottomCenter.getPlayerPlayed() == null) {
@@ -1502,11 +1514,16 @@ public class Main extends Application {
                                 case 1:
                                     return bottomCenter;
                             }
+                        } else {
+                            case1 = false;
                         }
                 }
             }
         } else if (topRight.getPlayerPlayed() != null && topRight.getPlayerPlayed().equals(player2)) {
-            while (true) {
+            boolean case0 = true;
+            boolean case1 = true;
+            boolean case2 = true;
+            while (case0 || case1 || case2) {
                 Random rand = new Random();
                 int n = rand.nextInt(3);
 
@@ -1520,6 +1537,8 @@ public class Main extends Application {
                                 case 1:
                                     return topLeft;
                             }
+                        } else {
+                            case0 = false;
                         }
                     case 1:
                         if (centerRight.getPlayerPlayed() == null && bottomRight.getPlayerPlayed() == null) {
@@ -1530,6 +1549,8 @@ public class Main extends Application {
                                 case 1:
                                     return bottomRight;
                             }
+                        } else {
+                            case1 = false;
                         }
                     case 2:
                         if (center.getPlayerPlayed() == null && bottomLeft.getPlayerPlayed() == null) {
@@ -1540,11 +1561,15 @@ public class Main extends Application {
                                 case 1:
                                     return bottomLeft;
                             }
+                        } else {
+                            case2 = false;
                         }
                 }
             }
         } else if (centerLeft.getPlayerPlayed() != null && centerLeft.getPlayerPlayed().equals(player2)) {
-            while (true) {
+            boolean case0 = true;
+            boolean case1 = true;
+            while (case0 || case1) {
                 Random rand = new Random();
                 int n = rand.nextInt(2);
 
@@ -1558,6 +1583,8 @@ public class Main extends Application {
                                 case 1:
                                     return topLeft;
                             }
+                        } else {
+                            case0 = false;
                         }
                     case 1:
                         if (center.getPlayerPlayed() == null && centerRight.getPlayerPlayed() == null) {
@@ -1568,11 +1595,17 @@ public class Main extends Application {
                                 case 1:
                                     return center;
                             }
+                        } else {
+                            case1 = false;
                         }
                 }
             }
         } else if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(player2)) {
-            while (true) {
+            boolean case0 = true;
+            boolean case1 = true;
+            boolean case2 = true;
+            boolean case3 = true;
+            while (case0 || case1 || case2 || case3) {
                 Random rand = new Random();
                 int n = rand.nextInt(4);
 
@@ -1586,6 +1619,8 @@ public class Main extends Application {
                                 case 1:
                                     return topLeft;
                             }
+                        } else {
+                            case0 = false;
                         }
                     case 1:
                         if (topCenter.getPlayerPlayed() == null && bottomCenter.getPlayerPlayed() == null) {
@@ -1596,6 +1631,8 @@ public class Main extends Application {
                                 case 1:
                                     return bottomCenter;
                             }
+                        } else {
+                            case1 = false;
                         }
                     case 2:
                         if (topRight.getPlayerPlayed() == null && bottomLeft.getPlayerPlayed() == null) {
@@ -1606,6 +1643,8 @@ public class Main extends Application {
                                 case 1:
                                     return bottomLeft;
                             }
+                        } else {
+                            case2 = false;
                         }
                     case 3:
                         if (centerLeft.getPlayerPlayed() == null && centerRight.getPlayerPlayed() == null) {
@@ -1616,11 +1655,15 @@ public class Main extends Application {
                                 case 1:
                                     return centerLeft;
                             }
+                        } else {
+                            case3 = false;
                         }
                 }
             }
         } else if (centerRight.getPlayerPlayed() != null && centerRight.getPlayerPlayed().equals(player2)) {
-            while (true) {
+            boolean case0 = true;
+            boolean case1 = true;
+            while (case0 || case1) {
                 Random rand = new Random();
                 int n = rand.nextInt(2);
 
@@ -1634,6 +1677,8 @@ public class Main extends Application {
                                 case 1:
                                     return bottomRight;
                             }
+                        } else {
+                            case0 = false;
                         }
                     case 1:
                         if (center.getPlayerPlayed() == null && centerLeft.getPlayerPlayed() == null) {
@@ -1644,11 +1689,16 @@ public class Main extends Application {
                                 case 1:
                                     return centerLeft;
                             }
+                        } else {
+                            case1 = false;
                         }
                 }
             }
         } else if (bottomLeft.getPlayerPlayed() != null && bottomLeft.getPlayerPlayed().equals(player2)) {
-            while (true) {
+            boolean case0 = true;
+            boolean case1 = true;
+            boolean case2 = true;
+            while (case0 || case1 || case2) {
                 Random rand = new Random();
                 int n = rand.nextInt(3);
 
@@ -1662,6 +1712,8 @@ public class Main extends Application {
                                 case 1:
                                     return topLeft;
                             }
+                        } else {
+                            case0 = false;
                         }
                     case 1:
                         if (bottomCenter.getPlayerPlayed() == null && bottomRight.getPlayerPlayed() == null) {
@@ -1672,6 +1724,8 @@ public class Main extends Application {
                                 case 1:
                                     return bottomCenter;
                             }
+                        } else {
+                            case1 = false;
                         }
                     case 2:
                         if (center.getPlayerPlayed() == null && topRight.getPlayerPlayed() == null) {
@@ -1682,11 +1736,15 @@ public class Main extends Application {
                                 case 1:
                                     return topRight;
                             }
+                        } else {
+                            case2 = false;
                         }
                 }
             }
         } else if (bottomCenter.getPlayerPlayed() != null && bottomCenter.getPlayerPlayed().equals(player2)) {
-            while (true) {
+            boolean case0 = true;
+            boolean case1 = true;
+            while (case0 || case1) {
                 Random rand = new Random();
                 int n = rand.nextInt(2);
 
@@ -1700,6 +1758,8 @@ public class Main extends Application {
                                 case 1:
                                     return bottomRight;
                             }
+                        } else {
+                            case0 = false;
                         }
                     case 1:
                         if (center.getPlayerPlayed() == null && topCenter.getPlayerPlayed() == null) {
@@ -1710,11 +1770,16 @@ public class Main extends Application {
                                 case 1:
                                     return center;
                             }
+                        } else {
+                            case1 = false;
                         }
                 }
             }
         } else if (bottomRight.getPlayerPlayed() != null && bottomRight.getPlayerPlayed().equals(player2)) {
-            while (true) {
+            boolean case0 = true;
+            boolean case1 = true;
+            boolean case2 = true;
+            while (case0 || case1 || case2) {
                 Random rand = new Random();
                 int n = rand.nextInt(3);
 
@@ -1728,6 +1793,8 @@ public class Main extends Application {
                                 case 1:
                                     return centerRight;
                             }
+                        } else {
+                            case0 = false;
                         }
                     case 1:
                         if (bottomCenter.getPlayerPlayed() == null && bottomLeft.getPlayerPlayed() == null) {
@@ -1738,6 +1805,8 @@ public class Main extends Application {
                                 case 1:
                                     return bottomLeft;
                             }
+                        } else {
+                            case1 = false;
                         }
                     case 2:
                         if (center.getPlayerPlayed() == null && topLeft.getPlayerPlayed() == null) {
@@ -1748,6 +1817,8 @@ public class Main extends Application {
                                 case 1:
                                     return topLeft;
                             }
+                        } else {
+                            case2 = false;
                         }
                 }
             }
