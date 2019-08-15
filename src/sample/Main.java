@@ -125,8 +125,8 @@ public class Main extends Application {
         paused = false;
 
         openingScene.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.ENTER && PopUp == null) {
-            } else if ((event.getCode() == KeyCode.DIGIT1 || event.getCode() == KeyCode.NUMPAD1) && enterNumberPopUpShown) {
+            System.out.println("hey");
+            if ((event.getCode() == KeyCode.DIGIT1 || event.getCode() == KeyCode.NUMPAD1) && enterNumberPopUpShown) {
                 numberOfPlayers = 1;
                 resume();
                 enterNumberPopUpShown = false;
@@ -147,7 +147,7 @@ public class Main extends Application {
                     }
                 } else if (numberOfPlayers == 2) {
                     if (enterTwoNamesPopUpPane.lookup("#player1Name") != null) {
-                        TextField name1 = (TextField) enterTwoNamesPopUpPane.lookup("#player1Name");
+                        TextField name1 = (TextField) enterOneNamePopUpPane.lookup("#player1Name");
                         player1.setPlayerName(name1.getText());
                     } else {
                         player1.setPlayerName("player1");
