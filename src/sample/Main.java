@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 
+
 public class Main extends Application {
 
     //Variables
@@ -124,7 +125,7 @@ public class Main extends Application {
          */
         paused = false;
 
-        openingScene.setOnKeyPressed(event -> {
+        openingScene.setOnKeyReleased(event -> {
             if ((event.getCode() == KeyCode.DIGIT1 || event.getCode() == KeyCode.NUMPAD1) && enterNumberPopUpShown) {
                 numberOfPlayers = 1;
                 resume();
@@ -145,13 +146,13 @@ public class Main extends Application {
                         player1.setPlayerName("player1");
                     }
                 } else if (numberOfPlayers == 2) {
-                    if (!(((TextField) enterOneNamePopUpPane.lookup("#player1Name")).getText().equals(""))) {
-                        TextField name1 = (TextField) enterOneNamePopUpPane.lookup("#player1Name");
+                    if (!(((TextField) enterTwoNamesPopUpPane.lookup("#player1Name")).getText().equals(""))) {
+                        TextField name1 = (TextField) enterTwoNamesPopUpPane.lookup("#player1Name");
                         player1.setPlayerName(name1.getText());
                     } else {
                         player1.setPlayerName("player1");
                     }
-                    if (!(((TextField) enterOneNamePopUpPane.lookup("#player2Name")).getText().equals(""))) {
+                    if (!(((TextField) enterTwoNamesPopUpPane.lookup("#player2Name")).getText().equals(""))) {
                         TextField name2 = (TextField) enterTwoNamesPopUpPane.lookup("#player2Name");
                         player2.setPlayerName(name2.getText());
                     } else {
@@ -166,7 +167,7 @@ public class Main extends Application {
             }
         });
 
-        gameScene.setOnKeyPressed(event -> {
+        gameScene.setOnKeyReleased(event -> {
             if (event.getCode() == KeyCode.NUMPAD7 && !paused && PopUp == null) {
                 markQuadrant(topLeft, topLeft.getIsMarked());
             } else if (event.getCode() == KeyCode.NUMPAD8 && !paused && PopUp == null) {
@@ -199,6 +200,8 @@ public class Main extends Application {
                 undoBtn.setDisable(false);
             } else if (event.getCode() == KeyCode.SPACE && !paused) {
                 pause();
+            } else if (event.getCode() == KeyCode.SPACE && paused) {
+                resume();
             } else if (event.getCode() == KeyCode.BACK_SPACE && paused) {
                 primaryStage.setScene(openingScene); //sets the scene on the stage
                 primaryStage.show(); //shows the primaryStage
@@ -261,6 +264,8 @@ public class Main extends Application {
         //show popup on primaryStage
         PopUp.show(primaryStage);
 
+        openingPane.requestFocus();
+
         Button onePlayerBtn = (Button) numberOfPlayersPopUpPane.lookup("#onePlayer");
         onePlayerBtn.setOnAction(event -> {
             numberOfPlayers = 1;
@@ -269,6 +274,7 @@ public class Main extends Application {
             enterOneNamePopUp();
             player2.setPlayerName("Computer");
         });
+
         Button twoPlayersBtn = (Button) numberOfPlayersPopUpPane.lookup("#twoPlayers");
         twoPlayersBtn.setOnAction(event -> {
             numberOfPlayers = 2;
@@ -298,6 +304,9 @@ public class Main extends Application {
 
         //show popup on primaryStage
         PopUp.show(primaryStage);
+
+        TextField t1 = ((TextField) enterOneNamePopUpPane.lookup("#player1Name"));
+        t1.requestFocus();
 
         Button enterBtn = (Button) enterOneNamePopUpPane.lookup("#enter");
         enterBtn.setOnAction(event -> {
@@ -333,15 +342,20 @@ public class Main extends Application {
         //show popup on primaryStage
         PopUp.show(primaryStage);
 
+        TextField t1 = ((TextField) enterTwoNamesPopUpPane.lookup("#player1Name"));
+        t1.requestFocus();
+        TextField t2 = ((TextField) enterTwoNamesPopUpPane.lookup("#player2Name"));
+        t2.requestFocus();
+
         Button enterBtn = (Button) enterTwoNamesPopUpPane.lookup("#enter");
         enterBtn.setOnAction(event -> {
-            if (!(((TextField) enterOneNamePopUpPane.lookup("#player1Name")).getText().equals(""))) {
+            if (!(((TextField) enterTwoNamesPopUpPane.lookup("#player1Name")).getText().equals(""))) {
                 TextField name1 = (TextField) enterTwoNamesPopUpPane.lookup("#player1Name");
                 player1.setPlayerName(name1.getText());
             } else {
                 player1.setPlayerName("player1");
             }
-            if (!(((TextField) enterOneNamePopUpPane.lookup("#player2Name")).getText().equals(""))) {
+            if (!(((TextField) enterTwoNamesPopUpPane.lookup("#player2Name")).getText().equals(""))) {
                 TextField name2 = (TextField) enterTwoNamesPopUpPane.lookup("#player2Name");
                 player2.setPlayerName(name2.getText());
             } else {
@@ -452,6 +466,8 @@ public class Main extends Application {
 
         //show popup on primaryStage
         PopUp.show(primaryStage);
+
+        gamePane.requestFocus();
 
         Button resumeBtn = (Button) pausedPupUpPane.lookup("#resume");
         resumeBtn.setOnAction(browseDismissEvent -> {
