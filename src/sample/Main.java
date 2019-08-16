@@ -138,20 +138,20 @@ public class Main extends Application {
                 enterTwoNamesPopUp();
             } else if (event.getCode() == KeyCode.ENTER && enterNamePopUpShown) {
                 if (numberOfPlayers == 1) {
-                    if (enterOneNamePopUpPane.lookup("#player1Name") != null) {
+                    if (enterOneNamePopUpPane.lookup("#player1Name").toString().length() == 0) {
                         TextField name1 = (TextField) enterOneNamePopUpPane.lookup("#player1Name");
                         player1.setPlayerName(name1.getText());
                     } else {
                         player1.setPlayerName("player1");
                     }
                 } else if (numberOfPlayers == 2) {
-                    if (enterTwoNamesPopUpPane.lookup("#player1Name") != null) {
+                    if (enterTwoNamesPopUpPane.lookup("#player1Name").toString().length() == 0) {
                         TextField name1 = (TextField) enterOneNamePopUpPane.lookup("#player1Name");
                         player1.setPlayerName(name1.getText());
                     } else {
                         player1.setPlayerName("player1");
                     }
-                    if (enterTwoNamesPopUpPane.lookup("#player2Name") != null) {
+                    if (enterTwoNamesPopUpPane.lookup("#player2Name").toString().length() == 0) {
                         TextField name2 = (TextField) enterTwoNamesPopUpPane.lookup("#player2Name");
                         player2.setPlayerName(name2.getText());
                     } else {
@@ -300,7 +300,7 @@ public class Main extends Application {
 
         Button enterBtn = (Button) enterOneNamePopUpPane.lookup("#enter");
         enterBtn.setOnAction(event -> {
-            if (enterOneNamePopUpPane.lookup("#player1Name") != null) {
+            if (enterOneNamePopUpPane.lookup("#player1Name").toString().length() == 0) {
                 TextField name1 = (TextField) enterOneNamePopUpPane.lookup("#player1Name");
                 player1.setPlayerName(name1.getText());
             } else {
@@ -334,13 +334,13 @@ public class Main extends Application {
 
         Button enterBtn = (Button) enterTwoNamesPopUpPane.lookup("#enter");
         enterBtn.setOnAction(event -> {
-            if (enterTwoNamesPopUpPane.lookup("#player1Name") != null) {
+            if (enterTwoNamesPopUpPane.lookup("#player1Name").toString().length() == 0) {
                 TextField name1 = (TextField) enterTwoNamesPopUpPane.lookup("#player1Name");
                 player1.setPlayerName(name1.getText());
             } else {
                 player1.setPlayerName("player1");
             }
-            if (enterTwoNamesPopUpPane.lookup("#player2Name") != null) {
+            if (enterTwoNamesPopUpPane.lookup("#player2Name").toString().length() == 0) {
                 TextField name2 = (TextField) enterTwoNamesPopUpPane.lookup("#player2Name");
                 player2.setPlayerName(name2.getText());
             } else {
