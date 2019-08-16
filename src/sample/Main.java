@@ -202,6 +202,8 @@ public class Main extends Application {
                 pause();
             } else if (event.getCode() == KeyCode.SPACE && paused) {
                 resume();
+                pauseBtn.setDisable(false);
+                undoBtn.setDisable(false);
             } else if (event.getCode() == KeyCode.BACK_SPACE && paused) {
                 primaryStage.setScene(openingScene); //sets the scene on the stage
                 primaryStage.show(); //shows the primaryStage
