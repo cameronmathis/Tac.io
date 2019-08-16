@@ -138,20 +138,20 @@ public class Main extends Application {
                 enterTwoNamesPopUp();
             } else if (event.getCode() == KeyCode.ENTER && enterNamePopUpShown) {
                 if (numberOfPlayers == 1) {
-                    if (enterOneNamePopUpPane.lookup("#player1Name").toString().length() == 0) {
+                    if (!(((TextField) enterOneNamePopUpPane.lookup("#player1Name")).getText().equals(""))) {
                         TextField name1 = (TextField) enterOneNamePopUpPane.lookup("#player1Name");
                         player1.setPlayerName(name1.getText());
                     } else {
                         player1.setPlayerName("player1");
                     }
                 } else if (numberOfPlayers == 2) {
-                    if (enterTwoNamesPopUpPane.lookup("#player1Name").toString().length() == 0) {
+                    if (!(((TextField) enterOneNamePopUpPane.lookup("#player1Name")).getText().equals(""))) {
                         TextField name1 = (TextField) enterOneNamePopUpPane.lookup("#player1Name");
                         player1.setPlayerName(name1.getText());
                     } else {
                         player1.setPlayerName("player1");
                     }
-                    if (enterTwoNamesPopUpPane.lookup("#player2Name").toString().length() == 0) {
+                    if (!(((TextField) enterOneNamePopUpPane.lookup("#player2Name")).getText().equals(""))) {
                         TextField name2 = (TextField) enterTwoNamesPopUpPane.lookup("#player2Name");
                         player2.setPlayerName(name2.getText());
                     } else {
@@ -245,6 +245,7 @@ public class Main extends Application {
      */
     private void numberOfPlayersPopUp() {
         enterNumberPopUpShown = true;
+        firstMovePlayer = null;
 
         PopUp = new Popup(); //creates new popup
 
@@ -300,7 +301,7 @@ public class Main extends Application {
 
         Button enterBtn = (Button) enterOneNamePopUpPane.lookup("#enter");
         enterBtn.setOnAction(event -> {
-            if (enterOneNamePopUpPane.lookup("#player1Name").toString().length() == 0) {
+            if (!(((TextField) enterOneNamePopUpPane.lookup("#player1Name")).getText().equals(""))) {
                 TextField name1 = (TextField) enterOneNamePopUpPane.lookup("#player1Name");
                 player1.setPlayerName(name1.getText());
             } else {
@@ -334,13 +335,13 @@ public class Main extends Application {
 
         Button enterBtn = (Button) enterTwoNamesPopUpPane.lookup("#enter");
         enterBtn.setOnAction(event -> {
-            if (enterTwoNamesPopUpPane.lookup("#player1Name").toString().length() == 0) {
+            if (!(((TextField) enterOneNamePopUpPane.lookup("#player1Name")).getText().equals(""))) {
                 TextField name1 = (TextField) enterTwoNamesPopUpPane.lookup("#player1Name");
                 player1.setPlayerName(name1.getText());
             } else {
                 player1.setPlayerName("player1");
             }
-            if (enterTwoNamesPopUpPane.lookup("#player2Name").toString().length() == 0) {
+            if (!(((TextField) enterOneNamePopUpPane.lookup("#player2Name")).getText().equals(""))) {
                 TextField name2 = (TextField) enterTwoNamesPopUpPane.lookup("#player2Name");
                 player2.setPlayerName(name2.getText());
             } else {
@@ -549,7 +550,7 @@ public class Main extends Application {
             currentQuadrant = quadrant;
             ableToUndo = true;
             counter = 0;
-            if (!gameOver && player1.getTurn()) {
+            if (!gameOver && !paused && player1.getTurn()) {
                 Object[] temp1 = quadrant.getPane().getChildren().toArray();
                 File imageFile1 = new File("src/sample/images/TicTacToeSingleX.png");
                 Image imageO1 = new Image(imageFile1.toURI().toString());
@@ -561,7 +562,7 @@ public class Main extends Application {
                 player2.setTurn(true);
                 if (!checkIfWon(quadrant, player1)) {
                     checkIfTie();
-                    if (!gameOver && numberOfPlayers == 1 && player2.getTurn()) {
+                    if (!gameOver && !paused && numberOfPlayers == 1 && player2.getTurn()) {
                         quadrant = getQuadrantToMark(quadrant);
                         Object[] temp2 = quadrant.getPane().getChildren().toArray();
                         File imageFile2 = new File("src/sample/images/TicTacToeSingleO.png");
@@ -578,7 +579,7 @@ public class Main extends Application {
                         }
                     }
                 }
-            } else if (!gameOver && numberOfPlayers == 2 && player2.getTurn()) {
+            } else if (!gameOver && !paused && numberOfPlayers == 2 && player2.getTurn()) {
                 Object[] temp = quadrant.getPane().getChildren().toArray();
                 File imageFile = new File("src/sample/images/TicTacToeSingleO.png");
                 Image imageO = new Image(imageFile.toURI().toString());
@@ -1996,6 +1997,8 @@ public class Main extends Application {
 
         pauseBtn.setDisable(false);
         undoBtn.setDisable(false);
+        wonGamePopUpShown = false;
+        tiedGamePopUpShown = false;
 
         topLeft = new Quadrant();
         topLeft.setPane((Pane) gameScene.lookup("#topLeftPane"));
