@@ -145,25 +145,36 @@ public class Main extends Application {
                     } else {
                         player1.setPlayerName("player1");
                     }
+                    resume();
+                    start();
+                    enterNamePopUpShown = false;
+                    pauseBtn.setDisable(false);
+                    undoBtn.setDisable(false);
                 } else if (numberOfPlayers == 2) {
-                    if (!(((TextField) enterTwoNamesPopUpPane.lookup("#player1Name")).getText().equals(""))) {
-                        TextField name1 = (TextField) enterTwoNamesPopUpPane.lookup("#player1Name");
-                        player1.setPlayerName(name1.getText());
+                    TextField t1 = ((TextField) enterTwoNamesPopUpPane.lookup("#player1Name"));
+                    TextField t2 = ((TextField) enterTwoNamesPopUpPane.lookup("#player2Name"));
+                    if (t1.isFocused()) {
+                        t2.requestFocus();
                     } else {
-                        player1.setPlayerName("player1");
-                    }
-                    if (!(((TextField) enterTwoNamesPopUpPane.lookup("#player2Name")).getText().equals(""))) {
-                        TextField name2 = (TextField) enterTwoNamesPopUpPane.lookup("#player2Name");
-                        player2.setPlayerName(name2.getText());
-                    } else {
-                        player2.setPlayerName("player2");
+                        if (!(((TextField) enterTwoNamesPopUpPane.lookup("#player1Name")).getText().equals(""))) {
+                            TextField name1 = (TextField) enterTwoNamesPopUpPane.lookup("#player1Name");
+                            player1.setPlayerName(name1.getText());
+                        } else {
+                            player1.setPlayerName("player1");
+                        }
+                        if (!(((TextField) enterTwoNamesPopUpPane.lookup("#player2Name")).getText().equals(""))) {
+                            TextField name2 = (TextField) enterTwoNamesPopUpPane.lookup("#player2Name");
+                            player2.setPlayerName(name2.getText());
+                        } else {
+                            player2.setPlayerName("player2");
+                        }
+                        resume();
+                        start();
+                        enterNamePopUpShown = false;
+                        pauseBtn.setDisable(false);
+                        undoBtn.setDisable(false);
                     }
                 }
-                resume();
-                start();
-                enterNamePopUpShown = false;
-                pauseBtn.setDisable(false);
-                undoBtn.setDisable(false);
             }
         });
 
@@ -346,8 +357,6 @@ public class Main extends Application {
 
         TextField t1 = ((TextField) enterTwoNamesPopUpPane.lookup("#player1Name"));
         t1.requestFocus();
-        TextField t2 = ((TextField) enterTwoNamesPopUpPane.lookup("#player2Name"));
-        t2.requestFocus();
 
         Button enterBtn = (Button) enterTwoNamesPopUpPane.lookup("#enter");
         enterBtn.setOnAction(event -> {
