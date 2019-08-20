@@ -16,8 +16,10 @@ import javafx.stage.Stage;
 
 import javafx.scene.image.ImageView;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 
@@ -27,6 +29,10 @@ public class Main extends Application {
     private Stage primaryStage;
     private AnchorPane openingPane;
     private Scene openingScene;
+    private Player player1 = new Player();
+    private Player player2 = new Player();
+    private File leaderBoardFile = new File("src/sample/leaderBoard.txt");
+    private List<Player> playerList = new ArrayList<>();
     private TitledPane enterOneNamePopUpPane;
     private TitledPane enterTwoNamesPopUpPane;
     private AnchorPane gamePane;
@@ -48,8 +54,6 @@ public class Main extends Application {
     private Quadrant bottomLeft;
     private Quadrant bottomCenter;
     private Quadrant bottomRight;
-    private Player player1 = new Player();
-    private Player player2 = new Player();
     private int numberOfPlayers;
     private boolean ableToUndo = false;
     private Quadrant currentQuadrant;
@@ -83,6 +87,44 @@ public class Main extends Application {
         //initialize both player games one
         player1.setGamesWon(0);
         player2.setGamesWon(0);
+
+        /**
+         * LEADER BOARD INITIALIZATION
+         * Initializes the leader boards
+         */
+        BufferedReader br = null;
+        try {
+            String line;
+            br = new BufferedReader(new FileReader(leaderBoardFile.getAbsoluteFile()));
+            br.readLine();
+
+            while ((line = br.readLine()) != null) {
+                String[] fields = line.split(",");
+
+                if (fields.length > 0) {
+                    Player player = new Player();
+                    createPlayer(player, fields);
+                    playerList.add(player);
+                }
+            }
+
+            System.out.println("\nPlayer Data:");
+            DecimalFormat decimalFormat = new DecimalFormat("#.#");
+            for (Player p : playerList) {
+                System.out.printf("\t[playerName = %s, gamesPlayed = %d, totalGamesWon = %d, winPercentage = %s]\n",
+                        p.getPlayerName(), p.getGamesPlayed(), p.getTotalGamesWon(),
+                        decimalFormat.format(p.getWinPercentage()));
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                br.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 
         /**
          * BUTTON INITIALIZATION
@@ -256,6 +298,19 @@ public class Main extends Application {
     }
 
     /**
+     * CREATE PLAYER METHOD
+     * Method to create a player that is not already on the leader board
+     * @param player
+     * @param fields
+     */
+    private void createPlayer(Player player, String[] fields) {
+        player.setPlayerName(fields[0]);
+        player.setGamesPlayed(Integer.parseInt(fields[1]));
+        player.setTotalGamesWon(Integer.parseInt(fields[2]));
+        player.setWinPercentage(Double.parseDouble(fields[3]));
+    }
+
+    /**
      * NUMBER OF PLAYERS POPUP
      * PopUp to ask for number of players
      */
@@ -383,6 +438,32 @@ public class Main extends Application {
      * Starts the game
      */
     private void start() {
+        boolean player1Found = false;
+        boolean player2Found = false;
+        for (Player p : playerList) {
+            if (player1Found && player2Found) {
+                break;
+            } else if (p.getPlayerName().equals(player1.getPlayerName())) {
+                player1 = p;
+                player1Found = true;
+            } else if (p.getPlayerName().equals(player2.getPlayerName())) {
+                player2 = p;
+                player2Found = true;
+            }
+        }
+
+        if (player1Found == false) {
+            player1.setGamesPlayed(0);
+            player1.setTotalGamesWon(0);
+            player1.setWinPercentage(0);
+            playerList.add(player1)
+;        }
+        if (player2Found == false) {
+            player2.setGamesPlayed(0);
+            player2.setTotalGamesWon(0);
+            player2.setWinPercentage(0);
+            playerList.add(player2);
+        }
         setGame();
         pauseBtn.setDisable(false);
         undoBtn.setDisable(false);
@@ -1921,6 +2002,8 @@ public class Main extends Application {
      * PopUp for when the game is over
      */
     private void gameOverPopUp(Player player) {
+        updateLeaderBoard(player);
+
         wonGamePopUpShown = true;
 
         PopUp = new Popup(); //creates new popup
@@ -1968,6 +2051,8 @@ public class Main extends Application {
      * PopUp for when the game is tied
      */
     private void tiePopUp() {
+        updateLeaderBoard(null);
+
         tiedGamePopUpShown = true;
 
         PopUp = new Popup(); //creates new popup
@@ -2001,6 +2086,47 @@ public class Main extends Application {
                 System.out.println(ex.getMessage());
             }
         });
+    }
+
+    /**
+     * UPDATE LEADER BOARD METHOD
+     * Updates the leader board file after each game
+     */
+    private void updateLeaderBoard(Player player) {
+        if (player != null) {
+            player.setTotalGamesWon(player.getTotalGamesWon() + 1);
+            player.setWinPercentage(player.getTotalGamesWon()/player.getGamesPlayed() * 100);
+        }
+
+        BufferedWriter bw = null;
+        try {
+            bw = new BufferedWriter(new FileWriter(leaderBoardFile.getAbsoluteFile()));
+            bw.write("name, gamesPlayed, totalGamesWon, winPercentage\n");
+
+            for (Player p : playerList) {
+                bw.write(String.valueOf(p.getPlayerName()));
+                bw.write(",");
+                bw.write(String.valueOf(p.getGamesPlayed()));
+                bw.write(",");
+                bw.write(String.valueOf(p.getTotalGamesWon()));
+                bw.write(",");
+                bw.write(String.valueOf(p.getWinPercentage()));
+                bw.write("\n");
+            }
+
+            bw.flush();
+            bw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("\nPlayer Data:");
+        DecimalFormat decimalFormat = new DecimalFormat("#.#");
+        for (Player p : playerList) {
+            System.out.printf("\t[playerName = %s, gamesPlayed = %d, totalGamesWon = %d, winPercentage = %s]\n",
+                    p.getPlayerName(), p.getGamesPlayed(), p.getTotalGamesWon(),
+                    decimalFormat.format(p.getWinPercentage()));
+        }
     }
 
     /**
@@ -2056,6 +2182,9 @@ public class Main extends Application {
         bottomRight.setIsMarked(false);
 
         gameOver = false;
+
+        player1.setGamesPlayed(player1.getGamesPlayed() + 1);
+        player2.setGamesPlayed(player2.getGamesPlayed() + 1);
 
         if (firstMovePlayer.equals(player2) && numberOfPlayers == 1) {
             Quadrant quadrant = getQuadrantToMark(topLeft);
