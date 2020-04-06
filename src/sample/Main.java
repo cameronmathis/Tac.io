@@ -17,10 +17,10 @@ import javafx.stage.Stage;
 import javafx.scene.image.ImageView;
 
 import java.io.*;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 
 public class Main extends Application {
@@ -261,6 +261,7 @@ public class Main extends Application {
     /**
      * CREATE PLAYER METHOD
      * Method to create a player that is not already on the leader board
+     *
      * @param player
      * @param fields
      */
@@ -341,13 +342,20 @@ public class Main extends Application {
         enterBtn.setOnAction(event -> {
             if (!(((TextField) enterOneNamePopUpPane.lookup("#player1Name")).getText().equals(""))) {
                 TextField name1 = (TextField) enterOneNamePopUpPane.lookup("#player1Name");
-                player1.setPlayerName(name1.getText());
+                if (name1.getText().length() > 20) {
+                    nameTooLongPopUp(1);
+                } else {
+                    player1.setPlayerName(name1.getText());
+                    resume();
+                    start();
+                    enterNamePopUpShown = false;
+                }
             } else {
                 player1.setPlayerName("player1");
+                resume();
+                start();
+                enterNamePopUpShown = false;
             }
-            resume();
-            start();
-            enterNamePopUpShown = false;
         });
     }
 
@@ -378,19 +386,62 @@ public class Main extends Application {
         enterBtn.setOnAction(event -> {
             if (!(((TextField) enterTwoNamesPopUpPane.lookup("#player1Name")).getText().equals(""))) {
                 TextField name1 = (TextField) enterTwoNamesPopUpPane.lookup("#player1Name");
-                player1.setPlayerName(name1.getText());
+                if (name1.getText().length() > 20) {
+                    nameTooLongPopUp(2);
+                } else {
+                    player1.setPlayerName(name1.getText());
+                }
             } else {
                 player1.setPlayerName("player1");
             }
             if (!(((TextField) enterTwoNamesPopUpPane.lookup("#player2Name")).getText().equals(""))) {
                 TextField name2 = (TextField) enterTwoNamesPopUpPane.lookup("#player2Name");
-                player2.setPlayerName(name2.getText());
+                if (name2.getText().length() > 20) {
+                    nameTooLongPopUp(2);
+                } else {
+                    player2.setPlayerName(name2.getText());
+                }
             } else {
                 player2.setPlayerName("player2");
             }
             resume();
             start();
             enterNamePopUpShown = false;
+
+        });
+    }
+
+    /**
+     * NAME TOO LONG POPUP
+     * PopUp for when a player tries to enter a name greater than twenty characters
+     */
+    private void nameTooLongPopUp(int num) {
+        PopUp = new Popup(); //creates new popup
+
+        TitledPane nameTooLongPopUpPane = null; //calls popup menu created in 'nameTooLongPopUp.fxml' file
+
+        try {
+            nameTooLongPopUpPane = FXMLLoader.load(getClass().getResource("nameTooLongPopUp.fxml"));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        PopUp.getContent().add(nameTooLongPopUpPane); //adds the popup (child) created in fxml file to the popup (parent) created
+
+        //show popup on primaryStage
+        PopUp.show(primaryStage);
+
+        Button dismissBtn = (Button) nameTooLongPopUpPane.lookup("#dismiss");
+
+        dismissBtn.setOnAction(event -> {
+            resume();
+            pauseBtn.setDisable(false);
+            undoBtn.setDisable(false);
+
+            if (num == 1) {
+                enterOneNamePopUp();
+            } else if (num == 2) {
+                enterTwoNamesPopUp();
+            }
         });
     }
 
@@ -418,7 +469,8 @@ public class Main extends Application {
             player1.setTotalGamesWon(0);
             player1.setWinPercentage(0);
             playerList.add(player1)
-;        }
+            ;
+        }
         if (player2Found == false) {
             player2.setGamesPlayed(0);
             player2.setTotalGamesWon(0);
@@ -2056,7 +2108,7 @@ public class Main extends Application {
     private void updateLeaderBoard(Player player) {
         if (player != null) {
             player.setTotalGamesWon(player.getTotalGamesWon() + 1);
-            player.setWinPercentage(player.getTotalGamesWon()/player.getGamesPlayed() * 100);
+            player.setWinPercentage(player.getTotalGamesWon() / player.getGamesPlayed() * 100);
         }
     }
 
