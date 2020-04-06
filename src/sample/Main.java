@@ -31,7 +31,6 @@ public class Main extends Application {
     private Scene openingScene;
     private Player player1 = new Player();
     private Player player2 = new Player();
-    private File leaderBoardFile = new File("src/sample/leaderBoard.txt");
     private List<Player> playerList = new ArrayList<>();
     private TitledPane enterOneNamePopUpPane;
     private TitledPane enterTwoNamesPopUpPane;
@@ -87,44 +86,6 @@ public class Main extends Application {
         //initialize both player games one
         player1.setGamesWon(0);
         player2.setGamesWon(0);
-
-        /**
-         * LEADER BOARD INITIALIZATION
-         * Initializes the leader boards
-         */
-        BufferedReader br = null;
-        try {
-            String line;
-            br = new BufferedReader(new FileReader(leaderBoardFile.getAbsoluteFile()));
-            br.readLine();
-
-            while ((line = br.readLine()) != null) {
-                String[] fields = line.split(",");
-
-                if (fields.length > 0) {
-                    Player player = new Player();
-                    createPlayer(player, fields);
-                    playerList.add(player);
-                }
-            }
-
-            System.out.println("\nPlayer Data:");
-            DecimalFormat decimalFormat = new DecimalFormat("#.#");
-            for (Player p : playerList) {
-                System.out.printf("\t[playerName = %s, gamesPlayed = %d, totalGamesWon = %d, winPercentage = %s]\n",
-                        p.getPlayerName(), p.getGamesPlayed(), p.getTotalGamesWon(),
-                        decimalFormat.format(p.getWinPercentage()));
-            }
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        } finally {
-            try {
-                br.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
 
         /**
          * BUTTON INITIALIZATION
@@ -2096,36 +2057,6 @@ public class Main extends Application {
         if (player != null) {
             player.setTotalGamesWon(player.getTotalGamesWon() + 1);
             player.setWinPercentage(player.getTotalGamesWon()/player.getGamesPlayed() * 100);
-        }
-
-        BufferedWriter bw = null;
-        try {
-            bw = new BufferedWriter(new FileWriter(leaderBoardFile.getAbsoluteFile()));
-            bw.write("name, gamesPlayed, totalGamesWon, winPercentage\n");
-
-            for (Player p : playerList) {
-                bw.write(String.valueOf(p.getPlayerName()));
-                bw.write(",");
-                bw.write(String.valueOf(p.getGamesPlayed()));
-                bw.write(",");
-                bw.write(String.valueOf(p.getTotalGamesWon()));
-                bw.write(",");
-                bw.write(String.valueOf(p.getWinPercentage()));
-                bw.write("\n");
-            }
-
-            bw.flush();
-            bw.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        System.out.println("\nPlayer Data:");
-        DecimalFormat decimalFormat = new DecimalFormat("#.#");
-        for (Player p : playerList) {
-            System.out.printf("\t[playerName = %s, gamesPlayed = %d, totalGamesWon = %d, winPercentage = %s]\n",
-                    p.getPlayerName(), p.getGamesPlayed(), p.getTotalGamesWon(),
-                    decimalFormat.format(p.getWinPercentage()));
         }
     }
 
