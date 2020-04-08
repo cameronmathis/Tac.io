@@ -349,6 +349,50 @@ public class Main extends Application {
     }
 
     /**
+     * ENTER TWO NAMES POPUP
+     * PopUp to ask for both player names
+     */
+    private void enterTwoNamesPopUp() {
+        enterNamePopUpShown = true;
+        PopUp = new Popup(); //creates new popup
+
+        enterTwoNamesPopUpPane = null; //calls popup menu created in 'enterTwoNamesPopUp.fxml' file
+
+        try {
+            enterTwoNamesPopUpPane = FXMLLoader.load(getClass().getResource("enterTwoNamesPopUp.fxml"));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        PopUp.getContent().add(enterTwoNamesPopUpPane); //adds the popup (child) created in fxml file to the popup (parent) created
+
+        //show popup on primaryStage
+        PopUp.show(primaryStage);
+
+        TextField t1 = ((TextField) enterTwoNamesPopUpPane.lookup("#player1Name"));
+        t1.requestFocus();
+
+        Button enterBtn = (Button) enterTwoNamesPopUpPane.lookup("#enter");
+        enterBtn.setOnAction(event -> {
+            if (!(((TextField) enterTwoNamesPopUpPane.lookup("#player1Name")).getText().equals(""))) {
+                TextField name1 = (TextField) enterTwoNamesPopUpPane.lookup("#player1Name");
+                player1.setUsername(name1.getText());
+            } else {
+                player1.setUsername("player1");
+            }
+            if (!(((TextField) enterTwoNamesPopUpPane.lookup("#player2Name")).getText().equals(""))) {
+                TextField name2 = (TextField) enterTwoNamesPopUpPane.lookup("#player2Name");
+                player2.setUsername(name2.getText());
+            } else {
+                player2.setUsername("player2");
+            }
+            resume();
+            start();
+            enterNamePopUpShown = false;
+
+        });
+    }
+
+    /**
      * CREATE ACCOUNT POPUP
      * PopUp to create new account
      */
@@ -396,10 +440,10 @@ public class Main extends Application {
                 }
             }
 
-            //if (Database.contains(username.getText())) {
+            //if (!Database.contains(username.getText())) {
             //  usernameAlreadyExistPopUp();
             //} else {
-
+            //  createPlayer();
             //}
             resume();
         });
@@ -448,46 +492,32 @@ public class Main extends Application {
     }
 
     /**
-     * ENTER TWO NAMES POPUP
-     * PopUp to ask for both player names
+     * NAME TOO LONG POPUP
+     * PopUp for when a player tries to enter an invalid username
      */
-    private void enterTwoNamesPopUp() {
-        enterNamePopUpShown = true;
+    private void usernameAlreadyExistPopUp() {
         PopUp = new Popup(); //creates new popup
 
-        enterTwoNamesPopUpPane = null; //calls popup menu created in 'enterTwoNamesPopUp.fxml' file
+        TitledPane usernameAlreadyExistPopUpPane = null; //calls popup menu created in 'usernameAlreadyExistPopUp.fxml' file
 
         try {
-            enterTwoNamesPopUpPane = FXMLLoader.load(getClass().getResource("enterTwoNamesPopUp.fxml"));
+            usernameAlreadyExistPopUpPane = FXMLLoader.load(getClass().getResource("usernameAlreadyExistPopUp.fxml"));
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        PopUp.getContent().add(enterTwoNamesPopUpPane); //adds the popup (child) created in fxml file to the popup (parent) created
+        PopUp.getContent().add(usernameAlreadyExistPopUpPane); //adds the popup (child) created in fxml file to the popup (parent) created
 
         //show popup on primaryStage
         PopUp.show(primaryStage);
 
-        TextField t1 = ((TextField) enterTwoNamesPopUpPane.lookup("#player1Name"));
-        t1.requestFocus();
+        Button dismissBtn = (Button) usernameAlreadyExistPopUpPane.lookup("#dismiss");
 
-        Button enterBtn = (Button) enterTwoNamesPopUpPane.lookup("#enter");
-        enterBtn.setOnAction(event -> {
-            if (!(((TextField) enterTwoNamesPopUpPane.lookup("#player1Name")).getText().equals(""))) {
-                TextField name1 = (TextField) enterTwoNamesPopUpPane.lookup("#player1Name");
-                player1.setUsername(name1.getText());
-            } else {
-                player1.setUsername("player1");
-            }
-            if (!(((TextField) enterTwoNamesPopUpPane.lookup("#player2Name")).getText().equals(""))) {
-                TextField name2 = (TextField) enterTwoNamesPopUpPane.lookup("#player2Name");
-                player2.setUsername(name2.getText());
-            } else {
-                player2.setUsername("player2");
-            }
+        dismissBtn.setOnAction(event -> {
             resume();
-            start();
-            enterNamePopUpShown = false;
+            pauseBtn.setDisable(false);
+            undoBtn.setDisable(false);
 
+            createAccountPopUp();
         });
     }
 
@@ -498,26 +528,26 @@ public class Main extends Application {
     private void invalidUsernamePopUp() {
         PopUp = new Popup(); //creates new popup
 
-        TitledPane nameTooLongPopUpPane = null; //calls popup menu created in 'invalidUsernamePopUp.fxml' file
+        TitledPane invalidUsernamePopUpPane = null; //calls popup menu created in 'invalidUsernamePopUp.fxml' file
 
         try {
-            nameTooLongPopUpPane = FXMLLoader.load(getClass().getResource("invalidUsernamePopUp.fxml"));
+            invalidUsernamePopUpPane = FXMLLoader.load(getClass().getResource("invalidUsernamePopUp.fxml"));
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        PopUp.getContent().add(nameTooLongPopUpPane); //adds the popup (child) created in fxml file to the popup (parent) created
+        PopUp.getContent().add(invalidUsernamePopUpPane); //adds the popup (child) created in fxml file to the popup (parent) created
 
         //show popup on primaryStage
         PopUp.show(primaryStage);
 
-        Button dismissBtn = (Button) nameTooLongPopUpPane.lookup("#dismiss");
+        Button dismissBtn = (Button) invalidUsernamePopUpPane.lookup("#dismiss");
 
         dismissBtn.setOnAction(event -> {
             resume();
             pauseBtn.setDisable(false);
             undoBtn.setDisable(false);
 
-            accountLoginPopUp();
+            createAccountPopUp();
         });
     }
 
@@ -547,7 +577,7 @@ public class Main extends Application {
             pauseBtn.setDisable(false);
             undoBtn.setDisable(false);
 
-            createAccountPopUp();
+            accountLoginPopUp();
         });
     }
 
