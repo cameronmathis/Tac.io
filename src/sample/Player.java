@@ -2,14 +2,14 @@ package sample;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Date;
 
 /**
  * PLAYER OBJECT
  */
 public class Player {
 
-    private String playerName;
+    private String username;
+    private String password;
     private int gamesWon;
     private boolean isTurn;
     private int gamesPlayed;
@@ -18,10 +18,16 @@ public class Player {
     private LocalDate lastDatePlayed;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
 
-    public void setPlayerName(String playerName) { this.playerName = playerName; }
+    public void setUsername(String playerName) { this.username = playerName; }
 
-    public String getPlayerName() {
-        return playerName;
+    public String getUsername() {
+        return username;
+    }
+
+    public void setPassword(String playerName) { this.password = password; }
+
+    public String getPassword() {
+        return password;
     }
 
     public void setGamesWon(int gamesWon) { this.gamesWon = gamesWon; }
@@ -50,7 +56,7 @@ public class Player {
 
     @Override
     public String toString() {
-        return "Name: " + getPlayerName();
+        return "Name: " + getUsername();
     }
 
 }

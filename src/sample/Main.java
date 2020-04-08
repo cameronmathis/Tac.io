@@ -20,7 +20,6 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 
 public class Main extends Application {
@@ -133,8 +132,8 @@ public class Main extends Application {
                 numberOfPlayers = 1;
                 resume();
                 enterNumberPopUpShown = false;
-                enterOneNamePopUp();
-                player2.setPlayerName("Computer");
+                newOrReturningUserPopUp();
+                player2.setUsername("Computer");
             } else if ((event.getCode() == KeyCode.DIGIT2 || event.getCode() == KeyCode.NUMPAD2) && enterNumberPopUpShown) {
                 numberOfPlayers = 2;
                 resume();
@@ -144,9 +143,9 @@ public class Main extends Application {
                 if (numberOfPlayers == 1) {
                     if (!(((TextField) enterOneNamePopUpPane.lookup("#player1Name")).getText().equals(""))) {
                         TextField name1 = (TextField) enterOneNamePopUpPane.lookup("#player1Name");
-                        player1.setPlayerName(name1.getText());
+                        player1.setUsername(name1.getText());
                     } else {
-                        player1.setPlayerName("player1");
+                        player1.setUsername("player1");
                     }
                     resume();
                     start();
@@ -161,15 +160,15 @@ public class Main extends Application {
                     } else {
                         if (!(((TextField) enterTwoNamesPopUpPane.lookup("#player1Name")).getText().equals(""))) {
                             TextField name1 = (TextField) enterTwoNamesPopUpPane.lookup("#player1Name");
-                            player1.setPlayerName(name1.getText());
+                            player1.setUsername(name1.getText());
                         } else {
-                            player1.setPlayerName("player1");
+                            player1.setUsername("player1");
                         }
                         if (!(((TextField) enterTwoNamesPopUpPane.lookup("#player2Name")).getText().equals(""))) {
                             TextField name2 = (TextField) enterTwoNamesPopUpPane.lookup("#player2Name");
-                            player2.setPlayerName(name2.getText());
+                            player2.setUsername(name2.getText());
                         } else {
-                            player2.setPlayerName("player2");
+                            player2.setUsername("player2");
                         }
                         resume();
                         start();
@@ -266,10 +265,11 @@ public class Main extends Application {
      * @param fields
      */
     private void createPlayer(Player player, String[] fields) {
-        player.setPlayerName(fields[0]);
-        player.setGamesPlayed(Integer.parseInt(fields[1]));
-        player.setTotalGamesWon(Integer.parseInt(fields[2]));
-        player.setWinPercentage(Double.parseDouble(fields[3]));
+        player.setUsername(fields[0]);
+        player.setPassword(fields[1]);
+        player.setGamesPlayed(Integer.parseInt(fields[2]));
+        player.setTotalGamesWon(Integer.parseInt(fields[3]));
+        player.setWinPercentage(Double.parseDouble(fields[4]));
     }
 
     /**
@@ -301,8 +301,8 @@ public class Main extends Application {
             numberOfPlayers = 1;
             resume();
             enterNumberPopUpShown = false;
-            enterOneNamePopUp();
-            player2.setPlayerName("Computer");
+            newOrReturningUserPopUp();
+            player2.setUsername("Computer");
         });
 
         Button twoPlayersBtn = (Button) numberOfPlayersPopUpPane.lookup("#twoPlayers");
@@ -315,47 +315,135 @@ public class Main extends Application {
     }
 
     /**
-     * ENTER ONE NAME POPUP
-     * PopUp to ask for one player name
+     * NEW OR RETURNING USER POPUP
+     * PopUp to ask user if they are new or not
      */
-    private void enterOneNamePopUp() {
-        enterNamePopUpShown = true;
-
+    private void newOrReturningUserPopUp() {
         PopUp = new Popup(); //creates new popup
 
-        enterOneNamePopUpPane = null; //calls popup menu created in 'enterOneNamePopUp.fxml' file
+        TitledPane newOrReturningUserPopUpPane = null; //calls popup menu created in 'newOrReturningUserPopUp.fxml' file
 
         try {
-            enterOneNamePopUpPane = FXMLLoader.load(getClass().getResource("enterOneNamePopUp.fxml"));
+            newOrReturningUserPopUpPane = FXMLLoader.load(getClass().getResource("newOrReturningUserPopUp.fxml"));
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        PopUp.getContent().add(enterOneNamePopUpPane); //adds the popup (child) created in fxml file to the popup (parent) created
+        PopUp.getContent().add(newOrReturningUserPopUpPane); //adds the popup (child) created in fxml file to the popup (parent) created
 
         //show popup on primaryStage
         PopUp.show(primaryStage);
 
-        TextField t1 = ((TextField) enterOneNamePopUpPane.lookup("#player1Name"));
+        openingPane.requestFocus();
+
+        Button createAccountBtn = (Button) newOrReturningUserPopUpPane.lookup("#createAccount");
+        createAccountBtn.setOnAction(event -> {
+            resume();
+            createAccountPopUp();
+        });
+
+        Button loginBtn = (Button) newOrReturningUserPopUpPane.lookup("#login");
+        loginBtn.setOnAction(event -> {
+            resume();
+            accountLoginPopUp();
+        });
+    }
+
+    /**
+     * CREATE ACCOUNT POPUP
+     * PopUp to create new account
+     */
+    private void createAccountPopUp() {
+        PopUp = new Popup(); //creates new popup
+
+        TitledPane createAccountPopUpPane = null; //calls popup menu created in 'createAccountPopUp.fxml' file
+
+        try {
+            createAccountPopUpPane = FXMLLoader.load(getClass().getResource("createAccountPopUp.fxml"));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        PopUp.getContent().add(createAccountPopUpPane); //adds the popup (child) created in fxml file to the popup (parent) created
+
+        //show popup on primaryStage
+        PopUp.show(primaryStage);
+
+        TextField t1 = ((TextField) createAccountPopUpPane.lookup("#username"));
         t1.requestFocus();
 
-        Button enterBtn = (Button) enterOneNamePopUpPane.lookup("#enter");
+        Button enterBtn = (Button) createAccountPopUpPane.lookup("#enter");
+        TitledPane finalCreateAccountPopUpPane = createAccountPopUpPane;
         enterBtn.setOnAction(event -> {
-            if (!(((TextField) enterOneNamePopUpPane.lookup("#player1Name")).getText().equals(""))) {
-                TextField name1 = (TextField) enterOneNamePopUpPane.lookup("#player1Name");
-                if (name1.getText().length() > 20) {
-                    nameTooLongPopUp(1);
+            TextField username;
+            TextField password;
+
+            if (!(((TextField) finalCreateAccountPopUpPane.lookup("#username")).getText().equals(""))) {
+                username = (TextField) finalCreateAccountPopUpPane.lookup("#username");
+                if (username.getText().length() > 20) {
+                    invalidUsernamePopUp();
+                }
+            } else {
+
+            }
+            if (!(((TextField) finalCreateAccountPopUpPane.lookup("#password")).getText().equals(""))) {
+                password = (TextField) finalCreateAccountPopUpPane.lookup("#password");
+                if (password.getText().length() > 20) {
+                    invalidUsernamePopUp();
                 } else {
-                    player1.setPlayerName(name1.getText());
+                    player1.setUsername(password.getText());
                     resume();
                     start();
                     enterNamePopUpShown = false;
                 }
-            } else {
-                player1.setPlayerName("player1");
-                resume();
-                start();
-                enterNamePopUpShown = false;
             }
+
+            //if (Database.contains(username.getText())) {
+            //  usernameAlreadyExistPopUp();
+            //} else {
+
+            //}
+            resume();
+        });
+    }
+
+    /**
+     * ACCOUNT LOGIN POPUP
+     * PopUp to login to account
+     */
+    private void accountLoginPopUp() {
+        PopUp = new Popup(); //creates new popup
+
+        TitledPane accountLoginPopUpPane = null; //calls popup menu created in 'accountLoginPopUp.fxml' file
+
+        try {
+            accountLoginPopUpPane = FXMLLoader.load(getClass().getResource("accountLoginPopUp.fxml"));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        PopUp.getContent().add(accountLoginPopUpPane); //adds the popup (child) created in fxml file to the popup (parent) created
+
+        //show popup on primaryStage
+        PopUp.show(primaryStage);
+
+        TextField t1 = ((TextField) accountLoginPopUpPane.lookup("#username"));
+        t1.requestFocus();
+
+        Button enterBtn = (Button) accountLoginPopUpPane.lookup("#enter");
+        TitledPane finalCreateAccountPopUpPane = accountLoginPopUpPane;
+        enterBtn.setOnAction(event -> {
+            TextField username;
+            TextField password;
+            username = (TextField) finalCreateAccountPopUpPane.lookup("#username");
+            password = (TextField) finalCreateAccountPopUpPane.lookup("#password");
+
+            //if (Database.contains(username.getText()) && Database.getUser(username).getPassword().equals(password)) {
+            player1.setUsername(username.getText());
+            resume();
+            start();
+            enterNumberPopUpShown = false;
+            //} else {
+            //    incorrectInformationPopUp();
+            //}
+            resume();
         });
     }
 
@@ -386,23 +474,15 @@ public class Main extends Application {
         enterBtn.setOnAction(event -> {
             if (!(((TextField) enterTwoNamesPopUpPane.lookup("#player1Name")).getText().equals(""))) {
                 TextField name1 = (TextField) enterTwoNamesPopUpPane.lookup("#player1Name");
-                if (name1.getText().length() > 20) {
-                    nameTooLongPopUp(2);
-                } else {
-                    player1.setPlayerName(name1.getText());
-                }
+                player1.setUsername(name1.getText());
             } else {
-                player1.setPlayerName("player1");
+                player1.setUsername("player1");
             }
             if (!(((TextField) enterTwoNamesPopUpPane.lookup("#player2Name")).getText().equals(""))) {
                 TextField name2 = (TextField) enterTwoNamesPopUpPane.lookup("#player2Name");
-                if (name2.getText().length() > 20) {
-                    nameTooLongPopUp(2);
-                } else {
-                    player2.setPlayerName(name2.getText());
-                }
+                player2.setUsername(name2.getText());
             } else {
-                player2.setPlayerName("player2");
+                player2.setUsername("player2");
             }
             resume();
             start();
@@ -413,15 +493,15 @@ public class Main extends Application {
 
     /**
      * NAME TOO LONG POPUP
-     * PopUp for when a player tries to enter a name greater than twenty characters
+     * PopUp for when a player tries to enter an invalid username
      */
-    private void nameTooLongPopUp(int num) {
+    private void invalidUsernamePopUp() {
         PopUp = new Popup(); //creates new popup
 
-        TitledPane nameTooLongPopUpPane = null; //calls popup menu created in 'nameTooLongPopUp.fxml' file
+        TitledPane nameTooLongPopUpPane = null; //calls popup menu created in 'invalidUsernamePopUp.fxml' file
 
         try {
-            nameTooLongPopUpPane = FXMLLoader.load(getClass().getResource("nameTooLongPopUp.fxml"));
+            nameTooLongPopUpPane = FXMLLoader.load(getClass().getResource("invalidUsernamePopUp.fxml"));
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -437,11 +517,37 @@ public class Main extends Application {
             pauseBtn.setDisable(false);
             undoBtn.setDisable(false);
 
-            if (num == 1) {
-                enterOneNamePopUp();
-            } else if (num == 2) {
-                enterTwoNamesPopUp();
-            }
+            accountLoginPopUp();
+        });
+    }
+
+    /**
+     * NAME TOO LONG POPUP
+     * PopUp for when a player tries to enter a name greater than twenty characters
+     */
+    private void incorrectInformationPopUp() {
+        PopUp = new Popup(); //creates new popup
+
+        TitledPane incorrectInformationPopUpPane = null; //calls popup menu created in 'incorrectInformationPopUp.fxml' file
+
+        try {
+            incorrectInformationPopUpPane = FXMLLoader.load(getClass().getResource("incorrectInformationPopUp.fxml"));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        PopUp.getContent().add(incorrectInformationPopUpPane); //adds the popup (child) created in fxml file to the popup (parent) created
+
+        //show popup on primaryStage
+        PopUp.show(primaryStage);
+
+        Button dismissBtn = (Button) incorrectInformationPopUpPane.lookup("#dismiss");
+
+        dismissBtn.setOnAction(event -> {
+            resume();
+            pauseBtn.setDisable(false);
+            undoBtn.setDisable(false);
+
+            createAccountPopUp();
         });
     }
 
@@ -455,10 +561,10 @@ public class Main extends Application {
         for (Player p : playerList) {
             if (player1Found && player2Found) {
                 break;
-            } else if (p.getPlayerName().equals(player1.getPlayerName())) {
+            } else if (p.getUsername().equals(player1.getUsername())) {
                 player1 = p;
                 player1Found = true;
-            } else if (p.getPlayerName().equals(player2.getPlayerName())) {
+            } else if (p.getUsername().equals(player2.getUsername())) {
                 player2 = p;
                 player2Found = true;
             }
@@ -2031,9 +2137,9 @@ public class Main extends Application {
         PopUp.getContent().add(gameOverPopUpPane); //adds the popup (child) created in fxml file to the popup (parent) created
 
         Text text = (Text) gameOverPopUpPane.getContent().lookup("#gameOverMessage");
-        if (numberOfPlayers == 2 || !player.getPlayerName().equals("Computer")) {
-            text.setText("Congratulations " + player.getPlayerName() + "! You won!");
-        } else if (numberOfPlayers == 1 && player.getPlayerName().equals("Computer")) {
+        if (numberOfPlayers == 2 || !player.getUsername().equals("Computer")) {
+            text.setText("Congratulations " + player.getUsername() + "! You won!");
+        } else if (numberOfPlayers == 1 && player.getUsername().equals("Computer")) {
             text.setText("Sorry, you lost:(");
         }
 
