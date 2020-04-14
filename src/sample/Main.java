@@ -31,7 +31,7 @@ public class Main extends Application {
     private Player player1 = new Player();
     private Player player2 = new Player();
     private List<Player> playerList = new ArrayList<>();
-    private TitledPane enterOneNamePopUpPane;
+    private TitledPane accountLoginPopUpPane;
     private TitledPane enterTwoNamesPopUpPane;
     private AnchorPane gamePane;
     private Scene gameScene;
@@ -141,9 +141,9 @@ public class Main extends Application {
                 enterTwoNamesPopUp();
             } else if (event.getCode() == KeyCode.ENTER && enterNamePopUpShown) {
                 if (numberOfPlayers == 1) {
-                    if (!(((TextField) enterOneNamePopUpPane.lookup("#player1Name")).getText().equals(""))) {
-                        TextField name1 = (TextField) enterOneNamePopUpPane.lookup("#player1Name");
-                        player1.setUsername(name1.getText());
+                    if (!(((TextField) accountLoginPopUpPane.lookup("#username")).getText().equals(""))) {
+                        TextField username = (TextField) accountLoginPopUpPane.lookup("#username");
+                        player1.setUsername(username.getText());
                     } else {
                         player1.setUsername("player1");
                     }
@@ -456,7 +456,7 @@ public class Main extends Application {
     private void accountLoginPopUp() {
         PopUp = new Popup(); //creates new popup
 
-        TitledPane accountLoginPopUpPane = null; //calls popup menu created in 'accountLoginPopUp.fxml' file
+        accountLoginPopUpPane = null; //calls popup menu created in 'accountLoginPopUp.fxml' file
 
         try {
             accountLoginPopUpPane = FXMLLoader.load(getClass().getResource("accountLoginPopUp.fxml"));
@@ -492,8 +492,8 @@ public class Main extends Application {
     }
 
     /**
-     * NAME TOO LONG POPUP
-     * PopUp for when a player tries to enter an invalid username
+     * USERNAME ALREADY EXISTS POPUP
+     * PopUp for when a player tries to enter a username that already exist
      */
     private void usernameAlreadyExistPopUp() {
         PopUp = new Popup(); //creates new popup
@@ -522,7 +522,7 @@ public class Main extends Application {
     }
 
     /**
-     * NAME TOO LONG POPUP
+     * INVALID USERNAME POPUP
      * PopUp for when a player tries to enter an invalid username
      */
     private void invalidUsernamePopUp() {
@@ -552,8 +552,8 @@ public class Main extends Application {
     }
 
     /**
-     * NAME TOO LONG POPUP
-     * PopUp for when a player tries to enter a name greater than twenty characters
+     * INCORRECT INFORMATION POPUP
+     * PopUp for when a player enters a wrong username or password
      */
     private void incorrectInformationPopUp() {
         PopUp = new Popup(); //creates new popup
