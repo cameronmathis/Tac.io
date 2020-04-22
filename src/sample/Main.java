@@ -83,7 +83,7 @@ public class Main extends Application {
                 setEnterNumberPopUpShown(false);
                 enterTwoNamesPopUp();
             } else if ((getCreateAccountPopUpShown() || getAccountLoginPopUpShown()) && event.getCode() == KeyCode.ENTER) {
-                if (getCreateAccountPopUpShown() && (getNumberOfPlayers() == 1)) {
+                if (getCreateAccountPopUpShown()) {
                     hidePopUp();
                     startGame();
                     setCreateAccountPopUpShown(false);
@@ -96,29 +96,23 @@ public class Main extends Application {
                     getPauseBtn().setDisable(false);
                     getUndoBtn().setDisable(false);
                 } else if (getNumberOfPlayers() == 2) {
-                    TextField t1 = ((TextField) getEnterTwoNamesPopUpPane().lookup("#player1Name"));
-                    TextField t2 = ((TextField) getEnterTwoNamesPopUpPane().lookup("#player2Name"));
-                    if (t1.isFocused()) {
-                        t2.requestFocus();
+                    if (!(((TextField) getEnterTwoNamesPopUpPane().lookup("#player1Name")).getText().equals(""))) {
+                        TextField name1 = (TextField) getEnterTwoNamesPopUpPane().lookup("#player1Name");
+                        getPlayer1().setUsername(name1.getText());
                     } else {
-                        if (!(((TextField) getEnterTwoNamesPopUpPane().lookup("#player1Name")).getText().equals(""))) {
-                            TextField name1 = (TextField) getEnterTwoNamesPopUpPane().lookup("#player1Name");
-                            getPlayer1().setUsername(name1.getText());
-                        } else {
-                            getPlayer1().setUsername("player1");
-                        }
-                        if (!(((TextField) getEnterTwoNamesPopUpPane().lookup("#player2Name")).getText().equals(""))) {
-                            TextField name2 = (TextField) getEnterTwoNamesPopUpPane().lookup("#player2Name");
-                            getPlayer2().setUsername(name2.getText());
-                        } else {
-                            getPlayer2().setUsername("player2");
-                        }
-                        hidePopUp();
-                        startGame();
-                        setAccountLoginPopUpShown(false);
-                        getPauseBtn().setDisable(false);
-                        getUndoBtn().setDisable(false);
+                        getPlayer1().setUsername("player1");
                     }
+                    if (!(((TextField) getEnterTwoNamesPopUpPane().lookup("#player2Name")).getText().equals(""))) {
+                        TextField name2 = (TextField) getEnterTwoNamesPopUpPane().lookup("#player2Name");
+                        getPlayer2().setUsername(name2.getText());
+                    } else {
+                        getPlayer2().setUsername("player2");
+                    }
+                    hidePopUp();
+                    startGame();
+                    setAccountLoginPopUpShown(false);
+                    getPauseBtn().setDisable(false);
+                    getUndoBtn().setDisable(false);
                 }
             }
         });

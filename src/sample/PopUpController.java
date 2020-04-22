@@ -294,8 +294,10 @@ public class PopUpController {
                 hidePopUp();
                 invalidUsernamePopUp();
                 return;
-            } else {
-                getPlayer1().setUsername(username.getText());
+            } else if (false) {
+                hidePopUp();
+                usernameAlreadyExistPopUp();
+                return;
             }
 
             password1 = (PasswordField) finalCreateAccountPopUpPane.lookup("#password1");
@@ -308,12 +310,12 @@ public class PopUpController {
                 hidePopUp();
                 invalidPasswordPopUp();
                 return;
-            } else {
-                getPlayer1().setPassword(password1.getText());
-                hidePopUp();
-                startGame();
-                createAccountPopUpShown = false;
             }
+
+            createPlayer(new Player(), username.getText(), password1.getText());
+            hidePopUp();
+            startGame();
+            createAccountPopUpShown = false;
         });
     }
 

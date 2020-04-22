@@ -1,6 +1,7 @@
 package sample;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class PlayerController {
@@ -56,15 +57,13 @@ public class PlayerController {
     /**
      * CREATE PLAYER METHOD
      * Method to create a player that is not already on the leader board
-     *
-     * @param player
-     * @param fields
      */
-    static void createPlayer(Player player, String[] fields) {
-        player.setUsername(fields[0]);
-        player.setPassword(fields[1]);
-        player.setGamesPlayed(Integer.parseInt(fields[2]));
-        player.setTotalGamesWon(Integer.parseInt(fields[3]));
-        player.setWinPercentage(Double.parseDouble(fields[4]));
+    static void createPlayer(Player player, String username, String password) {
+        player.setUsername(username);
+        player.setPassword(password);
+        player.setGamesPlayed(0);
+        player.setTotalGamesWon(0);
+        player.setWinPercentage(0);
+        player.setLastDatePlayed(new Date());
     }
 }
