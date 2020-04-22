@@ -29,7 +29,7 @@ public class Main extends Application {
          * Main Stage and Scene Created and shown
          */
         setOpeningScene(new Scene(getOpeningPane())); //creates a new scene from 'StartScreen.fxml'
-        setGameScene(new Scene(getGamePane())); //created a new scene from 'GameScreen.fxml'
+        setGameScene(new Scene(getGamePane())); //created a new scene from 'GameScene.fxml'
         primaryStage.setTitle("TicTacToe"); //sets the title of the app
         primaryStage.setScene(getOpeningScene()); //sets the scene on the stage
         primaryStage.setAlwaysOnTop(false); //set to false to show popups
@@ -48,10 +48,14 @@ public class Main extends Application {
         setPauseBtn((Button) getGameScene().lookup("#pause"));
         setUndoBtn((Button) getGameScene().lookup("#undo"));
 
+        /**
+         * QUADRANT INITIALIZATION
+         * Initialize all the quadrants
+         */
         initializeQuadrants();
 
         /**
-         * CHECK FOR PLAYS
+         * CHECK FOR PLAYS VIA MOUSE
          */
         getTopLeft().getPane().setOnMouseClicked(event -> markQuadrant(getTopLeft(), getTopLeft().getIsMarked()));
         getTopCenter().getPane().setOnMouseClicked(event -> markQuadrant(getTopCenter(), getTopCenter().getIsMarked()));
@@ -67,29 +71,29 @@ public class Main extends Application {
          * SHORTCUT KEYS
          */
         getOpeningScene().setOnKeyReleased(event -> {
-
-            if ((event.getCode() == KeyCode.DIGIT1 || event.getCode() == KeyCode.NUMPAD1) && getEnterNumberPopUpShown()) {
+            if (getEnterNumberPopUpShown() && (event.getCode() == KeyCode.DIGIT1 || event.getCode() == KeyCode.NUMPAD1)) {
                 setNumberOfPlayers(1);
+                setAbleToUndo(false);
                 resume();
                 setEnterNumberPopUpShown(false);
                 newOrReturningUserPopUp();
                 getPlayer2().setUsername("Computer");
-            } else if ((event.getCode() == KeyCode.DIGIT2 || event.getCode() == KeyCode.NUMPAD2) && getEnterNumberPopUpShown()) {
+            } else if (getEnterNumberPopUpShown() && (event.getCode() == KeyCode.DIGIT2 || event.getCode() == KeyCode.NUMPAD2)) {
                 setNumberOfPlayers(2);
                 resume();
                 setEnterNumberPopUpShown(false);
                 enterTwoNamesPopUp();
-            } else if (event.getCode() == KeyCode.ENTER && getEnterNamePopUpShown()) {
-                if (getNumberOfPlayers() == 1) {
-                    if (!(((TextField) getAccountLoginPopUpPane().lookup("#username")).getText().equals(""))) {
-                        TextField username = (TextField) getAccountLoginPopUpPane().lookup("#username");
-                        getPlayer1().setUsername(username.getText());
-                    } else {
-                        getPlayer1().setUsername("player1");
-                    }
+            } else if ((getCreateAccountPopUpShown() || getAccountLoginPopUpShown()) && event.getCode() == KeyCode.ENTER) {
+                if (getCreateAccountPopUpShown() && (getNumberOfPlayers() == 1)) {
                     resume();
                     startGame();
-                    setEnterNamePopUpShown(false);
+                    setCreateAccountPopUpShown(false);
+                    getPauseBtn().setDisable(false);
+                    getUndoBtn().setDisable(false);
+                } else if (getAccountLoginPopUpShown() && (getNumberOfPlayers() == 1)) {
+                    resume();
+                    startGame();
+                    setAccountLoginPopUpShown(false);
                     getPauseBtn().setDisable(false);
                     getUndoBtn().setDisable(false);
                 } else if (getNumberOfPlayers() == 2) {
@@ -112,7 +116,7 @@ public class Main extends Application {
                         }
                         resume();
                         startGame();
-                        setEnterNamePopUpShown(false);
+                        setAccountLoginPopUpShown(false);
                         getPauseBtn().setDisable(false);
                         getUndoBtn().setDisable(false);
                     }

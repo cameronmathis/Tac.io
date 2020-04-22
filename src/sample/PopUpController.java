@@ -28,7 +28,8 @@ public class PopUpController {
     private static AnchorPane gamePane;
     private static Scene gameScene;
     private static boolean enterNumberPopUpShown = false;
-    private static boolean enterNamePopUpShown = false;
+    private static boolean accountLoginPopUpShown = false;
+    private static boolean createAccountPopUpShown = false;
     private static boolean wonGamePopUpShown = false;
     private static boolean tiedGamePopUpShown = false;
 
@@ -69,7 +70,9 @@ public class PopUpController {
 
     static void setEnterNumberPopUpShown(boolean bool) { enterNumberPopUpShown = bool; }
 
-    static void setEnterNamePopUpShown(boolean bool) { enterNamePopUpShown = bool; }
+    static void setAccountLoginPopUpShown(boolean bool) { accountLoginPopUpShown = bool; }
+
+    static void setCreateAccountPopUpShown(boolean bool) { createAccountPopUpShown = bool; }
 
     static void setWonGamePopUpShown(boolean bool) { wonGamePopUpShown = bool; }
 
@@ -80,9 +83,7 @@ public class PopUpController {
      */
     static Stage getPrimaryStage() { return primaryStage; }
 
-    static TitledPane getAccountLoginPopUpPane() {
-        return accountLoginPopUpPane;
-    }
+    static TitledPane getAccountLoginPopUpPane() { return accountLoginPopUpPane; }
 
     static TitledPane getEnterTwoNamesPopUpPane() { return enterTwoNamesPopUpPane; }
 
@@ -98,7 +99,9 @@ public class PopUpController {
 
     static boolean getEnterNumberPopUpShown() { return enterNumberPopUpShown; }
 
-    static boolean getEnterNamePopUpShown() { return enterNamePopUpShown; }
+    static boolean getAccountLoginPopUpShown() { return accountLoginPopUpShown; }
+
+    static boolean getCreateAccountPopUpShown() { return createAccountPopUpShown; }
 
     static boolean getWonGamePopUpShown() { return wonGamePopUpShown; }
 
@@ -141,7 +144,6 @@ public class PopUpController {
         Button twoPlayersBtn = (Button) numberOfPlayersPopUpPane.lookup("#twoPlayers");
         twoPlayersBtn.setOnAction(event -> {
             setNumberOfPlayers(2);
-            setAbleToUndo(true);
             resume();
             enterNumberPopUpShown = false;
             enterTwoNamesPopUp();
@@ -188,6 +190,7 @@ public class PopUpController {
      */
     static void accountLoginPopUp() {
         PopUp = new Popup(); //creates new popup
+        accountLoginPopUpShown = true;
 
         accountLoginPopUpPane = null; //calls popup menu created in 'accountLoginPopUp.fxml' file
 
@@ -216,11 +219,7 @@ public class PopUpController {
             getPlayer1().setUsername(username.getText());
             resume();
             startGame();
-            enterNumberPopUpShown = false;
-            //} else {
-            //    incorrectInformationPopUp();
-            //}
-            resume();
+            accountLoginPopUpShown = false;
         });
     }
 
@@ -230,6 +229,7 @@ public class PopUpController {
      */
     static void createAccountPopUp() {
         PopUp = new Popup(); //creates new popup
+        createAccountPopUpShown = true;
 
         TitledPane createAccountPopUpPane = null; //calls popup menu created in 'createAccountPopUp.fxml' file
 
@@ -268,16 +268,12 @@ public class PopUpController {
                     getPlayer1().setUsername(password.getText());
                     resume();
                     startGame();
-                    enterNamePopUpShown = false;
+                    createAccountPopUpShown = false;
                 }
             }
 
-            //if (!Database.contains(username.getText())) {
-            //  usernameAlreadyExistPopUp();
-            //} else {
-            //  createPlayer();
-            //}
             resume();
+            startGame();
         });
     }
 
@@ -376,7 +372,7 @@ public class PopUpController {
      * PopUp to ask for both player names
      */
     static void enterTwoNamesPopUp() {
-        enterNamePopUpShown = true;
+        accountLoginPopUpShown = true;
         PopUp = new Popup(); //creates new popup
 
         enterTwoNamesPopUpPane = null; //calls popup menu created in 'enterTwoNamesPopUp.fxml' file
@@ -410,8 +406,7 @@ public class PopUpController {
             }
             resume();
             startGame();
-            enterNamePopUpShown = false;
-
+            accountLoginPopUpShown = false;
         });
     }
 

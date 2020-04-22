@@ -38,9 +38,7 @@ public class ButtonController {
         return undoBtn;
     }
 
-    static boolean getAbleToUndo() {
-        return ableToUndo;
-    }
+    static boolean getAbleToUndo() { return ableToUndo; }
 
     /**
      * PAUSE METHOD
@@ -70,7 +68,7 @@ public class ButtonController {
      * Undo the last move
      */
     static void undo() {
-        if (!ableToUndo) {
+        if (getNumberOfPlayers() != 2) {
             return;
         }
         if (ableToUndo && getNumberOfPlayers() == 2) {

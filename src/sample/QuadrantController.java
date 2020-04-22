@@ -1460,6 +1460,7 @@ public class QuadrantController {
                 previousQuadrant = currentQuadrant;
             }
             currentQuadrant = quadrant;
+            setAbleToUndo(true);
             counter = 0;
             if (!gameOver && !getPauseBtn().isDisabled() && getPlayer1().getTurn()) {
                 Object[] temp1 = quadrant.getPane().getChildren().toArray();
