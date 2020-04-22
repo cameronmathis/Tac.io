@@ -3,6 +3,7 @@ package sample;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.AnchorPane;
@@ -260,8 +261,8 @@ public class PopUpController {
             } else {
 
             }
-            if (!(((TextField) finalCreateAccountPopUpPane.lookup("#password")).getText().equals(""))) {
-                password = (TextField) finalCreateAccountPopUpPane.lookup("#password");
+            if (!(((TextField) finalCreateAccountPopUpPane.lookup("#password1")).getText().equals(""))) {
+                password = (PasswordField) finalCreateAccountPopUpPane.lookup("#password1");
                 if (password.getText().length() > 20) {
                     invalidUsernamePopUp();
                 } else {
