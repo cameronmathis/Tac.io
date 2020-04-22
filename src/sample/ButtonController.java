@@ -51,10 +51,10 @@ public class ButtonController {
     }
 
     /**
-     * RESUME METHOD
-     * Resumes the game
+     * HIDE POPUP METHOD
+     * Hides current PopUp
      */
-    static void resume() {
+    static void hidePopUp() {
         try {
             getPopUp().hide();
             setPopUp(null);

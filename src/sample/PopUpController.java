@@ -69,44 +69,80 @@ public class PopUpController {
         gameScene = s;
     }
 
-    static void setEnterNumberPopUpShown(boolean bool) { enterNumberPopUpShown = bool; }
+    static void setEnterNumberPopUpShown(boolean bool) {
+        enterNumberPopUpShown = bool;
+    }
 
-    static void setAccountLoginPopUpShown(boolean bool) { accountLoginPopUpShown = bool; }
+    static void setAccountLoginPopUpShown(boolean bool) {
+        accountLoginPopUpShown = bool;
+    }
 
-    static void setCreateAccountPopUpShown(boolean bool) { createAccountPopUpShown = bool; }
+    static void setCreateAccountPopUpShown(boolean bool) {
+        createAccountPopUpShown = bool;
+    }
 
-    static void setWonGamePopUpShown(boolean bool) { wonGamePopUpShown = bool; }
+    static void setWonGamePopUpShown(boolean bool) {
+        wonGamePopUpShown = bool;
+    }
 
-    static void setTiedGamePopUpShown(boolean bool) { tiedGamePopUpShown = bool; }
+    static void setTiedGamePopUpShown(boolean bool) {
+        tiedGamePopUpShown = bool;
+    }
 
     /**
      * GETTER METHODS
      */
-    static Stage getPrimaryStage() { return primaryStage; }
+    static Stage getPrimaryStage() {
+        return primaryStage;
+    }
 
-    static TitledPane getAccountLoginPopUpPane() { return accountLoginPopUpPane; }
+    static TitledPane getAccountLoginPopUpPane() {
+        return accountLoginPopUpPane;
+    }
 
-    static TitledPane getEnterTwoNamesPopUpPane() { return enterTwoNamesPopUpPane; }
+    static TitledPane getEnterTwoNamesPopUpPane() {
+        return enterTwoNamesPopUpPane;
+    }
 
-    static Popup getPopUp() { return PopUp; }
+    static Popup getPopUp() {
+        return PopUp;
+    }
 
-    static AnchorPane getOpeningPane() { return openingPane; }
+    static AnchorPane getOpeningPane() {
+        return openingPane;
+    }
 
-    static Scene getOpeningScene() { return openingScene; }
+    static Scene getOpeningScene() {
+        return openingScene;
+    }
 
-    static AnchorPane getGamePane() { return gamePane; }
+    static AnchorPane getGamePane() {
+        return gamePane;
+    }
 
-    static Scene getGameScene() { return gameScene; }
+    static Scene getGameScene() {
+        return gameScene;
+    }
 
-    static boolean getEnterNumberPopUpShown() { return enterNumberPopUpShown; }
+    static boolean getEnterNumberPopUpShown() {
+        return enterNumberPopUpShown;
+    }
 
-    static boolean getAccountLoginPopUpShown() { return accountLoginPopUpShown; }
+    static boolean getAccountLoginPopUpShown() {
+        return accountLoginPopUpShown;
+    }
 
-    static boolean getCreateAccountPopUpShown() { return createAccountPopUpShown; }
+    static boolean getCreateAccountPopUpShown() {
+        return createAccountPopUpShown;
+    }
 
-    static boolean getWonGamePopUpShown() { return wonGamePopUpShown; }
+    static boolean getWonGamePopUpShown() {
+        return wonGamePopUpShown;
+    }
 
-    static boolean getTiedGamePopUpShown() { return tiedGamePopUpShown; }
+    static boolean getTiedGamePopUpShown() {
+        return tiedGamePopUpShown;
+    }
 
     /**
      * NUMBER OF PLAYERS POPUP
@@ -135,8 +171,7 @@ public class PopUpController {
         Button onePlayerBtn = (Button) numberOfPlayersPopUpPane.lookup("#onePlayer");
         onePlayerBtn.setOnAction(event -> {
             setNumberOfPlayers(1);
-            setAbleToUndo(false);
-            resume();
+            hidePopUp();
             enterNumberPopUpShown = false;
             newOrReturningUserPopUp();
             getPlayer2().setUsername("Computer");
@@ -145,7 +180,7 @@ public class PopUpController {
         Button twoPlayersBtn = (Button) numberOfPlayersPopUpPane.lookup("#twoPlayers");
         twoPlayersBtn.setOnAction(event -> {
             setNumberOfPlayers(2);
-            resume();
+            hidePopUp();
             enterNumberPopUpShown = false;
             enterTwoNamesPopUp();
         });
@@ -174,13 +209,13 @@ public class PopUpController {
 
         Button createAccountBtn = (Button) newOrReturningUserPopUpPane.lookup("#createAccount");
         createAccountBtn.setOnAction(event -> {
-            resume();
+            hidePopUp();
             createAccountPopUp();
         });
 
         Button loginBtn = (Button) newOrReturningUserPopUpPane.lookup("#login");
         loginBtn.setOnAction(event -> {
-            resume();
+            hidePopUp();
             accountLoginPopUp();
         });
     }
@@ -218,7 +253,7 @@ public class PopUpController {
 
             //if (Database.contains(username.getText()) && Database.getUser(username).getPassword().equals(password)) {
             getPlayer1().setUsername(username.getText());
-            resume();
+            hidePopUp();
             startGame();
             accountLoginPopUpShown = false;
         });
@@ -251,30 +286,34 @@ public class PopUpController {
         TitledPane finalCreateAccountPopUpPane = createAccountPopUpPane;
         enterBtn.setOnAction(event -> {
             TextField username;
-            TextField password;
+            TextField password1;
+            TextField password2;
 
-            if (!(((TextField) finalCreateAccountPopUpPane.lookup("#username")).getText().equals(""))) {
-                username = (TextField) finalCreateAccountPopUpPane.lookup("#username");
-                if (username.getText().length() > 20) {
-                    invalidUsernamePopUp();
-                }
+            username = (TextField) finalCreateAccountPopUpPane.lookup("#username");
+            if (username.getText().equals("") || (username.getText().length() > 20)) {
+                hidePopUp();
+                invalidUsernamePopUp();
+                return;
             } else {
-
-            }
-            if (!(((TextField) finalCreateAccountPopUpPane.lookup("#password1")).getText().equals(""))) {
-                password = (PasswordField) finalCreateAccountPopUpPane.lookup("#password1");
-                if (password.getText().length() > 20) {
-                    invalidUsernamePopUp();
-                } else {
-                    getPlayer1().setUsername(password.getText());
-                    resume();
-                    startGame();
-                    createAccountPopUpShown = false;
-                }
+                getPlayer1().setUsername(username.getText());
             }
 
-            resume();
-            startGame();
+            password1 = (PasswordField) finalCreateAccountPopUpPane.lookup("#password1");
+            password2 = (PasswordField) finalCreateAccountPopUpPane.lookup("#password2");
+            if (!password1.getText().equals(password2.getText())) {
+                hidePopUp();
+                passwordsDontMatchPopUp();
+                return;
+            } else if (password1.getText().equals("") || (password1.getText().length() < 7) || (password1.getText().length() > 20)) {
+                hidePopUp();
+                invalidPasswordPopUp();
+                return;
+            } else {
+                getPlayer1().setPassword(password1.getText());
+                hidePopUp();
+                startGame();
+                createAccountPopUpShown = false;
+            }
         });
     }
 
@@ -300,7 +339,7 @@ public class PopUpController {
         Button dismissBtn = (Button) usernameAlreadyExistPopUpPane.lookup("#dismiss");
 
         dismissBtn.setOnAction(event -> {
-            resume();
+            hidePopUp();
             getPauseBtn().setDisable(false);
             getUndoBtn().setDisable(false);
 
@@ -330,7 +369,67 @@ public class PopUpController {
         Button dismissBtn = (Button) invalidUsernamePopUpPane.lookup("#dismiss");
 
         dismissBtn.setOnAction(event -> {
-            resume();
+            hidePopUp();
+            getPauseBtn().setDisable(false);
+            getUndoBtn().setDisable(false);
+
+            createAccountPopUp();
+        });
+    }
+
+    /**
+     * PASSWORDS DON'T MATCH POPUP
+     * PopUp for passwords do not match
+     */
+    static void passwordsDontMatchPopUp() {
+        PopUp = new Popup(); //creates new popup
+
+        TitledPane passwordsDontMatchPopUpPane = null; //calls popup menu created in 'passwordsDontMatchPopUp.fxml' file
+
+        try {
+            passwordsDontMatchPopUpPane = FXMLLoader.load(PopUpController.class.getResource("passwordsDontMatchPopUp.fxml"));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        PopUp.getContent().add(passwordsDontMatchPopUpPane); //adds the popup (child) created in fxml file to the popup (parent) created
+
+        //show popup on primaryStage
+        PopUp.show(primaryStage);
+
+        Button dismissBtn = (Button) passwordsDontMatchPopUpPane.lookup("#dismiss");
+
+        dismissBtn.setOnAction(event -> {
+            hidePopUp();
+            getPauseBtn().setDisable(false);
+            getUndoBtn().setDisable(false);
+
+            createAccountPopUp();
+        });
+    }
+
+    /**
+     * INVALID PASSWORDS POPUP
+     * PopUp for when a player tries to enter an invalid password
+     */
+    static void invalidPasswordPopUp() {
+        PopUp = new Popup(); //creates new popup
+
+        TitledPane invalidPasswordPopUpPane = null; //calls popup menu created in 'invalidPasswordPopUp.fxml' file
+
+        try {
+            invalidPasswordPopUpPane = FXMLLoader.load(PopUpController.class.getResource("invalidPasswordPopUp.fxml"));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        PopUp.getContent().add(invalidPasswordPopUpPane); //adds the popup (child) created in fxml file to the popup (parent) created
+
+        //show popup on primaryStage
+        PopUp.show(primaryStage);
+
+        Button dismissBtn = (Button) invalidPasswordPopUpPane.lookup("#dismiss");
+
+        dismissBtn.setOnAction(event -> {
+            hidePopUp();
             getPauseBtn().setDisable(false);
             getUndoBtn().setDisable(false);
 
@@ -360,7 +459,7 @@ public class PopUpController {
         Button dismissBtn = (Button) incorrectInformationPopUpPane.lookup("#dismiss");
 
         dismissBtn.setOnAction(event -> {
-            resume();
+            hidePopUp();
             getPauseBtn().setDisable(false);
             getUndoBtn().setDisable(false);
 
@@ -405,7 +504,7 @@ public class PopUpController {
             } else {
                 getPlayer2().setUsername("player2");
             }
-            resume();
+            hidePopUp();
             startGame();
             accountLoginPopUpShown = false;
         });
@@ -434,7 +533,7 @@ public class PopUpController {
 
         Button resumeBtn = (Button) pausedPupUpPane.lookup("#resume");
         resumeBtn.setOnAction(browseDismissEvent -> {
-            resume();
+            hidePopUp();
             getPauseBtn().setDisable(false);
             getUndoBtn().setDisable(false);
         });
@@ -443,7 +542,7 @@ public class PopUpController {
         exitBtn.setOnAction(event -> {
             primaryStage.setScene(openingScene); //sets the scene on the stage
             primaryStage.show(); //shows the primaryStage
-            resume();
+            hidePopUp();
             numberOfPlayersPopUp();
         });
     }
@@ -469,7 +568,7 @@ public class PopUpController {
 
         Button dismissBtn = (Button) undoStartPopUpPane.lookup("#dismiss");
         dismissBtn.setOnAction(browseDismissEvent -> {
-            resume();
+            hidePopUp();
             getPauseBtn().setDisable(false);
             getUndoBtn().setDisable(false);
         });
@@ -496,7 +595,7 @@ public class PopUpController {
 
         Button dismissBtn = (Button) undoTwicePopUpPane.lookup("#dismiss");
         dismissBtn.setOnAction(browseDismissEvent -> {
-            resume();
+            hidePopUp();
             getPauseBtn().setDisable(false);
             getUndoBtn().setDisable(false);
         });
@@ -523,7 +622,7 @@ public class PopUpController {
 
         Button dismissBtn = (Button) isAlreadyMarkedPopUpPane.lookup("#dismiss");
         dismissBtn.setOnAction(event -> {
-            resume();
+            hidePopUp();
             getPauseBtn().setDisable(false);
             getUndoBtn().setDisable(false);
         });
@@ -564,7 +663,7 @@ public class PopUpController {
             getPauseBtn().setDisable(false);
             getUndoBtn().setDisable(false);
             setGame();
-            resume();
+            hidePopUp();
         });
 
         Button quitBtn = (Button) gameOverPopUpPane.lookup("#quit");
@@ -606,7 +705,7 @@ public class PopUpController {
             getPauseBtn().setDisable(false);
             getUndoBtn().setDisable(false);
             setGame();
-            resume();
+            hidePopUp();
         });
 
         Button quitBtn = (Button) tiePopUpPane.lookup("#quit");

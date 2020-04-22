@@ -73,25 +73,24 @@ public class Main extends Application {
         getOpeningScene().setOnKeyReleased(event -> {
             if (getEnterNumberPopUpShown() && (event.getCode() == KeyCode.DIGIT1 || event.getCode() == KeyCode.NUMPAD1)) {
                 setNumberOfPlayers(1);
-                setAbleToUndo(false);
-                resume();
+                hidePopUp();
                 setEnterNumberPopUpShown(false);
                 newOrReturningUserPopUp();
                 getPlayer2().setUsername("Computer");
             } else if (getEnterNumberPopUpShown() && (event.getCode() == KeyCode.DIGIT2 || event.getCode() == KeyCode.NUMPAD2)) {
                 setNumberOfPlayers(2);
-                resume();
+                hidePopUp();
                 setEnterNumberPopUpShown(false);
                 enterTwoNamesPopUp();
             } else if ((getCreateAccountPopUpShown() || getAccountLoginPopUpShown()) && event.getCode() == KeyCode.ENTER) {
                 if (getCreateAccountPopUpShown() && (getNumberOfPlayers() == 1)) {
-                    resume();
+                    hidePopUp();
                     startGame();
                     setCreateAccountPopUpShown(false);
                     getPauseBtn().setDisable(false);
                     getUndoBtn().setDisable(false);
                 } else if (getAccountLoginPopUpShown() && (getNumberOfPlayers() == 1)) {
-                    resume();
+                    hidePopUp();
                     startGame();
                     setAccountLoginPopUpShown(false);
                     getPauseBtn().setDisable(false);
@@ -114,7 +113,7 @@ public class Main extends Application {
                         } else {
                             getPlayer2().setUsername("player2");
                         }
-                        resume();
+                        hidePopUp();
                         startGame();
                         setAccountLoginPopUpShown(false);
                         getPauseBtn().setDisable(false);
@@ -145,31 +144,31 @@ public class Main extends Application {
                 markQuadrant(getBottomRight(), getBottomRight().getIsMarked());
             } else if (event.getCode() == KeyCode.ENTER && getWonGamePopUpShown()) {
                 setGame();
-                resume();
+                hidePopUp();
                 setWonGamePopUpShown(false);
                 getPauseBtn().setDisable(false);
                 getUndoBtn().setDisable(false);
             } else if (event.getCode() == KeyCode.ENTER && getTiedGamePopUpShown()) {
                 setGame();
-                resume();
+                hidePopUp();
                 setWonGamePopUpShown(false);
                 getPauseBtn().setDisable(false);
                 getUndoBtn().setDisable(false);
             } else if (event.getCode() == KeyCode.SPACE && !getPauseBtn().isDisabled()) {
                 pause();
             } else if (event.getCode() == KeyCode.SPACE && getPauseBtn().isDisabled()) {
-                resume();
+                hidePopUp();
                 getPauseBtn().setDisable(false);
                 getUndoBtn().setDisable(false);
             } else if (event.getCode() == KeyCode.BACK_SPACE && getPauseBtn().isDisabled()) {
                 primaryStage.setScene(getOpeningScene()); //sets the scene on the stage
                 primaryStage.show(); //shows the primaryStage
-                resume();
+                hidePopUp();
                 numberOfPlayersPopUp();
             } else if (event.getCode() == KeyCode.BACK_SPACE && getPopUp() == null) {
                 undo();
             } else if (event.getCode() == KeyCode.ENTER && getPopUp() != null) {
-                resume();
+                hidePopUp();
                 getPauseBtn().setDisable(false);
                 getUndoBtn().setDisable(false);
             }
