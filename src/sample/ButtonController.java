@@ -46,21 +46,21 @@ public class ButtonController {
             currentQuadrant.setIsMarked(false);
             currentQuadrant = previousQuadrant;
             previousQuadrant = previousPreviousQuadrant;
-            if ( PlayerController.player1.getTurn()) {
+            if (PlayerController.player1.getTurn()) {
                 PlayerController.player1.setTurn(false);
                 PlayerController.player2.setTurn(true);
-            } else if ( PlayerController.player2.getTurn()) {
+            } else if (PlayerController.player2.getTurn()) {
                 PlayerController.player2.setTurn(false);
                 PlayerController.player1.setTurn(true);
             }
         } else if (ableToUndo && PlayerController.numberOfPlayers == 1) {
-            if ( PlayerController.player1.getTurn()) {
+            if (PlayerController.player1.getTurn()) {
                 currentQuadrant.setIsMarked(false);
                 currentQuadrant = previousPreviousQuadrant;
                 previousQuadrant.setIsMarked(false);
                 previousQuadrant = null;
                 previousPreviousQuadrant = null;
-            } else if ( PlayerController.player2.getTurn()) {
+            } else if (PlayerController.player2.getTurn()) {
                 currentQuadrant.setIsMarked(false);
                 currentQuadrant = previousQuadrant;
                 previousQuadrant = null;

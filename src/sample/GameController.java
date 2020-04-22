@@ -23,10 +23,10 @@ public class GameController {
         for (Player p : playerList) {
             if (player1Found && player2Found) {
                 break;
-            } else if (p.getUsername().equals( player1.getUsername())) {
+            } else if (p.getUsername().equals(player1.getUsername())) {
                 player1 = p;
                 player1Found = true;
-            } else if (p.getUsername().equals( player2.getUsername())) {
+            } else if (p.getUsername().equals(player2.getUsername())) {
                 player2 = p;
                 player2Found = true;
             }
@@ -36,14 +36,14 @@ public class GameController {
             player1.setGamesPlayed(0);
             player1.setTotalGamesWon(0);
             player1.setWinPercentage(0);
-            playerList.add( player1)
+            playerList.add(player1)
             ;
         }
         if (player2Found == false) {
             player2.setGamesPlayed(0);
             player2.setTotalGamesWon(0);
             player2.setWinPercentage(0);
-            playerList.add( player2);
+            playerList.add(player2);
         }
         setGame();
         pauseBtn.setDisable(false);
@@ -60,15 +60,15 @@ public class GameController {
         if (firstMovePlayer == null) {
             player1.setTurn(true);
             player2.setTurn(false);
-            firstMovePlayer =  player1;
-        } else if (firstMovePlayer.equals( player1)) {
+            firstMovePlayer = player1;
+        } else if (firstMovePlayer.equals(player1)) {
             player1.setTurn(false);
             player2.setTurn(true);
-            firstMovePlayer =  player2;
-        } else if (firstMovePlayer.equals( player2)) {
+            firstMovePlayer = player2;
+        } else if (firstMovePlayer.equals(player2)) {
             player1.setTurn(true);
             player2.setTurn(false);
-            firstMovePlayer =  player1;
+            firstMovePlayer = player1;
         }
 
         pauseBtn.setDisable(false);
@@ -106,10 +106,10 @@ public class GameController {
 
         gameOver = false;
 
-        player1.setGamesPlayed( player1.getGamesPlayed() + 1);
-        player2.setGamesPlayed( player2.getGamesPlayed() + 1);
+        player1.setGamesPlayed(player1.getGamesPlayed() + 1);
+        player2.setGamesPlayed(player2.getGamesPlayed() + 1);
 
-        if (firstMovePlayer.equals( player2) && numberOfPlayers == 1) {
+        if (firstMovePlayer.equals(player2) && numberOfPlayers == 1) {
             Quadrant quadrant = getQuadrantToMark(topLeft);
             Object[] temp = quadrant.getPane().getChildren().toArray();
             File imageFile = new File("src/sample/images/TicTacToeSingleO.png");
@@ -117,7 +117,7 @@ public class GameController {
             ImageView quadrantImageView = (ImageView) temp[0];
             quadrantImageView.setImage(imageO);
             quadrant.setIsMarked(true);
-            quadrant.setPlayerPlayed( player2);
+            quadrant.setPlayerPlayed(player2);
             currentQuadrant = quadrant;
             player2.setTurn(false);
             player1.setTurn(true);

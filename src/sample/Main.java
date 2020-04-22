@@ -141,23 +141,23 @@ public class Main extends Application {
 
         gameScene.setOnKeyReleased(event -> {
             if (event.getCode() == KeyCode.NUMPAD7 && !paused && PopUp == null) {
-                markQuadrant( topLeft,  topLeft.getIsMarked());
+                markQuadrant(topLeft, topLeft.getIsMarked());
             } else if (event.getCode() == KeyCode.NUMPAD8 && !paused && PopUp == null) {
-                markQuadrant( topCenter,  topCenter.getIsMarked());
+                markQuadrant(topCenter, topCenter.getIsMarked());
             } else if (event.getCode() == KeyCode.NUMPAD9 && !paused && PopUp == null) {
-                markQuadrant( topRight,  topRight.getIsMarked());
+                markQuadrant(topRight, topRight.getIsMarked());
             } else if (event.getCode() == KeyCode.NUMPAD4 && !paused && PopUp == null) {
-                markQuadrant( centerLeft,  centerLeft.getIsMarked());
+                markQuadrant(centerLeft, centerLeft.getIsMarked());
             } else if (event.getCode() == KeyCode.NUMPAD5 && !paused && PopUp == null) {
-                markQuadrant( center,  center.getIsMarked());
+                markQuadrant(center, center.getIsMarked());
             } else if (event.getCode() == KeyCode.NUMPAD6 && !paused && PopUp == null) {
-                markQuadrant( centerRight,  centerRight.getIsMarked());
+                markQuadrant(centerRight, centerRight.getIsMarked());
             } else if (event.getCode() == KeyCode.NUMPAD1 && !paused && PopUp == null) {
-                markQuadrant( bottomLeft,  bottomLeft.getIsMarked());
+                markQuadrant(bottomLeft, bottomLeft.getIsMarked());
             } else if (event.getCode() == KeyCode.NUMPAD2 && !paused && PopUp == null) {
-                markQuadrant( bottomCenter,  bottomCenter.getIsMarked());
+                markQuadrant(bottomCenter, bottomCenter.getIsMarked());
             } else if (event.getCode() == KeyCode.NUMPAD3 && !paused && PopUp == null) {
-                markQuadrant( bottomRight,  bottomRight.getIsMarked());
+                markQuadrant(bottomRight, bottomRight.getIsMarked());
             } else if (event.getCode() == KeyCode.ENTER && wonGamePopUpShown) {
                 setGame();
                 resume();
@@ -205,15 +205,15 @@ public class Main extends Application {
         /**
          * CHECK FOR PLAYS
          */
-        topLeft.getPane().setOnMouseClicked(event -> markQuadrant( topLeft,  topLeft.getIsMarked()));
-        topCenter.getPane().setOnMouseClicked(event -> markQuadrant( topCenter,  topCenter.getIsMarked()));
-        topRight.getPane().setOnMouseClicked(event -> markQuadrant( topRight,  topRight.getIsMarked()));
-        centerLeft.getPane().setOnMouseClicked(event -> markQuadrant( centerLeft,  centerLeft.getIsMarked()));
-        center.getPane().setOnMouseClicked(event -> markQuadrant( center,  center.getIsMarked()));
-        centerRight.getPane().setOnMouseClicked(event -> markQuadrant( centerRight,  centerRight.getIsMarked()));
-        bottomLeft.getPane().setOnMouseClicked(event -> markQuadrant( bottomLeft,  bottomLeft.getIsMarked()));
-        bottomCenter.getPane().setOnMouseClicked(event -> markQuadrant( bottomCenter,  bottomCenter.getIsMarked()));
-        bottomRight.getPane().setOnMouseClicked(event -> markQuadrant( bottomRight,  bottomRight.getIsMarked()));
+        topLeft.getPane().setOnMouseClicked(event -> markQuadrant(topLeft, topLeft.getIsMarked()));
+        topCenter.getPane().setOnMouseClicked(event -> markQuadrant(topCenter, topCenter.getIsMarked()));
+        topRight.getPane().setOnMouseClicked(event -> markQuadrant(topRight, topRight.getIsMarked()));
+        centerLeft.getPane().setOnMouseClicked(event -> markQuadrant(centerLeft, centerLeft.getIsMarked()));
+        center.getPane().setOnMouseClicked(event -> markQuadrant(center, center.getIsMarked()));
+        centerRight.getPane().setOnMouseClicked(event -> markQuadrant(centerRight, centerRight.getIsMarked()));
+        bottomLeft.getPane().setOnMouseClicked(event -> markQuadrant(bottomLeft, bottomLeft.getIsMarked()));
+        bottomCenter.getPane().setOnMouseClicked(event -> markQuadrant(bottomCenter, bottomCenter.getIsMarked()));
+        bottomRight.getPane().setOnMouseClicked(event -> markQuadrant(bottomRight, bottomRight.getIsMarked()));
     }
 
     /**
