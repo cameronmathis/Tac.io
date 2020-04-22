@@ -2,22 +2,51 @@ package sample;
 
 import javafx.scene.control.Button;
 
-import static sample.Main.*;
+import static sample.PlayerController.*;
 import static sample.PopUpController.*;
 import static sample.QuadrantController.*;
 
 public class ButtonController {
     // Variables
-    static Button pauseBtn;
-    static Button undoBtn;
-    static boolean ableToUndo = false;
+    private static Button pauseBtn;
+    private static Button undoBtn;
+    private static boolean ableToUndo = false;
+
+    /**
+     * SETTER METHODS
+     */
+    static void setPauseBtn(Button b) {
+        pauseBtn = b;
+    }
+
+    static void setUndoBtn(Button b) {
+        undoBtn = b;
+    }
+
+    static void setAbleToUndo(boolean bool) {
+        ableToUndo = bool;
+    }
+
+    /**
+     * GETTER METHODS
+     */
+    static Button getPauseBtn() {
+        return pauseBtn;
+    }
+
+    static Button getUndoBtn() {
+        return undoBtn;
+    }
+
+    static boolean getAbleToUndo() {
+        return ableToUndo;
+    }
 
     /**
      * PAUSE METHOD
      * Pause the game
      */
     static void pause() {
-        paused = true;
         pauseBtn.setDisable(true);
         undoBtn.setDisable(true);
         pausedPopUp();
@@ -29,9 +58,8 @@ public class ButtonController {
      */
     static void resume() {
         try {
-            paused = false;
-            PopUp.hide();
-            PopUp = null;
+            getPopUp().hide();
+            setPopUp(null);
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
@@ -42,37 +70,40 @@ public class ButtonController {
      * Undo the last move
      */
     static void undo() {
-        if (ableToUndo && PlayerController.numberOfPlayers == 2) {
-            currentQuadrant.setIsMarked(false);
-            currentQuadrant = previousQuadrant;
-            previousQuadrant = previousPreviousQuadrant;
-            if (PlayerController.player1.getTurn()) {
-                PlayerController.player1.setTurn(false);
-                PlayerController.player2.setTurn(true);
-            } else if (PlayerController.player2.getTurn()) {
-                PlayerController.player2.setTurn(false);
-                PlayerController.player1.setTurn(true);
+        if (!ableToUndo) {
+            return;
+        }
+        if (ableToUndo && getNumberOfPlayers() == 2) {
+            getCurrentQuadrant().setIsMarked(false);
+            setCurrentQuadrant(getPreviousQuadrant());
+            setPreviousQuadrant(getPreviousPreviousQuadrant());
+            if (getPlayer1().getTurn()) {
+                getPlayer1().setTurn(false);
+                getPlayer2().setTurn(true);
+            } else if (getPlayer2().getTurn()) {
+                getPlayer2().setTurn(false);
+                getPlayer1().setTurn(true);
             }
-        } else if (ableToUndo && PlayerController.numberOfPlayers == 1) {
-            if (PlayerController.player1.getTurn()) {
-                currentQuadrant.setIsMarked(false);
-                currentQuadrant = previousPreviousQuadrant;
-                previousQuadrant.setIsMarked(false);
-                previousQuadrant = null;
-                previousPreviousQuadrant = null;
-            } else if (PlayerController.player2.getTurn()) {
-                currentQuadrant.setIsMarked(false);
-                currentQuadrant = previousQuadrant;
-                previousQuadrant = null;
-                previousPreviousQuadrant = null;
-                PlayerController.player2.setTurn(false);
-                PlayerController.player1.setTurn(true);
+        } else if (ableToUndo && getNumberOfPlayers() == 1) {
+            if (getPlayer1().getTurn()) {
+                getCurrentQuadrant().setIsMarked(false);
+                setCurrentQuadrant(getPreviousPreviousQuadrant());
+                getPreviousQuadrant().setIsMarked(false);
+                setPreviousQuadrant(null);
+                setPreviousPreviousQuadrant(null);
+            } else if (PlayerController.getPlayer2().getTurn()) {
+                getCurrentQuadrant().setIsMarked(false);
+                setCurrentQuadrant(getPreviousQuadrant());
+                setPreviousQuadrant(null);
+                setPreviousPreviousQuadrant(null);
+                PlayerController.getPlayer2().setTurn(false);
+                getPlayer1().setTurn(true);
             }
-        } else if (currentQuadrant == null) {
+        } else if (getCurrentQuadrant() == null) {
             pauseBtn.setDisable(true);
             undoBtn.setDisable(true);
             undoStartPopUp();
-        } else if (previousQuadrant == null) {
+        } else if (getPreviousQuadrant() == null) {
             pauseBtn.setDisable(true);
             undoBtn.setDisable(true);
             undoTwicePopUp();
