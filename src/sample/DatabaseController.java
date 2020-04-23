@@ -45,7 +45,7 @@ public class DatabaseController {
 
     /**
      * IMPORT ACCOUNT FROM DATABASE METHOD
-     * Imports an account from the database
+     * Imports an account from the account database
      */
     static void importAccountFromDatabase(Player player) {
         String[] accountFields = new String[3];
@@ -75,7 +75,7 @@ public class DatabaseController {
 
     /**
      * UPDATE ACCOUNT IN DATABASE METHOD
-     * Update an account in the database
+     * Update an account in the account database
      */
     static void updateAccountInDatabase(Player player) {
         // Step 1: Establishing a Connection and
