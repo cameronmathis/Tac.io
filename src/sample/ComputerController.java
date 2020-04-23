@@ -10,7 +10,7 @@ public class ComputerController {
     private static Quadrant topLeft = getTopLeft();
     private static Quadrant topCenter = getTopCenter();
     private static Quadrant topRight = getTopRight();
-    private static Quadrant  centerLeft = getCenterLeft();
+    private static Quadrant centerLeft = getCenterLeft();
     private static Quadrant center = getCenter();
     private static Quadrant centerRight = getCenterRight();
     private static Quadrant bottomLeft = getBottomLeft();

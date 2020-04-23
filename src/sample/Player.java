@@ -1,6 +1,6 @@
 package sample;
 
-import java.time.LocalDate;
+import java.sql.Date;
 
 /**
  * PLAYER OBJECT
@@ -11,10 +11,12 @@ public class Player {
     private String password;
     private boolean isTurn;
     private int gamesWon;
-    private int gamesPlayed;
+    private int totalGamesPlayed;
     private int totalGamesWon;
+    private int totalGamesLost;
+    private int totalGamesTied;
     private double winPercentage;
-    private LocalDate lastDatePlayed;
+    private Date lastDatePlayed;
 
     /**
      * SETTER METHODS
@@ -27,28 +29,32 @@ public class Player {
         this.password = password;
     }
 
-    void setTurn(boolean isTurn) {
-        this.isTurn = isTurn;
-    }
-
     void setGamesWon(int gamesWon) {
         this.gamesWon = gamesWon;
     }
 
-    void setGamesPlayed(int gamesPlayed) {
-        this.gamesPlayed = gamesPlayed;
+    void setTotalGamesPlayed(int totalGamesPlayed) {
+        this.totalGamesPlayed = totalGamesPlayed;
     }
 
     void setTotalGamesWon(int totalGamesWon) {
         this.totalGamesWon = totalGamesWon;
     }
 
+    void setTotalGamesLost(int totalGamesLost) { this.totalGamesLost = totalGamesLost; }
+
+    void setTotalGamesTied(int totalGamesTied) { this.totalGamesTied = totalGamesTied; }
+
     void setWinPercentage(double winLossPercentage) {
         this.winPercentage = winLossPercentage;
     }
 
-    void setLastDatePlayed(LocalDate lastDatePlayed) {
+    void setLastDatePlayed(Date lastDatePlayed) {
         this.lastDatePlayed = lastDatePlayed;
+    }
+
+    void setTurn(boolean isTurn) {
+        this.isTurn = isTurn;
     }
 
     /**
@@ -62,28 +68,30 @@ public class Player {
         return password;
     }
 
-    boolean getTurn() {
-        return isTurn;
-    }
-
     int getGamesWon() {
         return gamesWon;
     }
 
-    int getGamesPlayed() {
-        return gamesPlayed;
+    int getTotalGamesPlayed() {
+        return totalGamesPlayed;
     }
 
-    int getTotalGamesWon() {
-        return totalGamesWon;
+    int getTotalGamesWon() { return totalGamesWon; }
+
+    int getTotalGamesLost() { return totalGamesLost; }
+
+    int getTotalGamesTied() { return totalGamesTied; }
+
+    Date getLastDatePlayed() {
+        return lastDatePlayed;
     }
 
     double getWinPercentage() {
-        return totalGamesWon / gamesPlayed * 100;
+        return totalGamesWon / totalGamesPlayed * 100;
     }
 
-    LocalDate getLastDatePlayed() {
-        return lastDatePlayed;
+    boolean getTurn() {
+        return isTurn;
     }
 
     @Override

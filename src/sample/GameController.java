@@ -32,14 +32,14 @@ public class GameController {
         }
 
         if (player1Found == false) {
-            getPlayer1().setGamesPlayed(0);
+            getPlayer1().setTotalGamesPlayed(0);
             getPlayer1().setTotalGamesWon(0);
             getPlayer1().setWinPercentage(0);
             getPlayerList().add(getPlayer1())
             ;
         }
         if (player2Found == false) {
-            getPlayer2().setGamesPlayed(0);
+            getPlayer2().setTotalGamesPlayed(0);
             getPlayer2().setTotalGamesWon(0);
             getPlayer2().setWinPercentage(0);
             getPlayerList().add(getPlayer2());
@@ -79,8 +79,8 @@ public class GameController {
 
         setGameOver(false);
 
-        getPlayer1().setGamesPlayed(getPlayer1().getGamesPlayed() + 1);
-        getPlayer2().setGamesPlayed(getPlayer2().getGamesPlayed() + 1);
+        getPlayer1().setTotalGamesPlayed(getPlayer1().getTotalGamesPlayed() + 1);
+        getPlayer2().setTotalGamesPlayed(getPlayer2().getTotalGamesPlayed() + 1);
 
         if (getFirstMovePlayer().equals(getPlayer2()) && getNumberOfPlayers() == 1) {
             Quadrant quadrant = getQuadrantToMark(getTopLeft());

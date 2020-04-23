@@ -1,7 +1,6 @@
 package sample;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,8 +13,7 @@ public class PlayerController {
     private static List<Player> playerList = new ArrayList<>();
     private static int numberOfPlayers;
     private static Player firstMovePlayer;
-    private static LocalDate now = LocalDate.now();
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+    private static Date now = new Date(System.currentTimeMillis());
 
     /**
      * SETTER METHODS
@@ -66,10 +64,10 @@ public class PlayerController {
     static Player importPlayer(Player player, String username, String password, int gamesPlayed, int gamesWon) {
         player.setUsername(username);
         player.setPassword(password);
-        player.setGamesPlayed(gamesPlayed);
+        player.setTotalGamesPlayed(gamesPlayed);
         player.setTotalGamesWon(gamesWon);
-        player.setWinPercentage(0);
         player.setLastDatePlayed(now);
+        player.setWinPercentage(0);
         addPlayerToLeaderBoard(player);
         return player;
     }
@@ -81,10 +79,10 @@ public class PlayerController {
     static Player createPlayer(Player player, String username, String password) {
         player.setUsername(username);
         player.setPassword(password);
-        player.setGamesPlayed(0);
+        player.setTotalGamesPlayed(0);
         player.setTotalGamesWon(0);
-        player.setWinPercentage(0);
         player.setLastDatePlayed(now);
+        player.setWinPercentage(0);
         addPlayerToLeaderBoard(player);
         return player;
     }

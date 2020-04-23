@@ -15,7 +15,9 @@ public class Quadrant {
     /**
      * SETTER METHODS
      */
-    public void setPane(Pane pane) { this.pane = pane; }
+    public void setPane(Pane pane) {
+        this.pane = pane;
+    }
 
     public void setIsMarked(boolean isMarked) {
         this.isMarked = isMarked;
@@ -29,14 +31,22 @@ public class Quadrant {
         }
     }
 
-    public void setPlayerPlayed(Player playerPlayed) { this.playerPlayed = playerPlayed; }
+    public void setPlayerPlayed(Player playerPlayed) {
+        this.playerPlayed = playerPlayed;
+    }
 
     /**
      * GETTER METHODS
      */
-    public Pane getPane() { return pane; }
+    public Pane getPane() {
+        return pane;
+    }
 
-    public boolean getIsMarked() { return isMarked; }
+    public boolean getIsMarked() {
+        return isMarked;
+    }
 
-    public Player getPlayerPlayed() { return playerPlayed; }
+    public Player getPlayerPlayed() {
+        return playerPlayed;
+    }
 }

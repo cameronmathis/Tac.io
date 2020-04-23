@@ -38,7 +38,9 @@ public class ButtonController {
         return undoBtn;
     }
 
-    static boolean getAbleToUndo() { return ableToUndo; }
+    static boolean getAbleToUndo() {
+        return ableToUndo;
+    }
 
     /**
      * BUTTON INITIALIZATION

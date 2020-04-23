@@ -74,46 +74,84 @@ public class PopUpController {
         gameScene = s;
     }
 
-    static void setEnterNumberPopUpShown(boolean bool) { enterNumberPopUpShown = bool; }
+    static void setEnterNumberPopUpShown(boolean bool) {
+        enterNumberPopUpShown = bool;
+    }
 
-    static void setAccountLoginPopUpShown(boolean bool) { accountLoginPopUpShown = bool; }
+    static void setAccountLoginPopUpShown(boolean bool) {
+        accountLoginPopUpShown = bool;
+    }
 
-    static void setCreateAccountPopUpShown(boolean bool) { createAccountPopUpShown = bool; }
+    static void setCreateAccountPopUpShown(boolean bool) {
+        createAccountPopUpShown = bool;
+    }
 
-    static void setWonGamePopUpShown(boolean bool) { wonGamePopUpShown = bool; }
+    static void setWonGamePopUpShown(boolean bool) {
+        wonGamePopUpShown = bool;
+    }
 
-    static void setTiedGamePopUpShown(boolean bool) { tiedGamePopUpShown = bool; }
+    static void setTiedGamePopUpShown(boolean bool) {
+        tiedGamePopUpShown = bool;
+    }
 
     /**
      * GETTER METHODS
      */
-    static Stage getPrimaryStage() { return primaryStage; }
+    static Stage getPrimaryStage() {
+        return primaryStage;
+    }
 
-    static TitledPane getAccountLoginPopUpPane() { return accountLoginPopUpPane; }
+    static TitledPane getAccountLoginPopUpPane() {
+        return accountLoginPopUpPane;
+    }
 
-    static TitledPane getEnterTwoNamesPopUpPane() { return enterTwoNamesPopUpPane; }
+    static TitledPane getEnterTwoNamesPopUpPane() {
+        return enterTwoNamesPopUpPane;
+    }
 
-    static TitledPane getCreateAccountPopUpPane() { return createAccountPopUpPane; }
+    static TitledPane getCreateAccountPopUpPane() {
+        return createAccountPopUpPane;
+    }
 
-    static Popup getPopUp() { return PopUp; }
+    static Popup getPopUp() {
+        return PopUp;
+    }
 
-    static AnchorPane getOpeningPane() { return openingPane; }
+    static AnchorPane getOpeningPane() {
+        return openingPane;
+    }
 
-    static Scene getOpeningScene() { return openingScene; }
+    static Scene getOpeningScene() {
+        return openingScene;
+    }
 
-    static AnchorPane getGamePane() { return gamePane; }
+    static AnchorPane getGamePane() {
+        return gamePane;
+    }
 
-    static Scene getGameScene() { return gameScene; }
+    static Scene getGameScene() {
+        return gameScene;
+    }
 
-    static boolean getEnterNumberPopUpShown() { return enterNumberPopUpShown; }
+    static boolean getEnterNumberPopUpShown() {
+        return enterNumberPopUpShown;
+    }
 
-    static boolean getAccountLoginPopUpShown() { return accountLoginPopUpShown; }
+    static boolean getAccountLoginPopUpShown() {
+        return accountLoginPopUpShown;
+    }
 
-    static boolean getCreateAccountPopUpShown() { return createAccountPopUpShown; }
+    static boolean getCreateAccountPopUpShown() {
+        return createAccountPopUpShown;
+    }
 
-    static boolean getWonGamePopUpShown() { return wonGamePopUpShown; }
+    static boolean getWonGamePopUpShown() {
+        return wonGamePopUpShown;
+    }
 
-    static boolean getTiedGamePopUpShown() { return tiedGamePopUpShown; }
+    static boolean getTiedGamePopUpShown() {
+        return tiedGamePopUpShown;
+    }
 
     /**
      * NUMBER OF PLAYERS POPUP
@@ -290,7 +328,6 @@ public class PopUpController {
                 invalidPasswordPopUp();
                 return;
             }
-
             setPlayer1(createPlayer(new Player(), username.getText(), password1.getText()));
             hidePopUp();
             startGame();

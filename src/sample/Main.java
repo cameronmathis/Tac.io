@@ -8,6 +8,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
+
 import static sample.ButtonController.*;
 import static sample.PlayerController.*;
 import static sample.QuadrantController.*;
@@ -36,10 +37,6 @@ public class Main extends Application {
         primaryStage.setResizable(false); //makes app able to be resized
         primaryStage.show(); //shows the primaryStage
         numberOfPlayersPopUp(); //ask for number of players
-
-        //initialize both player games one this during this session
-        getPlayer1().setGamesWon(0);
-        getPlayer2().setGamesWon(0);
 
         /**
          * BUTTON INITIALIZATION
@@ -106,8 +103,7 @@ public class Main extends Application {
                         invalidPasswordPopUp();
                         return;
                     }
-
-                    createPlayer(new Player(), username.getText(), password1.getText());
+                    setPlayer1(createPlayer(new Player(), username.getText(), password1.getText()));
                     hidePopUp();
                     startGame();
                     setCreateAccountPopUpShown(false);

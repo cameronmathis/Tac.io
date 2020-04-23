@@ -44,7 +44,9 @@ public class QuadrantController {
         topRight = q;
     }
 
-    static void setCenterLeft(Quadrant q) { centerLeft = q; }
+    static void setCenterLeft(Quadrant q) {
+        centerLeft = q;
+    }
 
     static void setCenter(Quadrant q) {
         center = q;

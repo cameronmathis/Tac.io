@@ -13,7 +13,7 @@
             <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" prefWidth="100.0"/>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0"/>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
             </columnConstraints>
@@ -25,7 +25,8 @@
             <children>
                 <Button fx:id="dismiss" mnemonicParsing="false" text="Dismiss" GridPane.columnIndex="2"
                         GridPane.halignment="CENTER" GridPane.rowIndex="2" style="-fx-focus-traversable: false;"/>
-                <Text opacity="0.55" strokeType="OUTSIDE" strokeWidth="0.0" text="This square has already been played in"
+                <Text opacity="0.55" strokeType="OUTSIDE" strokeWidth="0.0"
+                      text="This square has already been played in"
                       textAlignment="CENTER" wrappingWidth="235.63671875" GridPane.columnIndex="2"
                       GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER"/>
             </children>
