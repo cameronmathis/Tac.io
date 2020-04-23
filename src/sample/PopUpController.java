@@ -23,6 +23,7 @@ public class PopUpController {
     static Stage primaryStage;
     private static TitledPane accountLoginPopUpPane;
     private static TitledPane enterTwoNamesPopUpPane;
+    private static TitledPane createAccountPopUpPane;
     private static Popup PopUp;
     private static AnchorPane openingPane;
     private static Scene openingScene;
@@ -47,6 +48,10 @@ public class PopUpController {
 
     static void setAccountLoginPopUpPane(TitledPane pane) {
         accountLoginPopUpPane = pane;
+    }
+
+    static void setCreateAccountPopUpPane(TitledPane pane) {
+        createAccountPopUpPane = pane;
     }
 
     static void setPopUp(Popup p) {
@@ -102,6 +107,10 @@ public class PopUpController {
 
     static TitledPane getEnterTwoNamesPopUpPane() {
         return enterTwoNamesPopUpPane;
+    }
+
+    static TitledPane getCreateAccountPopUpPane() {
+        return createAccountPopUpPane;
     }
 
     static Popup getPopUp() {
@@ -244,15 +253,28 @@ public class PopUpController {
         t1.requestFocus();
 
         Button enterBtn = (Button) accountLoginPopUpPane.lookup("#enter");
-        TitledPane finalCreateAccountPopUpPane = accountLoginPopUpPane;
         enterBtn.setOnAction(event -> {
-            TextField username;
-            TextField password;
-            username = (TextField) finalCreateAccountPopUpPane.lookup("#username");
-            password = (TextField) finalCreateAccountPopUpPane.lookup("#password");
+            Player tempPlayer = new Player();
+            TextField username = (TextField) accountLoginPopUpPane.lookup("#username");
+            if (username.getText().equals("") || (username.getText().length() > 250)) {
+                hidePopUp();
+                usernameDoesNotExistPopUp();
+                return;
+            } else if (false) {
+                hidePopUp();
+                usernameDoesNotExistPopUp();
+                return;
+            } else if (true) {
+                tempPlayer.setUsername(username.getText());
+            }
 
-            //if (Database.contains(username.getText()) && Database.getUser(username).getPassword().equals(password)) {
-            getPlayer1().setUsername(username.getText());
+            TextField password = (PasswordField) accountLoginPopUpPane.lookup("#password");
+            if (!password.getText().equals(password.getText())) {
+                hidePopUp();
+                incorrectPasswordPopUp();
+                return;
+            }
+            setPlayer1(importPlayer(tempPlayer, username.getText(), password.getText(), 0, 0));
             hidePopUp();
             startGame();
             accountLoginPopUpShown = false;
@@ -267,7 +289,7 @@ public class PopUpController {
         PopUp = new Popup(); //creates new popup
         createAccountPopUpShown = true;
 
-        TitledPane createAccountPopUpPane = null; //calls popup menu created in 'createAccountPopUp.fxml' file
+        createAccountPopUpPane = null; //calls popup menu created in 'createAccountPopUp.fxml' file
 
         try {
             createAccountPopUpPane = FXMLLoader.load(PopUpController.class.getResource("createAccountPopUp.fxml"));
@@ -283,14 +305,9 @@ public class PopUpController {
         t1.requestFocus();
 
         Button enterBtn = (Button) createAccountPopUpPane.lookup("#enter");
-        TitledPane finalCreateAccountPopUpPane = createAccountPopUpPane;
         enterBtn.setOnAction(event -> {
-            TextField username;
-            TextField password1;
-            TextField password2;
-
-            username = (TextField) finalCreateAccountPopUpPane.lookup("#username");
-            if (username.getText().equals("") || (username.getText().length() > 20)) {
+            TextField username = (TextField) createAccountPopUpPane.lookup("#username");
+            if (username.getText().equals("") || (username.getText().length() > 250)) {
                 hidePopUp();
                 invalidUsernamePopUp();
                 return;
@@ -300,22 +317,78 @@ public class PopUpController {
                 return;
             }
 
-            password1 = (PasswordField) finalCreateAccountPopUpPane.lookup("#password1");
-            password2 = (PasswordField) finalCreateAccountPopUpPane.lookup("#password2");
+            TextField password1 = (PasswordField) createAccountPopUpPane.lookup("#password1");
+            TextField password2 = (PasswordField) createAccountPopUpPane.lookup("#password2");
             if (!password1.getText().equals(password2.getText())) {
                 hidePopUp();
                 passwordsDontMatchPopUp();
                 return;
-            } else if (password1.getText().equals("") || (password1.getText().length() < 7) || (password1.getText().length() > 20)) {
+            } else if (password1.getText().equals("") || (password1.getText().length() < 7) || (password1.getText().length() > 250)) {
                 hidePopUp();
                 invalidPasswordPopUp();
                 return;
             }
 
-            createPlayer(new Player(), username.getText(), password1.getText());
+            setPlayer1(createPlayer(new Player(), username.getText(), password1.getText()));
             hidePopUp();
             startGame();
             createAccountPopUpShown = false;
+        });
+    }
+
+    /**
+     * USERNAME DOES NOT ALREADY EXISTS POPUP
+     * PopUp for when a player tries to enter a username that does not exist
+     */
+    static void usernameDoesNotExistPopUp() {
+        PopUp = new Popup(); //creates new popup
+
+        TitledPane usernameDoesNotExistPopUpPane = null; //calls popup menu created in 'usernameDoesNotExistPopUp.fxml' file
+
+        try {
+            usernameDoesNotExistPopUpPane = FXMLLoader.load(PopUpController.class.getResource("usernameDoesNotExistPopUp.fxml"));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        PopUp.getContent().add(usernameDoesNotExistPopUpPane); //adds the popup (child) created in fxml file to the popup (parent) created
+
+        //show popup on primaryStage
+        PopUp.show(primaryStage);
+
+        Button dismissBtn = (Button) usernameDoesNotExistPopUpPane.lookup("#dismiss");
+
+        dismissBtn.setOnAction(event -> {
+            hidePopUp();
+
+            accountLoginPopUp();
+        });
+    }
+
+    /**
+     * INVALID PASSWORDS POPUP
+     * PopUp for when a player tries to enter an invalid password
+     */
+    static void incorrectPasswordPopUp() {
+        PopUp = new Popup(); //creates new popup
+
+        TitledPane incorrectPasswordPopUpPane = null; //calls popup menu created in 'incorrectPasswordPopUp.fxml' file
+
+        try {
+            incorrectPasswordPopUpPane = FXMLLoader.load(PopUpController.class.getResource("incorrectPasswordPopUp.fxml"));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        PopUp.getContent().add(incorrectPasswordPopUpPane); //adds the popup (child) created in fxml file to the popup (parent) created
+
+        //show popup on primaryStage
+        PopUp.show(primaryStage);
+
+        Button dismissBtn = (Button) incorrectPasswordPopUpPane.lookup("#dismiss");
+
+        dismissBtn.setOnAction(event -> {
+            hidePopUp();
+
+            accountLoginPopUp();
         });
     }
 
@@ -342,8 +415,6 @@ public class PopUpController {
 
         dismissBtn.setOnAction(event -> {
             hidePopUp();
-            getPauseBtn().setDisable(false);
-            getUndoBtn().setDisable(false);
 
             createAccountPopUp();
         });
@@ -372,8 +443,6 @@ public class PopUpController {
 
         dismissBtn.setOnAction(event -> {
             hidePopUp();
-            getPauseBtn().setDisable(false);
-            getUndoBtn().setDisable(false);
 
             createAccountPopUp();
         });
@@ -402,8 +471,6 @@ public class PopUpController {
 
         dismissBtn.setOnAction(event -> {
             hidePopUp();
-            getPauseBtn().setDisable(false);
-            getUndoBtn().setDisable(false);
 
             createAccountPopUp();
         });
@@ -432,40 +499,8 @@ public class PopUpController {
 
         dismissBtn.setOnAction(event -> {
             hidePopUp();
-            getPauseBtn().setDisable(false);
-            getUndoBtn().setDisable(false);
 
             createAccountPopUp();
-        });
-    }
-
-    /**
-     * INCORRECT INFORMATION POPUP
-     * PopUp for when a player enters a wrong username or password
-     */
-    static void incorrectInformationPopUp() {
-        PopUp = new Popup(); //creates new popup
-
-        TitledPane incorrectInformationPopUpPane = null; //calls popup menu created in 'incorrectInformationPopUp.fxml' file
-
-        try {
-            incorrectInformationPopUpPane = FXMLLoader.load(PopUpController.class.getResource("incorrectInformationPopUp.fxml"));
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        PopUp.getContent().add(incorrectInformationPopUpPane); //adds the popup (child) created in fxml file to the popup (parent) created
-
-        //show popup on primaryStage
-        PopUp.show(primaryStage);
-
-        Button dismissBtn = (Button) incorrectInformationPopUpPane.lookup("#dismiss");
-
-        dismissBtn.setOnAction(event -> {
-            hidePopUp();
-            getPauseBtn().setDisable(false);
-            getUndoBtn().setDisable(false);
-
-            accountLoginPopUp();
         });
     }
 
@@ -536,8 +571,6 @@ public class PopUpController {
         Button resumeBtn = (Button) pausedPupUpPane.lookup("#resume");
         resumeBtn.setOnAction(browseDismissEvent -> {
             hidePopUp();
-            getPauseBtn().setDisable(false);
-            getUndoBtn().setDisable(false);
         });
 
         Button exitBtn = (Button) pausedPupUpPane.lookup("#exit");
@@ -571,8 +604,6 @@ public class PopUpController {
         Button dismissBtn = (Button) undoStartPopUpPane.lookup("#dismiss");
         dismissBtn.setOnAction(browseDismissEvent -> {
             hidePopUp();
-            getPauseBtn().setDisable(false);
-            getUndoBtn().setDisable(false);
         });
     }
 
@@ -598,8 +629,6 @@ public class PopUpController {
         Button dismissBtn = (Button) undoTwicePopUpPane.lookup("#dismiss");
         dismissBtn.setOnAction(browseDismissEvent -> {
             hidePopUp();
-            getPauseBtn().setDisable(false);
-            getUndoBtn().setDisable(false);
         });
     }
 
@@ -625,8 +654,6 @@ public class PopUpController {
         Button dismissBtn = (Button) isAlreadyMarkedPopUpPane.lookup("#dismiss");
         dismissBtn.setOnAction(event -> {
             hidePopUp();
-            getPauseBtn().setDisable(false);
-            getUndoBtn().setDisable(false);
         });
     }
 
@@ -662,8 +689,6 @@ public class PopUpController {
 
         Button playAgainBtn = (Button) gameOverPopUpPane.lookup("#playAgain");
         playAgainBtn.setOnAction(event -> {
-            getPauseBtn().setDisable(false);
-            getUndoBtn().setDisable(false);
             setGame();
             hidePopUp();
         });
@@ -704,8 +729,6 @@ public class PopUpController {
 
         Button playAgainBtn = (Button) tiePopUpPane.lookup("#playAgain");
         playAgainBtn.setOnAction(event -> {
-            getPauseBtn().setDisable(false);
-            getUndoBtn().setDisable(false);
             setGame();
             hidePopUp();
         });

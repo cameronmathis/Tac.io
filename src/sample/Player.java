@@ -1,7 +1,6 @@
 package sample;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
 
 /**
  * PLAYER OBJECT
@@ -15,8 +14,7 @@ public class Player {
     private int gamesPlayed;
     private int totalGamesWon;
     private double winPercentage;
-    private Date lastDatePlayed;
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+    private LocalDate lastDatePlayed;
 
     /**
      * SETTER METHODS
@@ -49,7 +47,7 @@ public class Player {
         this.winPercentage = winLossPercentage;
     }
 
-    void setLastDatePlayed(Date lastDatePlayed) {
+    void setLastDatePlayed(LocalDate lastDatePlayed) {
         this.lastDatePlayed = lastDatePlayed;
     }
 
@@ -84,7 +82,7 @@ public class Player {
         return totalGamesWon / gamesPlayed * 100;
     }
 
-    Date getLastDatePlayed() {
+    LocalDate getLastDatePlayed() {
         return lastDatePlayed;
     }
 

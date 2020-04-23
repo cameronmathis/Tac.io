@@ -29,7 +29,7 @@
                 <Button fx:id="dismiss" mnemonicParsing="false" style="-fx-focus-traversable: false;" text="Dismiss"
                         GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2"/>
                 <Text opacity="0.55" strokeType="OUTSIDE" strokeWidth="0.0"
-                      text="Please enter a name between 1 and 20 characters." textAlignment="CENTER"
+                      text="Please enter a name between 1 and 250 characters." textAlignment="CENTER"
                       wrappingWidth="158.63671875" GridPane.columnIndex="2" GridPane.halignment="CENTER"
                       GridPane.rowIndex="1" GridPane.valignment="CENTER"/>
             </children>

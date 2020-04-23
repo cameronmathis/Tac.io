@@ -3,7 +3,7 @@ package sample;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
@@ -45,8 +45,7 @@ public class Main extends Application {
          * BUTTON INITIALIZATION
          * Initialize all the buttons
          */
-        setPauseBtn((Button) getGameScene().lookup("#pause"));
-        setUndoBtn((Button) getGameScene().lookup("#undo"));
+        initializeButtons();
 
         /**
          * QUADRANT INITIALIZATION
@@ -71,6 +70,7 @@ public class Main extends Application {
          * SHORTCUT KEYS
          */
         getOpeningScene().setOnKeyReleased(event -> {
+            // Pregame shortcut keys
             if (getEnterNumberPopUpShown() && (event.getCode() == KeyCode.DIGIT1 || event.getCode() == KeyCode.NUMPAD1)) {
                 setNumberOfPlayers(1);
                 hidePopUp();
@@ -84,17 +84,37 @@ public class Main extends Application {
                 enterTwoNamesPopUp();
             } else if ((getCreateAccountPopUpShown() || getAccountLoginPopUpShown()) && event.getCode() == KeyCode.ENTER) {
                 if (getCreateAccountPopUpShown()) {
+                    TextField username = (TextField) getCreateAccountPopUpPane().lookup("#username");
+                    if (username.getText().equals("") || (username.getText().length() > 20)) {
+                        hidePopUp();
+                        invalidUsernamePopUp();
+                        return;
+                    } else if (false) {
+                        hidePopUp();
+                        usernameAlreadyExistPopUp();
+                        return;
+                    }
+
+                    TextField password1 = (PasswordField) getCreateAccountPopUpPane().lookup("#password1");
+                    TextField password2 = (PasswordField) getCreateAccountPopUpPane().lookup("#password2");
+                    if (!password1.getText().equals(password2.getText())) {
+                        hidePopUp();
+                        passwordsDontMatchPopUp();
+                        return;
+                    } else if (password1.getText().equals("") || (password1.getText().length() < 7) || (password1.getText().length() > 20)) {
+                        hidePopUp();
+                        invalidPasswordPopUp();
+                        return;
+                    }
+
+                    createPlayer(new Player(), username.getText(), password1.getText());
                     hidePopUp();
                     startGame();
                     setCreateAccountPopUpShown(false);
-                    getPauseBtn().setDisable(false);
-                    getUndoBtn().setDisable(false);
                 } else if (getAccountLoginPopUpShown() && (getNumberOfPlayers() == 1)) {
                     hidePopUp();
                     startGame();
                     setAccountLoginPopUpShown(false);
-                    getPauseBtn().setDisable(false);
-                    getUndoBtn().setDisable(false);
                 } else if (getNumberOfPlayers() == 2) {
                     if (!(((TextField) getEnterTwoNamesPopUpPane().lookup("#player1Name")).getText().equals(""))) {
                         TextField name1 = (TextField) getEnterTwoNamesPopUpPane().lookup("#player1Name");
@@ -111,12 +131,11 @@ public class Main extends Application {
                     hidePopUp();
                     startGame();
                     setAccountLoginPopUpShown(false);
-                    getPauseBtn().setDisable(false);
-                    getUndoBtn().setDisable(false);
                 }
             }
         });
 
+        // Game shortcut keys
         getGameScene().setOnKeyReleased(event -> {
             if (event.getCode() == KeyCode.NUMPAD7 && !getPauseBtn().isDisabled() && getPopUp() == null) {
                 markQuadrant(getTopLeft(), getTopLeft().getIsMarked());
@@ -140,20 +159,14 @@ public class Main extends Application {
                 setGame();
                 hidePopUp();
                 setWonGamePopUpShown(false);
-                getPauseBtn().setDisable(false);
-                getUndoBtn().setDisable(false);
             } else if (event.getCode() == KeyCode.ENTER && getTiedGamePopUpShown()) {
                 setGame();
                 hidePopUp();
                 setWonGamePopUpShown(false);
-                getPauseBtn().setDisable(false);
-                getUndoBtn().setDisable(false);
             } else if (event.getCode() == KeyCode.SPACE && !getPauseBtn().isDisabled()) {
                 pause();
             } else if (event.getCode() == KeyCode.SPACE && getPauseBtn().isDisabled()) {
                 hidePopUp();
-                getPauseBtn().setDisable(false);
-                getUndoBtn().setDisable(false);
             } else if (event.getCode() == KeyCode.BACK_SPACE && getPauseBtn().isDisabled()) {
                 primaryStage.setScene(getOpeningScene()); //sets the scene on the stage
                 primaryStage.show(); //shows the primaryStage
@@ -163,8 +176,6 @@ public class Main extends Application {
                 undo();
             } else if (event.getCode() == KeyCode.ENTER && getPopUp() != null) {
                 hidePopUp();
-                getPauseBtn().setDisable(false);
-                getUndoBtn().setDisable(false);
             }
         });
 

@@ -41,6 +41,15 @@ public class ButtonController {
     static boolean getAbleToUndo() { return ableToUndo; }
 
     /**
+     * BUTTON INITIALIZATION
+     * Initialize all the buttons
+     */
+    static void initializeButtons() {
+        pauseBtn = (Button) getGameScene().lookup("#pause");
+        undoBtn = (Button) getGameScene().lookup("#undo");
+    }
+
+    /**
      * PAUSE METHOD
      * Pause the game
      */
@@ -61,6 +70,8 @@ public class ButtonController {
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
+        pauseBtn.setDisable(false);
+        undoBtn.setDisable(false);
     }
 
     /**

@@ -2,6 +2,16 @@ package sample;
 
 public class LeaderBoardController {
     /**
+     * ADD PLAYER TO LEADER BOARD METHOD
+     * Adds a player to the leader board
+     */
+    static void addPlayerToLeaderBoard(Player player) {
+        if (player != null) {
+            //
+        }
+    }
+
+    /**
      * UPDATE LEADER BOARD METHOD
      * Updates the leader board file after each game
      */
