@@ -68,7 +68,7 @@ public class PlayerController {
         player.setPassword(password);
         player.setGamesPlayed(gamesPlayed);
         player.setTotalGamesWon(gamesWon);
-        player.setWinPercentage(gamesWon/gamesPlayed);
+        player.setWinPercentage(0);
         player.setLastDatePlayed(now);
         addPlayerToLeaderBoard(player);
         return player;
