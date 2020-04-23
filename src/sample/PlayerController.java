@@ -4,7 +4,7 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
-import static sample.LeaderBoardController.*;
+import static sample.DatabaseController.*;
 
 public class PlayerController {
     // Variables
@@ -68,7 +68,6 @@ public class PlayerController {
         player.setTotalGamesWon(gamesWon);
         player.setLastDatePlayed(now);
         player.setWinPercentage(0);
-        addPlayerToLeaderBoard(player);
         return player;
     }
 
@@ -83,7 +82,7 @@ public class PlayerController {
         player.setTotalGamesWon(0);
         player.setLastDatePlayed(now);
         player.setWinPercentage(0);
-        addPlayerToLeaderBoard(player);
+        insertAccountToDatabase(player);
         return player;
     }
 }

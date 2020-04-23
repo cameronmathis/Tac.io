@@ -15,7 +15,7 @@ import java.io.*;
 
 import static sample.ButtonController.*;
 import static sample.GameController.*;
-import static sample.LeaderBoardController.*;
+import static sample.DatabaseController.*;
 import static sample.PlayerController.*;
 
 public class PopUpController {
@@ -661,8 +661,6 @@ public class PopUpController {
      * PopUp for when the game is over
      */
     static void gameOverPopUp(Player player) {
-        updateLeaderBoard(player);
-
         wonGamePopUpShown = true;
 
         PopUp = new Popup(); //creates new popup
@@ -708,8 +706,6 @@ public class PopUpController {
      * PopUp for when the game is tied
      */
     static void tiePopUp() {
-        updateLeaderBoard(null);
-
         tiedGamePopUpShown = true;
 
         PopUp = new Popup(); //creates new popup
