@@ -2,11 +2,13 @@ package sample;
 
 import java.sql.*;
 
+import static sample.SensitiveData.*;
+
 public class DatabaseController {
     // Variables
-    private static final String DATABASE_URL = "jdbc:mysql://192.168.1.17:3306/TicTacToeDatabase";
-    private static final String DATABASE_USERNAME = "TicTacToeUser";
-    private static final String DATABASE_PASSWORD = "TicTacToePassword";
+    private static final String DATABASE_URL = getDatabaseUrl();
+    private static final String DATABASE_USERNAME = getDatabaseUsername();
+    private static final String DATABASE_PASSWORD = getDatabasePassword();
     private static String leaderBoard;
     private static String userField;
     private static String insertAccount = "INSERT INTO Accounts user_id, user_password, last_date_player";
