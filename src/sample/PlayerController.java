@@ -58,8 +58,8 @@ public class PlayerController {
     }
 
     /**
-     * CREATE PLAYER METHOD
-     * Method to create a player that is not already on the leader board
+     * IMPORT PLAYER METHOD
+     * Method to import a player from the leader board
      */
     static Player importPlayer(Player player, String username, String password, int gamesPlayed, int gamesWon) {
         player.setUsername(username);
@@ -68,6 +68,7 @@ public class PlayerController {
         player.setTotalGamesWon(gamesWon);
         player.setLastDatePlayed(now);
         player.setWinPercentage(0);
+        importAccountFromDatabase(player);
         return player;
     }
 
