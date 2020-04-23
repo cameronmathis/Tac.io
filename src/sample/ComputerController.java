@@ -6,7 +6,7 @@ import static sample.PlayerController.*;
 import static sample.QuadrantController.*;
 
 public class ComputerController {
-    // Variables
+    // Variablesa
     private static Quadrant topLeft = getTopLeft();
     private static Quadrant topCenter = getTopCenter();
     private static Quadrant topRight = getTopRight();
