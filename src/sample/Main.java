@@ -108,6 +108,31 @@ public class Main extends Application {
                     startGame();
                     setCreateAccountPopUpShown(false);
                 } else if (getAccountLoginPopUpShown() && (getNumberOfPlayers() == 1)) {
+                    Player tempPlayer = new Player();
+                    TextField username = (TextField) getAccountLoginPopUpPane().lookup("#username");
+                    TextField password = (PasswordField) getAccountLoginPopUpPane().lookup("#password");
+                    if (username.getText().equals("") || (username.getText().length() > 250)) {
+                        hidePopUp();
+                        usernameDoesNotExistPopUp();
+                        return;
+                    } else if (false) {
+                        hidePopUp();
+                        usernameDoesNotExistPopUp();
+                        return;
+                    } else if (true) {
+                        tempPlayer.setUsername(username.getText());
+                    }
+
+                    if ((password.getText().length() < 7) || (password.getText().length() > 250)) {
+                        hidePopUp();
+                        incorrectPasswordPopUp();
+                        return;
+                    } else if (!password.getText().equals(password.getText())) {
+                        hidePopUp();
+                        incorrectPasswordPopUp();
+                        return;
+                    }
+                    setPlayer1(importPlayer(tempPlayer, username.getText(), password.getText(), 0, 0));
                     hidePopUp();
                     startGame();
                     setAccountLoginPopUpShown(false);

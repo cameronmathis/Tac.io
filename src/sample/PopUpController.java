@@ -256,6 +256,7 @@ public class PopUpController {
         enterBtn.setOnAction(event -> {
             Player tempPlayer = new Player();
             TextField username = (TextField) accountLoginPopUpPane.lookup("#username");
+            TextField password = (PasswordField) accountLoginPopUpPane.lookup("#password");
             if (username.getText().equals("") || (username.getText().length() > 250)) {
                 hidePopUp();
                 usernameDoesNotExistPopUp();
@@ -268,8 +269,11 @@ public class PopUpController {
                 tempPlayer.setUsername(username.getText());
             }
 
-            TextField password = (PasswordField) accountLoginPopUpPane.lookup("#password");
-            if (!password.getText().equals(password.getText())) {
+            if ((password.getText().length() < 7) || (password.getText().length() > 250)) {
+                hidePopUp();
+                incorrectPasswordPopUp();
+                return;
+            } else if (!password.getText().equals(password.getText())) {
                 hidePopUp();
                 incorrectPasswordPopUp();
                 return;

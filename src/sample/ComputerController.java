@@ -6,264 +6,253 @@ import static sample.PlayerController.*;
 import static sample.QuadrantController.*;
 
 public class ComputerController {
-    // Variables
-    private static Quadrant topLeft = getTopLeft();
-    private static Quadrant topCenter = getTopCenter();
-    private static Quadrant topRight = getTopRight();
-    private static Quadrant centerLeft = getCenterLeft();
-    private static Quadrant center = getCenter();
-    private static Quadrant centerRight = getCenterRight();
-    private static Quadrant bottomLeft = getBottomLeft();
-    private static Quadrant bottomCenter = getBottomCenter();
-    private static Quadrant bottomRight = getBottomRight();
-
     static Quadrant primaryOffensiveMove() {
-        if (topLeft.getPlayerPlayed() != null && topLeft.getPlayerPlayed().equals(getPlayer2())) {
-            if (topCenter.getPlayerPlayed() != null && topCenter.getPlayerPlayed().equals(getPlayer2())) {
-                if (!topRight.getIsMarked()) {
-                    return topRight;
+        if (getTopLeft().getPlayerPlayed() != null && getTopLeft().getPlayerPlayed().equals(getPlayer2())) {
+            if (getTopCenter().getPlayerPlayed() != null && getTopCenter().getPlayerPlayed().equals(getPlayer2())) {
+                if (!getTopRight().getIsMarked()) {
+                    return getTopRight();
                 }
             }
-            if (topRight.getPlayerPlayed() != null && topRight.getPlayerPlayed().equals(getPlayer2())) {
-                if (!topCenter.getIsMarked()) {
-                    return topCenter;
+            if (getTopRight().getPlayerPlayed() != null && getTopRight().getPlayerPlayed().equals(getPlayer2())) {
+                if (!getTopCenter().getIsMarked()) {
+                    return getTopCenter();
                 }
-            } else if (centerLeft.getPlayerPlayed() != null && centerLeft.getPlayerPlayed().equals(getPlayer2())) {
-                if (!bottomLeft.getIsMarked()) {
-                    return bottomLeft;
-                }
-            }
-            if (bottomLeft.getPlayerPlayed() != null && bottomLeft.getPlayerPlayed().equals(getPlayer2())) {
-                if (!centerLeft.getIsMarked()) {
-                    return centerLeft;
+            } else if (getCenterLeft().getPlayerPlayed() != null && getCenterLeft().getPlayerPlayed().equals(getPlayer2())) {
+                if (!getBottomLeft().getIsMarked()) {
+                    return getBottomLeft();
                 }
             }
-            if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(getPlayer2())) {
-                if (!bottomRight.getIsMarked()) {
-                    return bottomRight;
+            if (getBottomLeft().getPlayerPlayed() != null && getBottomLeft().getPlayerPlayed().equals(getPlayer2())) {
+                if (!getCenterLeft().getIsMarked()) {
+                    return getCenterLeft();
                 }
             }
-            if (bottomRight.getPlayerPlayed() != null && bottomRight.getPlayerPlayed().equals(getPlayer2())) {
-                if (!center.getIsMarked()) {
-                    return center;
+            if (getCenter().getPlayerPlayed() != null && getCenter().getPlayerPlayed().equals(getPlayer2())) {
+                if (!getBottomLeft().getIsMarked()) {
+                    return getBottomLeft();
                 }
             }
-        } else if (topCenter.getPlayerPlayed() != null && topCenter.getPlayerPlayed().equals(getPlayer2())) {
-            if (topLeft.getPlayerPlayed() != null && topLeft.getPlayerPlayed().equals(getPlayer2())) {
-                if (!topRight.getIsMarked()) {
-                    return topRight;
+            if (getBottomRight().getPlayerPlayed() != null && getBottomRight().getPlayerPlayed().equals(getPlayer2())) {
+                if (!getCenter().getIsMarked()) {
+                    return getCenter();
                 }
             }
-            if (topRight.getPlayerPlayed() != null && topRight.getPlayerPlayed().equals(getPlayer2())) {
-                if (!topLeft.getIsMarked()) {
-                    return topLeft;
+        } else if (getTopCenter().getPlayerPlayed() != null && getTopCenter().getPlayerPlayed().equals(getPlayer2())) {
+            if (getTopLeft().getPlayerPlayed() != null && getTopLeft().getPlayerPlayed().equals(getPlayer2())) {
+                if (!getTopRight().getIsMarked()) {
+                    return getTopRight();
                 }
             }
-            if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(getPlayer2())) {
-                if (!bottomCenter.getIsMarked()) {
-                    return bottomCenter;
+            if (getTopRight().getPlayerPlayed() != null && getTopRight().getPlayerPlayed().equals(getPlayer2())) {
+                if (!getTopLeft().getIsMarked()) {
+                    return getTopLeft();
                 }
             }
-            if (bottomCenter.getPlayerPlayed() != null && bottomCenter.getPlayerPlayed().equals(getPlayer2())) {
-                if (!center.getIsMarked()) {
-                    return center;
+            if (getCenter().getPlayerPlayed() != null && getCenter().getPlayerPlayed().equals(getPlayer2())) {
+                if (!getBottomCenter().getIsMarked()) {
+                    return getBottomCenter();
                 }
             }
-        } else if (topRight.getPlayerPlayed() != null && topRight.getPlayerPlayed().equals(getPlayer2())) {
-            if (topCenter.getPlayerPlayed() != null && topCenter.getPlayerPlayed().equals(getPlayer2())) {
-                if (!topLeft.getIsMarked()) {
-                    return topLeft;
+            if (getBottomCenter().getPlayerPlayed() != null && getBottomCenter().getPlayerPlayed().equals(getPlayer2())) {
+                if (!getCenter().getIsMarked()) {
+                    return getCenter();
                 }
             }
-            if (topLeft.getPlayerPlayed() != null && topLeft.getPlayerPlayed().equals(getPlayer2())) {
-                if (!topCenter.getIsMarked()) {
-                    return topCenter;
+        } else if (getTopRight().getPlayerPlayed() != null && getTopRight().getPlayerPlayed().equals(getPlayer2())) {
+            if (getTopCenter().getPlayerPlayed() != null && getTopCenter().getPlayerPlayed().equals(getPlayer2())) {
+                if (!getTopLeft().getIsMarked()) {
+                    return getTopLeft();
                 }
             }
-            if (centerRight.getPlayerPlayed() != null && centerRight.getPlayerPlayed().equals(getPlayer2())) {
-                if (!bottomRight.getIsMarked()) {
-                    return bottomRight;
+            if (getTopLeft().getPlayerPlayed() != null && getTopLeft().getPlayerPlayed().equals(getPlayer2())) {
+                if (!getTopCenter().getIsMarked()) {
+                    return getTopCenter();
                 }
             }
-            if (bottomRight.getPlayerPlayed() != null && bottomRight.getPlayerPlayed().equals(getPlayer2())) {
-                if (!centerRight.getIsMarked()) {
-                    return centerRight;
+            if (getCenterRight().getPlayerPlayed() != null && getCenterRight().getPlayerPlayed().equals(getPlayer2())) {
+                if (!getBottomRight().getIsMarked()) {
+                    return getBottomRight();
                 }
             }
-            if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(getPlayer2())) {
-                if (!bottomLeft.getIsMarked()) {
-                    return bottomLeft;
+            if (getBottomRight().getPlayerPlayed() != null && getBottomRight().getPlayerPlayed().equals(getPlayer2())) {
+                if (!getCenterRight().getIsMarked()) {
+                    return getCenterRight();
                 }
             }
-            if (bottomLeft.getPlayerPlayed() != null && bottomLeft.getPlayerPlayed().equals(getPlayer2())) {
-                if (!center.getIsMarked()) {
-                    return center;
+            if (getCenter().getPlayerPlayed() != null && getCenter().getPlayerPlayed().equals(getPlayer2())) {
+                if (!getBottomLeft().getIsMarked()) {
+                    return getBottomLeft();
                 }
             }
-        } else if (centerLeft.getPlayerPlayed() != null && centerLeft.getPlayerPlayed().equals(getPlayer2())) {
-            if (topLeft.getPlayerPlayed() != null && topLeft.getPlayerPlayed().equals(getPlayer2())) {
-                if (!bottomLeft.getIsMarked()) {
-                    return bottomLeft;
+            if (getBottomLeft().getPlayerPlayed() != null && getBottomLeft().getPlayerPlayed().equals(getPlayer2())) {
+                if (!getCenter().getIsMarked()) {
+                    return getCenter();
                 }
             }
-            if (bottomLeft.getPlayerPlayed() != null && bottomLeft.getPlayerPlayed().equals(getPlayer2())) {
-                if (!topLeft.getIsMarked()) {
-                    return topLeft;
+        } else if (getCenterLeft().getPlayerPlayed() != null && getCenterLeft().getPlayerPlayed().equals(getPlayer2())) {
+            if (getTopLeft().getPlayerPlayed() != null && getTopLeft().getPlayerPlayed().equals(getPlayer2())) {
+                if (!getBottomLeft().getIsMarked()) {
+                    return getBottomLeft();
                 }
             }
-            if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(getPlayer2())) {
-                if (!centerRight.getIsMarked()) {
-                    return centerRight;
+            if (getBottomLeft().getPlayerPlayed() != null && getBottomLeft().getPlayerPlayed().equals(getPlayer2())) {
+                if (!getTopLeft().getIsMarked()) {
+                    return getTopLeft();
                 }
             }
-            if (centerRight.getPlayerPlayed() != null && centerRight.getPlayerPlayed().equals(getPlayer2())) {
-                if (!center.getIsMarked()) {
-                    return center;
+            if (getCenter().getPlayerPlayed() != null && getCenter().getPlayerPlayed().equals(getPlayer2())) {
+                if (!getCenterRight().getIsMarked()) {
+                    return getCenterRight();
                 }
             }
-        } else if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(getPlayer2())) {
-            if (topLeft.getPlayerPlayed() != null && topLeft.getPlayerPlayed().equals(getPlayer2())) {
-                if (!bottomRight.getIsMarked()) {
-                    return bottomRight;
+            if (getCenterRight().getPlayerPlayed() != null && getCenterRight().getPlayerPlayed().equals(getPlayer2())) {
+                if (!getCenter().getIsMarked()) {
+                    return getCenter();
                 }
             }
-            if (bottomRight.getPlayerPlayed() != null && bottomRight.getPlayerPlayed().equals(getPlayer2())) {
-                if (!topLeft.getIsMarked()) {
-                    return topLeft;
+        } else if (getCenter().getPlayerPlayed() != null && getCenter().getPlayerPlayed().equals(getPlayer2())) {
+            if (getTopLeft().getPlayerPlayed() != null && getTopLeft().getPlayerPlayed().equals(getPlayer2())) {
+                if (!getBottomRight().getIsMarked()) {
+                    return getBottomRight();
                 }
             }
-            if (topRight.getPlayerPlayed() != null && topRight.getPlayerPlayed().equals(getPlayer2())) {
-                if (!bottomLeft.getIsMarked()) {
-                    return bottomLeft;
+            if (getBottomRight().getPlayerPlayed() != null && getBottomRight().getPlayerPlayed().equals(getPlayer2())) {
+                if (!getTopLeft().getIsMarked()) {
+                    return getTopLeft();
                 }
             }
-            if (bottomLeft.getPlayerPlayed() != null && bottomLeft.getPlayerPlayed().equals(getPlayer2())) {
-                if (!topRight.getIsMarked()) {
-                    return topRight;
+            if (getTopRight().getPlayerPlayed() != null && getTopRight().getPlayerPlayed().equals(getPlayer2())) {
+                if (!getBottomLeft().getIsMarked()) {
+                    return getBottomLeft();
                 }
             }
-            if (topCenter.getPlayerPlayed() != null && topCenter.getPlayerPlayed().equals(getPlayer2())) {
-                if (!bottomCenter.getIsMarked()) {
-                    return bottomCenter;
+            if (getBottomLeft().getPlayerPlayed() != null && getBottomLeft().getPlayerPlayed().equals(getPlayer2())) {
+                if (!getTopRight().getIsMarked()) {
+                    return getTopRight();
                 }
             }
-            if (bottomCenter.getPlayerPlayed() != null && bottomCenter.getPlayerPlayed().equals(getPlayer2())) {
-                if (!topCenter.getIsMarked()) {
-                    return topCenter;
+            if (getTopCenter().getPlayerPlayed() != null && getTopCenter().getPlayerPlayed().equals(getPlayer2())) {
+                if (!getBottomCenter().getIsMarked()) {
+                    return getBottomCenter();
                 }
             }
-            if (centerLeft.getPlayerPlayed() != null && centerLeft.getPlayerPlayed().equals(getPlayer2())) {
-                if (!centerRight.getIsMarked()) {
-                    return centerRight;
+            if (getBottomCenter().getPlayerPlayed() != null && getBottomCenter().getPlayerPlayed().equals(getPlayer2())) {
+                if (!getTopCenter().getIsMarked()) {
+                    return getTopCenter();
                 }
             }
-            if (centerRight.getPlayerPlayed() != null && centerRight.getPlayerPlayed().equals(getPlayer2())) {
-                if (!centerLeft.getIsMarked()) {
-                    return centerLeft;
+            if (getCenterLeft().getPlayerPlayed() != null && getCenterLeft().getPlayerPlayed().equals(getPlayer2())) {
+                if (!getCenterRight().getIsMarked()) {
+                    return getCenterRight();
                 }
             }
-        } else if (centerRight.getPlayerPlayed() != null && centerRight.getPlayerPlayed().equals(getPlayer2())) {
-            if (topRight.getPlayerPlayed() != null && topRight.getPlayerPlayed().equals(getPlayer2())) {
-                if (!bottomRight.getIsMarked()) {
-                    return bottomRight;
+            if (getCenterRight().getPlayerPlayed() != null && getCenterRight().getPlayerPlayed().equals(getPlayer2())) {
+                if (!getCenterLeft().getIsMarked()) {
+                    return getCenterLeft();
                 }
             }
-            if (bottomRight.getPlayerPlayed() != null && bottomRight.getPlayerPlayed().equals(getPlayer2())) {
-                if (!topRight.getIsMarked()) {
-                    return topRight;
+        } else if (getCenterRight().getPlayerPlayed() != null && getCenterRight().getPlayerPlayed().equals(getPlayer2())) {
+            if (getTopRight().getPlayerPlayed() != null && getTopRight().getPlayerPlayed().equals(getPlayer2())) {
+                if (!getBottomRight().getIsMarked()) {
+                    return getBottomRight();
                 }
             }
-            if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(getPlayer2())) {
-                if (!centerLeft.getIsMarked()) {
-                    return centerLeft;
+            if (getBottomRight().getPlayerPlayed() != null && getBottomRight().getPlayerPlayed().equals(getPlayer2())) {
+                if (!getTopRight().getIsMarked()) {
+                    return getTopRight();
                 }
             }
-            if (centerLeft.getPlayerPlayed() != null && centerLeft.getPlayerPlayed().equals(getPlayer2())) {
-                if (!center.getIsMarked()) {
-                    return center;
+            if (getCenter().getPlayerPlayed() != null && getCenter().getPlayerPlayed().equals(getPlayer2())) {
+                if (!getCenterLeft().getIsMarked()) {
+                    return getCenterLeft();
                 }
             }
-        } else if (bottomLeft.getPlayerPlayed() != null && bottomLeft.getPlayerPlayed().equals(getPlayer2())) {
-            if (bottomCenter.getPlayerPlayed() != null && bottomCenter.getPlayerPlayed().equals(getPlayer2())) {
-                if (!bottomRight.getIsMarked()) {
-                    return bottomRight;
+            if (getCenterLeft().getPlayerPlayed() != null && getCenterLeft().getPlayerPlayed().equals(getPlayer2())) {
+                if (!getCenter().getIsMarked()) {
+                    return getCenter();
                 }
             }
-            if (bottomRight.getPlayerPlayed() != null && bottomRight.getPlayerPlayed().equals(getPlayer2())) {
-                if (!bottomCenter.getIsMarked()) {
-                    return bottomCenter;
+        } else if (getBottomLeft().getPlayerPlayed() != null && getBottomLeft().getPlayerPlayed().equals(getPlayer2())) {
+            if (getBottomCenter().getPlayerPlayed() != null && getBottomCenter().getPlayerPlayed().equals(getPlayer2())) {
+                if (!getBottomRight().getIsMarked()) {
+                    return getBottomRight();
                 }
             }
-            if (centerLeft.getPlayerPlayed() != null && centerLeft.getPlayerPlayed().equals(getPlayer2())) {
-                if (!topLeft.getIsMarked()) {
-                    return topLeft;
+            if (getBottomRight().getPlayerPlayed() != null && getBottomRight().getPlayerPlayed().equals(getPlayer2())) {
+                if (!getBottomCenter().getIsMarked()) {
+                    return getBottomCenter();
                 }
             }
-            if (topLeft.getPlayerPlayed() != null && topLeft.getPlayerPlayed().equals(getPlayer2())) {
-                if (!centerLeft.getIsMarked()) {
-                    return centerLeft;
+            if (getCenterLeft().getPlayerPlayed() != null && getCenterLeft().getPlayerPlayed().equals(getPlayer2())) {
+                if (!getTopLeft().getIsMarked()) {
+                    return getTopLeft();
                 }
             }
-            if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(getPlayer2())) {
-                if (!topRight.getIsMarked()) {
-                    return topRight;
+            if (getTopLeft().getPlayerPlayed() != null && getTopLeft().getPlayerPlayed().equals(getPlayer2())) {
+                if (!getCenterLeft().getIsMarked()) {
+                    return getCenterLeft();
                 }
             }
-            if (topRight.getPlayerPlayed() != null && topRight.getPlayerPlayed().equals(getPlayer2())) {
-                if (!center.getIsMarked()) {
-                    return center;
+            if (getCenter().getPlayerPlayed() != null && getCenter().getPlayerPlayed().equals(getPlayer2())) {
+                if (!getTopRight().getIsMarked()) {
+                    return getTopRight();
                 }
             }
-        } else if (bottomCenter.getPlayerPlayed() != null && bottomCenter.getPlayerPlayed().equals(getPlayer2())) {
-            if (bottomLeft.getPlayerPlayed() != null && bottomLeft.getPlayerPlayed().equals(getPlayer2())) {
-                if (!bottomRight.getIsMarked()) {
-                    return bottomRight;
+            if (getTopRight().getPlayerPlayed() != null && getTopRight().getPlayerPlayed().equals(getPlayer2())) {
+                if (!getCenter().getIsMarked()) {
+                    return getCenter();
                 }
             }
-            if (bottomRight.getPlayerPlayed() != null && bottomRight.getPlayerPlayed().equals(getPlayer2())) {
-                if (!bottomLeft.getIsMarked()) {
-                    return bottomLeft;
+        } else if (getBottomCenter().getPlayerPlayed() != null && getBottomCenter().getPlayerPlayed().equals(getPlayer2())) {
+            if (getBottomLeft().getPlayerPlayed() != null && getBottomLeft().getPlayerPlayed().equals(getPlayer2())) {
+                if (!getBottomRight().getIsMarked()) {
+                    return getBottomRight();
                 }
             }
-            if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(getPlayer2())) {
-                if (!topCenter.getIsMarked()) {
-                    return topCenter;
+            if (getBottomRight().getPlayerPlayed() != null && getBottomRight().getPlayerPlayed().equals(getPlayer2())) {
+                if (!getBottomLeft().getIsMarked()) {
+                    return getBottomLeft();
                 }
             }
-            if (topCenter.getPlayerPlayed() != null && topCenter.getPlayerPlayed().equals(getPlayer2())) {
-                if (!center.getIsMarked()) {
-                    return center;
+            if (getCenter().getPlayerPlayed() != null && getCenter().getPlayerPlayed().equals(getPlayer2())) {
+                if (!getTopCenter().getIsMarked()) {
+                    return getTopCenter();
                 }
             }
-        } else if (bottomRight.getPlayerPlayed() != null && bottomRight.getPlayerPlayed().equals(getPlayer2())) {
-            if (bottomCenter.getPlayerPlayed() != null && bottomCenter.getPlayerPlayed().equals(getPlayer2())) {
-                if (!bottomLeft.getIsMarked()) {
-                    return bottomLeft;
+            if (getTopCenter().getPlayerPlayed() != null && getTopCenter().getPlayerPlayed().equals(getPlayer2())) {
+                if (!getCenter().getIsMarked()) {
+                    return getCenter();
                 }
             }
-            if (bottomLeft.getPlayerPlayed() != null && bottomLeft.getPlayerPlayed().equals(getPlayer2())) {
-                if (!bottomCenter.getIsMarked()) {
-                    return bottomCenter;
+        } else if (getBottomRight().getPlayerPlayed() != null && getBottomRight().getPlayerPlayed().equals(getPlayer2())) {
+            if (getTopCenter().getPlayerPlayed() != null && getBottomCenter().getPlayerPlayed().equals(getPlayer2())) {
+                if (!getBottomLeft().getIsMarked()) {
+                    return getBottomLeft();
                 }
             }
-            if (centerRight.getPlayerPlayed() != null && centerRight.getPlayerPlayed().equals(getPlayer2())) {
-                if (!topRight.getIsMarked()) {
-                    return topRight;
+            if (getBottomLeft().getPlayerPlayed() != null && getBottomLeft().getPlayerPlayed().equals(getPlayer2())) {
+                if (!getBottomLeft().getIsMarked()) {
+                    return getBottomCenter();
                 }
             }
-            if (topRight.getPlayerPlayed() != null && topRight.getPlayerPlayed().equals(getPlayer2())) {
-                if (!centerRight.getIsMarked()) {
-                    return centerRight;
+            if (getCenterRight().getPlayerPlayed() != null && getCenterRight().getPlayerPlayed().equals(getPlayer2())) {
+                if (!getTopRight().getIsMarked()) {
+                    return getTopRight();
                 }
             }
-            if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(getPlayer2())) {
-                if (!topLeft.getIsMarked()) {
-                    return topLeft;
+            if (getTopRight().getPlayerPlayed() != null && getTopRight().getPlayerPlayed().equals(getPlayer2())) {
+                if (!getCenterRight().getIsMarked()) {
+                    return getCenterRight();
                 }
             }
-            if (topLeft.getPlayerPlayed() != null && topLeft.getPlayerPlayed().equals(getPlayer2())) {
-                if (!center.getIsMarked()) {
-                    return center;
+            if (getCenter().getPlayerPlayed() != null && getCenter().getPlayerPlayed().equals(getPlayer2())) {
+                if (!getTopLeft().getIsMarked()) {
+                    return getTopLeft();
+                }
+            }
+            if (getTopLeft().getPlayerPlayed() != null && getTopLeft().getPlayerPlayed().equals(getPlayer2())) {
+                if (!getCenter().getIsMarked()) {
+                    return getCenter();
                 }
             }
         }
@@ -274,260 +263,260 @@ public class ComputerController {
     static Quadrant defensiveMove(Quadrant quadrant) {
         switch (quadrant.getPane().getId()) {
             case "topLeftPane":
-                if (topCenter.getPlayerPlayed() != null && topCenter.getPlayerPlayed().equals(getPlayer1())) {
-                    if (!topRight.getIsMarked()) {
-                        return topRight;
+                if (getTopCenter().getPlayerPlayed() != null && getTopCenter().getPlayerPlayed().equals(getPlayer1())) {
+                    if (!getTopRight().getIsMarked()) {
+                        return getTopRight();
                     }
                 }
-                if (topRight.getPlayerPlayed() != null && topRight.getPlayerPlayed().equals(getPlayer1())) {
-                    if (!topCenter.getIsMarked()) {
-                        return topCenter;
+                if (getTopRight().getPlayerPlayed() != null && getTopRight().getPlayerPlayed().equals(getPlayer1())) {
+                    if (!getTopCenter().getIsMarked()) {
+                        return getTopCenter();
                     }
                 }
-                if (centerLeft.getPlayerPlayed() != null && centerLeft.getPlayerPlayed().equals(getPlayer1())) {
-                    if (!bottomLeft.getIsMarked()) {
-                        return bottomLeft;
+                if (getCenterLeft().getPlayerPlayed() != null && getCenterLeft().getPlayerPlayed().equals(getPlayer1())) {
+                    if (!getBottomLeft().getIsMarked()) {
+                        return getBottomLeft();
                     }
                 }
-                if (bottomLeft.getPlayerPlayed() != null && bottomLeft.getPlayerPlayed().equals(getPlayer1())) {
-                    if (!centerLeft.getIsMarked()) {
-                        return centerLeft;
+                if (getBottomLeft().getPlayerPlayed() != null && getBottomLeft().getPlayerPlayed().equals(getPlayer1())) {
+                    if (!getCenterLeft().getIsMarked()) {
+                        return getCenterLeft();
                     }
                 }
-                if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(getPlayer1())) {
-                    if (!bottomRight.getIsMarked()) {
-                        return bottomRight;
+                if (getCenter().getPlayerPlayed() != null && getCenter().getPlayerPlayed().equals(getPlayer1())) {
+                    if (!getBottomRight().getIsMarked()) {
+                        return getBottomRight();
                     }
                 }
-                if (bottomRight.getPlayerPlayed() != null && bottomRight.getPlayerPlayed().equals(getPlayer1())) {
-                    if (!center.getIsMarked()) {
-                        return center;
+                if (getBottomRight().getPlayerPlayed() != null && getBottomRight().getPlayerPlayed().equals(getPlayer1())) {
+                    if (!getCenter().getIsMarked()) {
+                        return getCenter();
                     }
                 }
                 break;
             case "topCenterPane":
-                if (topLeft.getPlayerPlayed() != null && topLeft.getPlayerPlayed().equals(getPlayer1())) {
-                    if (!topRight.getIsMarked()) {
-                        return topRight;
+                if (getTopLeft().getPlayerPlayed() != null && getTopLeft().getPlayerPlayed().equals(getPlayer1())) {
+                    if (!getTopRight().getIsMarked()) {
+                        return getTopRight();
                     }
                 }
-                if (topRight.getPlayerPlayed() != null && topRight.getPlayerPlayed().equals(getPlayer1())) {
-                    if (!topLeft.getIsMarked()) {
-                        return topLeft;
+                if (getTopRight().getPlayerPlayed() != null && getTopRight().getPlayerPlayed().equals(getPlayer1())) {
+                    if (!getTopLeft().getIsMarked()) {
+                        return getTopLeft();
                     }
                 }
-                if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(getPlayer1())) {
-                    if (!bottomCenter.getIsMarked()) {
-                        return bottomCenter;
+                if (getCenter().getPlayerPlayed() != null && getCenter().getPlayerPlayed().equals(getPlayer1())) {
+                    if (!getBottomCenter().getIsMarked()) {
+                        return getBottomCenter();
                     }
                 }
-                if (bottomCenter.getPlayerPlayed() != null && bottomCenter.getPlayerPlayed().equals(getPlayer1())) {
-                    if (!center.getIsMarked()) {
-                        return center;
+                if (getBottomCenter().getPlayerPlayed() != null && getBottomCenter().getPlayerPlayed().equals(getPlayer1())) {
+                    if (!getCenter().getIsMarked()) {
+                        return getCenter();
                     }
                 }
                 break;
             case "topRightPane":
-                if (topCenter.getPlayerPlayed() != null && topCenter.getPlayerPlayed().equals(getPlayer1())) {
-                    if (!topLeft.getIsMarked()) {
-                        return topLeft;
+                if (getTopCenter().getPlayerPlayed() != null && getTopCenter().getPlayerPlayed().equals(getPlayer1())) {
+                    if (!getTopLeft().getIsMarked()) {
+                        return getTopLeft();
                     }
                 }
-                if (topLeft.getPlayerPlayed() != null && topLeft.getPlayerPlayed().equals(getPlayer1())) {
-                    if (!topCenter.getIsMarked()) {
-                        return topCenter;
+                if (getTopLeft().getPlayerPlayed() != null && getTopLeft().getPlayerPlayed().equals(getPlayer1())) {
+                    if (!getTopCenter().getIsMarked()) {
+                        return getTopCenter();
                     }
                 }
-                if (centerRight.getPlayerPlayed() != null && centerRight.getPlayerPlayed().equals(getPlayer1())) {
-                    if (!bottomRight.getIsMarked()) {
-                        return bottomRight;
+                if (getCenterRight().getPlayerPlayed() != null && getCenterRight().getPlayerPlayed().equals(getPlayer1())) {
+                    if (!getBottomRight().getIsMarked()) {
+                        return getBottomRight();
                     }
                 }
-                if (bottomRight.getPlayerPlayed() != null && bottomRight.getPlayerPlayed().equals(getPlayer1())) {
-                    if (!centerRight.getIsMarked()) {
-                        return centerRight;
+                if (getBottomRight().getPlayerPlayed() != null && getBottomRight().getPlayerPlayed().equals(getPlayer1())) {
+                    if (!getCenterRight().getIsMarked()) {
+                        return getCenterRight();
                     }
                 }
-                if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(getPlayer1())) {
-                    if (!bottomLeft.getIsMarked()) {
-                        return bottomLeft;
+                if (getCenter().getPlayerPlayed() != null && getCenter().getPlayerPlayed().equals(getPlayer1())) {
+                    if (!getBottomLeft().getIsMarked()) {
+                        return getBottomLeft();
                     }
                 }
-                if (bottomLeft.getPlayerPlayed() != null && bottomLeft.getPlayerPlayed().equals(getPlayer1())) {
-                    if (!center.getIsMarked()) {
-                        return center;
+                if (getBottomLeft().getPlayerPlayed() != null && getBottomLeft().getPlayerPlayed().equals(getPlayer1())) {
+                    if (!getCenter().getIsMarked()) {
+                        return getCenter();
                     }
                 }
                 break;
             case "centerLeftPane":
-                if (topLeft.getPlayerPlayed() != null && topLeft.getPlayerPlayed().equals(getPlayer1())) {
-                    if (!bottomLeft.getIsMarked()) {
-                        return bottomLeft;
+                if (getTopLeft().getPlayerPlayed() != null && getTopLeft().getPlayerPlayed().equals(getPlayer1())) {
+                    if (!getBottomLeft().getIsMarked()) {
+                        return getBottomLeft();
                     }
                 }
-                if (bottomLeft.getPlayerPlayed() != null && bottomLeft.getPlayerPlayed().equals(getPlayer1())) {
-                    if (!topLeft.getIsMarked()) {
-                        return topLeft;
+                if (getBottomLeft().getPlayerPlayed() != null && getBottomLeft().getPlayerPlayed().equals(getPlayer1())) {
+                    if (!getTopLeft().getIsMarked()) {
+                        return getTopLeft();
                     }
                 }
-                if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(getPlayer1())) {
-                    if (!centerRight.getIsMarked()) {
-                        return centerRight;
+                if (getCenter().getPlayerPlayed() != null && getCenter().getPlayerPlayed().equals(getPlayer1())) {
+                    if (!getCenterRight().getIsMarked()) {
+                        return getCenterRight();
                     }
                 }
-                if (centerRight.getPlayerPlayed() != null && centerRight.getPlayerPlayed().equals(getPlayer1())) {
-                    if (!center.getIsMarked()) {
-                        return center;
+                if (getCenterRight().getPlayerPlayed() != null && getCenterRight().getPlayerPlayed().equals(getPlayer1())) {
+                    if (!getCenter().getIsMarked()) {
+                        return getCenter();
                     }
                 }
                 break;
             case "centerPane":
-                if (topLeft.getPlayerPlayed() != null && topLeft.getPlayerPlayed().equals(getPlayer1())) {
-                    if (!bottomRight.getIsMarked()) {
-                        return bottomRight;
+                if (getTopLeft().getPlayerPlayed() != null && getTopLeft().getPlayerPlayed().equals(getPlayer1())) {
+                    if (!getBottomRight().getIsMarked()) {
+                        return getBottomRight();
                     }
                 }
-                if (bottomRight.getPlayerPlayed() != null && bottomRight.getPlayerPlayed().equals(getPlayer1())) {
-                    if (!topLeft.getIsMarked()) {
-                        return topLeft;
+                if (getBottomRight().getPlayerPlayed() != null && getBottomRight().getPlayerPlayed().equals(getPlayer1())) {
+                    if (!getTopLeft().getIsMarked()) {
+                        return getTopLeft();
                     }
                 }
-                if (topRight.getPlayerPlayed() != null && topRight.getPlayerPlayed().equals(getPlayer1())) {
-                    if (!bottomLeft.getIsMarked()) {
-                        return bottomLeft;
+                if (getTopRight().getPlayerPlayed() != null && getTopRight().getPlayerPlayed().equals(getPlayer1())) {
+                    if (!getBottomLeft().getIsMarked()) {
+                        return getBottomLeft();
                     }
                 }
-                if (bottomLeft.getPlayerPlayed() != null && bottomLeft.getPlayerPlayed().equals(getPlayer1())) {
-                    if (!topRight.getIsMarked()) {
-                        return topRight;
+                if (getBottomLeft().getPlayerPlayed() != null && getBottomLeft().getPlayerPlayed().equals(getPlayer1())) {
+                    if (!getTopRight().getIsMarked()) {
+                        return getTopRight();
                     }
                 }
-                if (topCenter.getPlayerPlayed() != null && topCenter.getPlayerPlayed().equals(getPlayer1())) {
-                    if (!bottomCenter.getIsMarked()) {
-                        return bottomCenter;
+                if (getTopCenter().getPlayerPlayed() != null && getTopCenter().getPlayerPlayed().equals(getPlayer1())) {
+                    if (!getBottomCenter().getIsMarked()) {
+                        return getBottomCenter();
                     }
                 }
-                if (bottomCenter.getPlayerPlayed() != null && bottomCenter.getPlayerPlayed().equals(getPlayer1())) {
-                    if (!topCenter.getIsMarked()) {
-                        return topCenter;
+                if (getBottomCenter().getPlayerPlayed() != null && getBottomCenter().getPlayerPlayed().equals(getPlayer1())) {
+                    if (!getTopCenter().getIsMarked()) {
+                        return getTopCenter();
                     }
                 }
-                if (centerLeft.getPlayerPlayed() != null && centerLeft.getPlayerPlayed().equals(getPlayer1())) {
-                    if (!centerRight.getIsMarked()) {
-                        return centerRight;
+                if (getCenterLeft().getPlayerPlayed() != null && getCenterLeft().getPlayerPlayed().equals(getPlayer1())) {
+                    if (!getCenterRight().getIsMarked()) {
+                        return getCenterRight();
                     }
                 }
-                if (centerRight.getPlayerPlayed() != null && centerRight.getPlayerPlayed().equals(getPlayer1())) {
-                    if (!centerLeft.getIsMarked()) {
-                        return centerLeft;
+                if (getCenterRight().getPlayerPlayed() != null && getCenterRight().getPlayerPlayed().equals(getPlayer1())) {
+                    if (!getCenterRight().getIsMarked()) {
+                        return getCenterRight();
                     }
                 }
                 break;
             case "centerRightPane":
-                if (topRight.getPlayerPlayed() != null && topRight.getPlayerPlayed().equals(getPlayer1())) {
-                    if (!bottomRight.getIsMarked()) {
-                        return bottomRight;
+                if (getTopRight().getPlayerPlayed() != null && getTopRight().getPlayerPlayed().equals(getPlayer1())) {
+                    if (!getBottomRight().getIsMarked()) {
+                        return getBottomRight();
                     }
                 }
-                if (bottomRight.getPlayerPlayed() != null && bottomRight.getPlayerPlayed().equals(getPlayer1())) {
-                    if (!topRight.getIsMarked()) {
-                        return topRight;
+                if (getBottomRight().getPlayerPlayed() != null && getBottomRight().getPlayerPlayed().equals(getPlayer1())) {
+                    if (!getTopRight().getIsMarked()) {
+                        return getTopRight();
                     }
                 }
-                if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(getPlayer1())) {
-                    if (!centerLeft.getIsMarked()) {
-                        return centerLeft;
+                if (getCenter().getPlayerPlayed() != null && getCenter().getPlayerPlayed().equals(getPlayer1())) {
+                    if (!getCenterLeft().getIsMarked()) {
+                        return getCenterLeft();
                     }
                 }
-                if (centerLeft.getPlayerPlayed() != null && centerLeft.getPlayerPlayed().equals(getPlayer1())) {
-                    if (!center.getIsMarked()) {
-                        return center;
+                if (getCenterLeft().getPlayerPlayed() != null && getCenterLeft().getPlayerPlayed().equals(getPlayer1())) {
+                    if (!getCenter().getIsMarked()) {
+                        return getCenter();
                     }
                 }
                 break;
             case "bottomLeftPane":
-                if (bottomCenter.getPlayerPlayed() != null && bottomCenter.getPlayerPlayed().equals(getPlayer1())) {
-                    if (!bottomRight.getIsMarked()) {
-                        return bottomRight;
+                if (getBottomCenter().getPlayerPlayed() != null && getBottomCenter().getPlayerPlayed().equals(getPlayer1())) {
+                    if (!getBottomRight().getIsMarked()) {
+                        return getBottomRight();
                     }
                 }
-                if (bottomRight.getPlayerPlayed() != null && bottomRight.getPlayerPlayed().equals(getPlayer1())) {
-                    if (!bottomCenter.getIsMarked()) {
-                        return bottomCenter;
+                if (getBottomRight().getPlayerPlayed() != null && getBottomRight().getPlayerPlayed().equals(getPlayer1())) {
+                    if (!getBottomCenter().getIsMarked()) {
+                        return getBottomCenter();
                     }
                 }
-                if (centerLeft.getPlayerPlayed() != null && centerLeft.getPlayerPlayed().equals(getPlayer1())) {
-                    if (!topLeft.getIsMarked()) {
-                        return topLeft;
+                if (getCenterLeft().getPlayerPlayed() != null && getCenterLeft().getPlayerPlayed().equals(getPlayer1())) {
+                    if (!getTopLeft().getIsMarked()) {
+                        return getTopLeft();
                     }
                 }
-                if (topLeft.getPlayerPlayed() != null && topLeft.getPlayerPlayed().equals(getPlayer1())) {
-                    if (!centerLeft.getIsMarked()) {
-                        return centerLeft;
+                if (getTopLeft().getPlayerPlayed() != null && getTopLeft().getPlayerPlayed().equals(getPlayer1())) {
+                    if (!getCenterLeft().getIsMarked()) {
+                        return getCenterLeft();
                     }
                 }
-                if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(getPlayer1())) {
-                    if (!topRight.getIsMarked()) {
-                        return topRight;
+                if (getCenter().getPlayerPlayed() != null && getCenter().getPlayerPlayed().equals(getPlayer1())) {
+                    if (!getTopRight().getIsMarked()) {
+                        return getTopRight();
                     }
                 }
-                if (topRight.getPlayerPlayed() != null && topRight.getPlayerPlayed().equals(getPlayer1())) {
-                    if (!center.getIsMarked()) {
-                        return center;
+                if (getTopRight().getPlayerPlayed() != null && getTopRight().getPlayerPlayed().equals(getPlayer1())) {
+                    if (!getCenter().getIsMarked()) {
+                        return getCenter();
                     }
                 }
                 break;
             case "bottomCenterPane":
-                if (bottomLeft.getPlayerPlayed() != null && bottomLeft.getPlayerPlayed().equals(getPlayer1())) {
-                    if (!bottomRight.getIsMarked()) {
-                        return bottomRight;
+                if (getBottomLeft().getPlayerPlayed() != null && getBottomLeft().getPlayerPlayed().equals(getPlayer1())) {
+                    if (!getBottomRight().getIsMarked()) {
+                        return getBottomRight();
                     }
                 }
-                if (bottomRight.getPlayerPlayed() != null && bottomRight.getPlayerPlayed().equals(getPlayer1())) {
-                    if (!bottomLeft.getIsMarked()) {
-                        return bottomLeft;
+                if (getBottomRight().getPlayerPlayed() != null && getBottomRight().getPlayerPlayed().equals(getPlayer1())) {
+                    if (!getBottomLeft().getIsMarked()) {
+                        return getBottomLeft();
                     }
                 }
-                if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(getPlayer1())) {
-                    if (!topCenter.getIsMarked()) {
-                        return topCenter;
+                if (getCenter().getPlayerPlayed() != null && getCenter().getPlayerPlayed().equals(getPlayer1())) {
+                    if (!getTopCenter().getIsMarked()) {
+                        return getTopCenter();
                     }
                 }
-                if (topCenter.getPlayerPlayed() != null && topCenter.getPlayerPlayed().equals(getPlayer1())) {
-                    if (!center.getIsMarked()) {
-                        return center;
+                if (getTopCenter().getPlayerPlayed() != null && getTopCenter().getPlayerPlayed().equals(getPlayer1())) {
+                    if (!getCenter().getIsMarked()) {
+                        return getCenter();
                     }
                 }
                 break;
             case "bottomRightPane":
-                if (bottomCenter.getPlayerPlayed() != null && bottomCenter.getPlayerPlayed().equals(getPlayer1())) {
-                    if (!bottomLeft.getIsMarked()) {
-                        return bottomLeft;
+                if (getBottomCenter().getPlayerPlayed() != null && getBottomCenter().getPlayerPlayed().equals(getPlayer1())) {
+                    if (!getBottomLeft().getIsMarked()) {
+                        return getBottomLeft();
                     }
                 }
-                if (bottomLeft.getPlayerPlayed() != null && bottomLeft.getPlayerPlayed().equals(getPlayer1())) {
-                    if (!bottomCenter.getIsMarked()) {
-                        return bottomCenter;
+                if (getBottomLeft().getPlayerPlayed() != null && getBottomLeft().getPlayerPlayed().equals(getPlayer1())) {
+                    if (!getBottomCenter().getIsMarked()) {
+                        return getBottomCenter();
                     }
                 }
-                if (centerRight.getPlayerPlayed() != null && centerRight.getPlayerPlayed().equals(getPlayer1())) {
-                    if (!topRight.getIsMarked()) {
-                        return topRight;
+                if (getCenterRight().getPlayerPlayed() != null && getCenterRight().getPlayerPlayed().equals(getPlayer1())) {
+                    if (!getTopRight().getIsMarked()) {
+                        return getTopRight();
                     }
                 }
-                if (topRight.getPlayerPlayed() != null && topRight.getPlayerPlayed().equals(getPlayer1())) {
-                    if (!centerRight.getIsMarked()) {
-                        return centerRight;
+                if (getTopRight().getPlayerPlayed() != null && getTopRight().getPlayerPlayed().equals(getPlayer1())) {
+                    if (!getCenterRight().getIsMarked()) {
+                        return getCenterRight();
                     }
                 }
-                if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(getPlayer1())) {
-                    if (!topLeft.getIsMarked()) {
-                        return topLeft;
+                if (getCenter().getPlayerPlayed() != null && getCenter().getPlayerPlayed().equals(getPlayer1())) {
+                    if (!getTopLeft().getIsMarked()) {
+                        return getTopLeft();
                     }
                 }
-                if (topLeft.getPlayerPlayed() != null && topLeft.getPlayerPlayed().equals(getPlayer1())) {
-                    if (!center.getIsMarked()) {
-                        return center;
+                if (getTopLeft().getPlayerPlayed() != null && getTopLeft().getPlayerPlayed().equals(getPlayer1())) {
+                    if (!getCenter().getIsMarked()) {
+                        return getCenter();
                     }
                 }
                 break;
@@ -537,7 +526,7 @@ public class ComputerController {
     }
 
     static Quadrant secondaryOffensiveMove() {
-        if (topLeft.getPlayerPlayed() != null && topLeft.getPlayerPlayed().equals(getPlayer2())) {
+        if (getTopLeft().getPlayerPlayed() != null && getTopLeft().getPlayerPlayed().equals(getPlayer2())) {
             boolean case0 = true;
             boolean case1 = true;
             boolean case2 = true;
@@ -547,44 +536,44 @@ public class ComputerController {
 
                 switch (n) {
                     case 0:
-                        if (topCenter.getPlayerPlayed() == null && topRight.getPlayerPlayed() == null) {
+                        if (getTopCenter().getPlayerPlayed() == null && getTopRight().getPlayerPlayed() == null) {
                             int n2 = rand.nextInt(2);
                             switch (n2) {
                                 case 0:
-                                    return topCenter;
+                                    return getTopCenter();
                                 case 1:
-                                    return topRight;
+                                    return getTopRight();
                             }
                         } else {
                             case0 = false;
                         }
                     case 1:
-                        if (centerLeft.getPlayerPlayed() == null && bottomLeft.getPlayerPlayed() == null) {
+                        if (getCenterLeft().getPlayerPlayed() == null && getBottomLeft().getPlayerPlayed() == null) {
                             int n2 = rand.nextInt(2);
                             switch (n2) {
                                 case 0:
-                                    return centerLeft;
+                                    return getCenterLeft();
                                 case 1:
-                                    return bottomLeft;
+                                    return getBottomLeft();
                             }
                         } else {
                             case1 = false;
                         }
                     case 2:
-                        if (center.getPlayerPlayed() == null && bottomRight.getPlayerPlayed() == null) {
+                        if (getCenter().getPlayerPlayed() == null && getBottomRight().getPlayerPlayed() == null) {
                             int n2 = rand.nextInt(2);
                             switch (n2) {
                                 case 0:
-                                    return center;
+                                    return getCenter();
                                 case 1:
-                                    return bottomRight;
+                                    return getBottomRight();
                             }
                         } else {
                             case2 = false;
                         }
                 }
             }
-        } else if (topCenter.getPlayerPlayed() != null && topCenter.getPlayerPlayed().equals(getPlayer2())) {
+        } else if (getTopCenter().getPlayerPlayed() != null && getTopCenter().getPlayerPlayed().equals(getPlayer2())) {
             boolean case0 = true;
             boolean case1 = true;
             while (case0 || case1) {
@@ -593,32 +582,32 @@ public class ComputerController {
 
                 switch (n) {
                     case 0:
-                        if (topLeft.getPlayerPlayed() == null && topRight.getPlayerPlayed() == null) {
+                        if (getTopLeft().getPlayerPlayed() == null && getTopRight().getPlayerPlayed() == null) {
                             int n2 = rand.nextInt(2);
                             switch (n2) {
                                 case 0:
-                                    return topLeft;
+                                    return getTopLeft();
                                 case 1:
-                                    return topRight;
+                                    return getTopRight();
                             }
                         } else {
                             case0 = false;
                         }
                     case 1:
-                        if (center.getPlayerPlayed() == null && bottomCenter.getPlayerPlayed() == null) {
+                        if (getCenter().getPlayerPlayed() == null && getBottomCenter().getPlayerPlayed() == null) {
                             int n2 = rand.nextInt(2);
                             switch (n2) {
                                 case 0:
-                                    return center;
+                                    return getCenter();
                                 case 1:
-                                    return bottomCenter;
+                                    return getBottomCenter();
                             }
                         } else {
                             case1 = false;
                         }
                 }
             }
-        } else if (topRight.getPlayerPlayed() != null && topRight.getPlayerPlayed().equals(getPlayer2())) {
+        } else if (getTopRight().getPlayerPlayed() != null && getTopRight().getPlayerPlayed().equals(getPlayer2())) {
             boolean case0 = true;
             boolean case1 = true;
             boolean case2 = true;
@@ -628,44 +617,44 @@ public class ComputerController {
 
                 switch (n) {
                     case 0:
-                        if (topCenter.getPlayerPlayed() == null && topLeft.getPlayerPlayed() == null) {
+                        if (getTopCenter().getPlayerPlayed() == null && getTopLeft().getPlayerPlayed() == null) {
                             int n2 = rand.nextInt(2);
                             switch (n2) {
                                 case 0:
-                                    return topCenter;
+                                    return getTopCenter();
                                 case 1:
-                                    return topLeft;
+                                    return getTopLeft();
                             }
                         } else {
                             case0 = false;
                         }
                     case 1:
-                        if (centerRight.getPlayerPlayed() == null && bottomRight.getPlayerPlayed() == null) {
+                        if (getCenterRight().getPlayerPlayed() == null && getBottomRight().getPlayerPlayed() == null) {
                             int n2 = rand.nextInt(2);
                             switch (n2) {
                                 case 0:
-                                    return centerRight;
+                                    return getCenterRight();
                                 case 1:
-                                    return bottomRight;
+                                    return getBottomRight();
                             }
                         } else {
                             case1 = false;
                         }
                     case 2:
-                        if (center.getPlayerPlayed() == null && bottomLeft.getPlayerPlayed() == null) {
+                        if (getCenter().getPlayerPlayed() == null && getBottomLeft().getPlayerPlayed() == null) {
                             int n2 = rand.nextInt(2);
                             switch (n2) {
                                 case 0:
-                                    return center;
+                                    return getCenter();
                                 case 1:
-                                    return bottomLeft;
+                                    return getBottomLeft();
                             }
                         } else {
                             case2 = false;
                         }
                 }
             }
-        } else if (centerLeft.getPlayerPlayed() != null && centerLeft.getPlayerPlayed().equals(getPlayer2())) {
+        } else if (getCenterLeft().getPlayerPlayed() != null && getCenterLeft().getPlayerPlayed().equals(getPlayer2())) {
             boolean case0 = true;
             boolean case1 = true;
             while (case0 || case1) {
@@ -674,32 +663,32 @@ public class ComputerController {
 
                 switch (n) {
                     case 0:
-                        if (topLeft.getPlayerPlayed() == null && bottomLeft.getPlayerPlayed() == null) {
+                        if (getTopLeft().getPlayerPlayed() == null && getBottomLeft().getPlayerPlayed() == null) {
                             int n2 = rand.nextInt(2);
                             switch (n2) {
                                 case 0:
-                                    return bottomLeft;
+                                    return getTopLeft();
                                 case 1:
-                                    return topLeft;
+                                    return getBottomLeft();
                             }
                         } else {
                             case0 = false;
                         }
                     case 1:
-                        if (center.getPlayerPlayed() == null && centerRight.getPlayerPlayed() == null) {
+                        if (getCenter().getPlayerPlayed() == null && getCenterRight().getPlayerPlayed() == null) {
                             int n2 = rand.nextInt(2);
                             switch (n2) {
                                 case 0:
-                                    return centerRight;
+                                    return getCenter();
                                 case 1:
-                                    return center;
+                                    return getCenterRight();
                             }
                         } else {
                             case1 = false;
                         }
                 }
             }
-        } else if (center.getPlayerPlayed() != null && center.getPlayerPlayed().equals(getPlayer2())) {
+        } else if (getCenter().getPlayerPlayed() != null && getCenter().getPlayerPlayed().equals(getPlayer2())) {
             boolean case0 = true;
             boolean case1 = true;
             boolean case2 = true;
@@ -710,56 +699,56 @@ public class ComputerController {
 
                 switch (n) {
                     case 0:
-                        if (topLeft.getPlayerPlayed() == null && bottomRight.getPlayerPlayed() == null) {
+                        if (getTopLeft().getPlayerPlayed() == null && getBottomRight().getPlayerPlayed() == null) {
                             int n2 = rand.nextInt(2);
                             switch (n2) {
                                 case 0:
-                                    return bottomRight;
+                                    return getTopLeft();
                                 case 1:
-                                    return topLeft;
+                                    return getBottomRight();
                             }
                         } else {
                             case0 = false;
                         }
                     case 1:
-                        if (topCenter.getPlayerPlayed() == null && bottomCenter.getPlayerPlayed() == null) {
+                        if (getTopCenter().getPlayerPlayed() == null && getBottomCenter().getPlayerPlayed() == null) {
                             int n2 = rand.nextInt(2);
                             switch (n2) {
                                 case 0:
-                                    return topCenter;
+                                    return getTopCenter();
                                 case 1:
-                                    return bottomCenter;
+                                    return getBottomCenter();
                             }
                         } else {
                             case1 = false;
                         }
                     case 2:
-                        if (topRight.getPlayerPlayed() == null && bottomLeft.getPlayerPlayed() == null) {
+                        if (getTopRight().getPlayerPlayed() == null && getBottomLeft().getPlayerPlayed() == null) {
                             int n2 = rand.nextInt(2);
                             switch (n2) {
                                 case 0:
-                                    return topRight;
+                                    return getTopRight();
                                 case 1:
-                                    return bottomLeft;
+                                    return getBottomLeft();
                             }
                         } else {
                             case2 = false;
                         }
                     case 3:
-                        if (centerLeft.getPlayerPlayed() == null && centerRight.getPlayerPlayed() == null) {
+                        if (getCenterLeft().getPlayerPlayed() == null && getCenterRight().getPlayerPlayed() == null) {
                             int n2 = rand.nextInt(2);
                             switch (n2) {
                                 case 0:
-                                    return centerRight;
+                                    return getCenterLeft();
                                 case 1:
-                                    return centerLeft;
+                                    return getCenterRight();
                             }
                         } else {
                             case3 = false;
                         }
                 }
             }
-        } else if (centerRight.getPlayerPlayed() != null && centerRight.getPlayerPlayed().equals(getPlayer2())) {
+        } else if (getCenterRight().getPlayerPlayed() != null && getCenterRight().getPlayerPlayed().equals(getPlayer2())) {
             boolean case0 = true;
             boolean case1 = true;
             while (case0 || case1) {
@@ -768,32 +757,32 @@ public class ComputerController {
 
                 switch (n) {
                     case 0:
-                        if (topRight.getPlayerPlayed() == null && bottomRight.getPlayerPlayed() == null) {
+                        if (getTopRight().getPlayerPlayed() == null && getBottomRight().getPlayerPlayed() == null) {
                             int n2 = rand.nextInt(2);
                             switch (n2) {
                                 case 0:
-                                    return topRight;
+                                    return getTopRight();
                                 case 1:
-                                    return bottomRight;
+                                    return getBottomRight();
                             }
                         } else {
                             case0 = false;
                         }
                     case 1:
-                        if (center.getPlayerPlayed() == null && centerLeft.getPlayerPlayed() == null) {
+                        if (getCenter().getPlayerPlayed() == null && getCenterLeft().getPlayerPlayed() == null) {
                             int n2 = rand.nextInt(2);
                             switch (n2) {
                                 case 0:
-                                    return center;
+                                    return getCenter();
                                 case 1:
-                                    return centerLeft;
+                                    return getCenterLeft();
                             }
                         } else {
                             case1 = false;
                         }
                 }
             }
-        } else if (bottomLeft.getPlayerPlayed() != null && bottomLeft.getPlayerPlayed().equals(getPlayer2())) {
+        } else if (getBottomLeft().getPlayerPlayed() != null && getBottomLeft().getPlayerPlayed().equals(getPlayer2())) {
             boolean case0 = true;
             boolean case1 = true;
             boolean case2 = true;
@@ -803,44 +792,44 @@ public class ComputerController {
 
                 switch (n) {
                     case 0:
-                        if (centerLeft.getPlayerPlayed() == null && topLeft.getPlayerPlayed() == null) {
+                        if (getCenterLeft().getPlayerPlayed() == null && getTopLeft().getPlayerPlayed() == null) {
                             int n2 = rand.nextInt(2);
                             switch (n2) {
                                 case 0:
-                                    return centerLeft;
+                                    return getCenterLeft();
                                 case 1:
-                                    return topLeft;
+                                    return getTopLeft();
                             }
                         } else {
                             case0 = false;
                         }
                     case 1:
-                        if (bottomCenter.getPlayerPlayed() == null && bottomRight.getPlayerPlayed() == null) {
+                        if (getBottomCenter().getPlayerPlayed() == null && getBottomRight().getPlayerPlayed() == null) {
                             int n2 = rand.nextInt(2);
                             switch (n2) {
                                 case 0:
-                                    return bottomRight;
+                                    return getBottomCenter();
                                 case 1:
-                                    return bottomCenter;
+                                    return getBottomRight();
                             }
                         } else {
                             case1 = false;
                         }
                     case 2:
-                        if (center.getPlayerPlayed() == null && topRight.getPlayerPlayed() == null) {
+                        if (getCenter().getPlayerPlayed() == null && getTopRight().getPlayerPlayed() == null) {
                             int n2 = rand.nextInt(2);
                             switch (n2) {
                                 case 0:
-                                    return center;
+                                    return getCenter();
                                 case 1:
-                                    return topRight;
+                                    return getTopRight();
                             }
                         } else {
                             case2 = false;
                         }
                 }
             }
-        } else if (bottomCenter.getPlayerPlayed() != null && bottomCenter.getPlayerPlayed().equals(getPlayer2())) {
+        } else if (getBottomCenter().getPlayerPlayed() != null && getBottomCenter().getPlayerPlayed().equals(getPlayer2())) {
             boolean case0 = true;
             boolean case1 = true;
             while (case0 || case1) {
@@ -849,32 +838,32 @@ public class ComputerController {
 
                 switch (n) {
                     case 0:
-                        if (bottomLeft.getPlayerPlayed() == null && bottomRight.getPlayerPlayed() == null) {
+                        if (getBottomLeft().getPlayerPlayed() == null && getBottomRight().getPlayerPlayed() == null) {
                             int n2 = rand.nextInt(2);
                             switch (n2) {
                                 case 0:
-                                    return bottomLeft;
+                                    return getBottomLeft();
                                 case 1:
-                                    return bottomRight;
+                                    return getBottomRight();
                             }
                         } else {
                             case0 = false;
                         }
                     case 1:
-                        if (center.getPlayerPlayed() == null && topCenter.getPlayerPlayed() == null) {
+                        if (getCenter().getPlayerPlayed() == null && getTopCenter().getPlayerPlayed() == null) {
                             int n2 = rand.nextInt(2);
                             switch (n2) {
                                 case 0:
-                                    return topCenter;
+                                    return getCenter();
                                 case 1:
-                                    return center;
+                                    return getCenter();
                             }
                         } else {
                             case1 = false;
                         }
                 }
             }
-        } else if (bottomRight.getPlayerPlayed() != null && bottomRight.getPlayerPlayed().equals(getPlayer2())) {
+        } else if (getBottomRight().getPlayerPlayed() != null && getBottomRight().getPlayerPlayed().equals(getPlayer2())) {
             boolean case0 = true;
             boolean case1 = true;
             boolean case2 = true;
@@ -884,37 +873,37 @@ public class ComputerController {
 
                 switch (n) {
                     case 0:
-                        if (centerRight.getPlayerPlayed() == null && topRight.getPlayerPlayed() == null) {
+                        if (getCenterRight().getPlayerPlayed() == null && getTopRight().getPlayerPlayed() == null) {
                             int n2 = rand.nextInt(2);
                             switch (n2) {
                                 case 0:
-                                    return topRight;
+                                    return getCenterRight();
                                 case 1:
-                                    return centerRight;
+                                    return getTopRight();
                             }
                         } else {
                             case0 = false;
                         }
                     case 1:
-                        if (bottomCenter.getPlayerPlayed() == null && bottomLeft.getPlayerPlayed() == null) {
+                        if (getBottomCenter().getPlayerPlayed() == null && getBottomLeft().getPlayerPlayed() == null) {
                             int n2 = rand.nextInt(2);
                             switch (n2) {
                                 case 0:
-                                    return bottomCenter;
+                                    return getBottomCenter();
                                 case 1:
-                                    return bottomLeft;
+                                    return getBottomLeft();
                             }
                         } else {
                             case1 = false;
                         }
                     case 2:
-                        if (center.getPlayerPlayed() == null && topLeft.getPlayerPlayed() == null) {
+                        if (getCenter().getPlayerPlayed() == null && getTopLeft().getPlayerPlayed() == null) {
                             int n2 = rand.nextInt(2);
                             switch (n2) {
                                 case 0:
-                                    return center;
+                                    return getCenter();
                                 case 1:
-                                    return topLeft;
+                                    return getTopLeft();
                             }
                         } else {
                             case2 = false;
@@ -933,56 +922,56 @@ public class ComputerController {
 
             switch (n) {
                 case 0:
-                    if (!topLeft.getIsMarked()) {
-                        return topLeft;
+                    if (!getTopLeft().getIsMarked()) {
+                        return getTopLeft();
                     } else {
                         break;
                     }
                 case 1:
-                    if (!topCenter.getIsMarked()) {
-                        return topCenter;
+                    if (!getTopCenter().getIsMarked()) {
+                        return getTopCenter();
                     } else {
                         break;
                     }
                 case 2:
-                    if (!topRight.getIsMarked()) {
-                        return topRight;
+                    if (!getTopRight().getIsMarked()) {
+                        return getTopRight();
                     } else {
                         break;
                     }
                 case 3:
-                    if (!centerLeft.getIsMarked()) {
-                        return centerLeft;
+                    if (!getCenterLeft().getIsMarked()) {
+                        return getCenterLeft();
                     } else {
                         break;
                     }
                 case 4:
-                    if (!center.getIsMarked()) {
-                        return center;
+                    if (!getCenter().getIsMarked()) {
+                        return getCenter();
                     } else {
                         break;
                     }
                 case 5:
-                    if (!centerRight.getIsMarked()) {
-                        return centerRight;
+                    if (!getCenterRight().getIsMarked()) {
+                        return getCenterRight();
                     } else {
                         break;
                     }
                 case 6:
-                    if (!bottomLeft.getIsMarked()) {
-                        return bottomLeft;
+                    if (!getBottomLeft().getIsMarked()) {
+                        return getBottomLeft();
                     } else {
                         break;
                     }
                 case 7:
-                    if (!bottomCenter.getIsMarked()) {
-                        return bottomCenter;
+                    if (!getBottomCenter().getIsMarked()) {
+                        return getBottomCenter();
                     } else {
                         break;
                     }
                 case 8:
-                    if (!bottomRight.getIsMarked()) {
-                        return bottomRight;
+                    if (!getBottomRight().getIsMarked()) {
+                        return getBottomRight();
                     } else {
                         break;
                     }

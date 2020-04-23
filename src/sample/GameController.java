@@ -6,6 +6,7 @@ import javafx.scene.image.ImageView;
 import java.io.File;
 
 import static sample.ButtonController.*;
+import static sample.ComputerController.*;
 import static sample.PlayerController.*;
 import static sample.PopUpController.*;
 import static sample.QuadrantController.*;
@@ -83,7 +84,7 @@ public class GameController {
         getPlayer2().setTotalGamesPlayed(getPlayer2().getTotalGamesPlayed() + 1);
 
         if (getFirstMovePlayer().equals(getPlayer2()) && getNumberOfPlayers() == 1) {
-            Quadrant quadrant = getQuadrantToMark(getTopLeft());
+            Quadrant quadrant = randomMove();
             Object[] temp = quadrant.getPane().getChildren().toArray();
             File imageFile = new File("src/sample/images/TicTacToeSingleO.png");
             Image imageO = new Image(imageFile.toURI().toString());

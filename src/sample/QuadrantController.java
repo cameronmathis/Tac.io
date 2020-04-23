@@ -175,6 +175,108 @@ public class QuadrantController {
     }
 
     /**
+     * GET QUADRANT TO MARK METHOD
+     * Find the best quadrant to mark
+     */
+    static Quadrant getQuadrantToMark(Quadrant quadrant) {
+        previousPreviousQuadrant = previousQuadrant;
+        previousQuadrant = quadrant;
+
+        //Primary Offensive Moves
+        if (primaryOffensiveMove() != null) {
+            primaryOffensiveMove();
+        }
+
+        //Defensive Moves
+        if (defensiveMove(quadrant) != null) {
+            return defensiveMove(quadrant);
+        }
+
+        //Secondary Offensive Moves
+        if (secondaryOffensiveMove() != null) {
+            return secondaryOffensiveMove();
+        }
+
+        //Random Moves
+        return randomMove();
+    }
+
+    /**
+     * CHECK MARKED METHOD
+     * Check if square is playable and responds accordingly
+     */
+    static boolean markQuadrant(Quadrant quadrant, boolean isMarked) {
+        boolean start;
+        start = currentQuadrant == null;
+
+        if ((getNumberOfPlayers() == 2 && isMarked) || (getPlayer1().getTurn() && isMarked)) {
+            if (!previousQuadrant.equals(quadrant)) {
+                counter = 0;
+            }
+            counter++;
+            if (counter >= 3) {
+                counter = 0;
+                getPauseBtn().setDisable(true);
+                getUndoBtn().setDisable(true);
+                isAlreadyMarkedPopUp();
+            }
+        } else {
+            if (!start) {
+                previousPreviousQuadrant = previousQuadrant;
+                previousQuadrant = currentQuadrant;
+            }
+            currentQuadrant = quadrant;
+            setAbleToUndo(true);
+            counter = 0;
+            if (!gameOver && !getPauseBtn().isDisabled() && getPlayer1().getTurn()) {
+                Object[] temp1 = quadrant.getPane().getChildren().toArray();
+                File imageFile1 = new File("src/sample/images/TicTacToeSingleX.png");
+                Image imageO1 = new Image(imageFile1.toURI().toString());
+                ImageView quadrantImageView1 = (ImageView) temp1[0];
+                quadrantImageView1.setImage(imageO1);
+                quadrant.setIsMarked(true);
+                quadrant.setPlayerPlayed(getPlayer1());
+                getPlayer1().setTurn(false);
+                getPlayer2().setTurn(true);
+                if (!checkIfWon(quadrant, getPlayer1())) {
+                    checkIfTie();
+                    if (!gameOver && !getPauseBtn().isDisabled() && getNumberOfPlayers() == 1 && getPlayer2().getTurn()) {
+                        quadrant = QuadrantController.getQuadrantToMark(quadrant);
+                        Object[] temp2 = quadrant.getPane().getChildren().toArray();
+                        File imageFile2 = new File("src/sample/images/TicTacToeSingleO.png");
+                        Image imageO2 = new Image(imageFile2.toURI().toString());
+                        ImageView quadrantImageView2 = (ImageView) temp2[0];
+                        quadrantImageView2.setImage(imageO2);
+                        quadrant.setIsMarked(true);
+                        quadrant.setPlayerPlayed(getPlayer2());
+                        QuadrantController.currentQuadrant = quadrant;
+                        getPlayer2().setTurn(false);
+                        getPlayer1().setTurn(true);
+                        if (!QuadrantController.checkIfWon(quadrant, getPlayer2())) {
+                            QuadrantController.checkIfTie();
+                        }
+                    }
+                }
+            } else if (!gameOver && !getPauseBtn().isDisabled() && getNumberOfPlayers() == 2 && getPlayer2().getTurn()) {
+                Object[] temp = quadrant.getPane().getChildren().toArray();
+                File imageFile = new File("src/sample/images/TicTacToeSingleO.png");
+                Image imageO = new Image(imageFile.toURI().toString());
+                ImageView quadrantImageView = (ImageView) temp[0];
+                quadrantImageView.setImage(imageO);
+                quadrant.setIsMarked(true);
+                quadrant.setPlayerPlayed(getPlayer2());
+                getPlayer2().setTurn(false);
+                getPlayer1().setTurn(true);
+                if (!QuadrantController.checkIfWon(quadrant, getPlayer2())) {
+                    QuadrantController.checkIfTie();
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * CHECK IF WON METHOD
      * Check if player won
      */
@@ -464,107 +566,5 @@ public class QuadrantController {
             tiePopUp();
             gameOver = true;
         }
-    }
-
-    /**
-     * GET QUADRANT TO MARK METHOD
-     * Find the best quadrant to mark
-     */
-    static Quadrant getQuadrantToMark(Quadrant quadrant) {
-        previousPreviousQuadrant = previousQuadrant;
-        previousQuadrant = quadrant;
-
-        //Primary Offensive Moves
-        if (primaryOffensiveMove() != null) {
-            primaryOffensiveMove();
-        }
-
-        //Defensive Moves
-        if (defensiveMove(quadrant) != null) {
-            return defensiveMove(quadrant);
-        }
-
-        //Secondary Offensive Moves
-        if (secondaryOffensiveMove() != null) {
-            return secondaryOffensiveMove();
-        }
-
-        //Random Moves
-        return randomMove();
-    }
-
-    /**
-     * CHECK MARKED METHOD
-     * Check if square is playable and responds accordingly
-     */
-    static boolean markQuadrant(Quadrant quadrant, boolean isMarked) {
-        boolean start;
-        start = currentQuadrant == null;
-
-        if ((getNumberOfPlayers() == 2 && isMarked) || (getPlayer1().getTurn() && isMarked)) {
-            if (!previousQuadrant.equals(quadrant)) {
-                counter = 0;
-            }
-            counter++;
-            if (counter >= 3) {
-                counter = 0;
-                getPauseBtn().setDisable(true);
-                getUndoBtn().setDisable(true);
-                isAlreadyMarkedPopUp();
-            }
-        } else {
-            if (!start) {
-                previousPreviousQuadrant = previousQuadrant;
-                previousQuadrant = currentQuadrant;
-            }
-            currentQuadrant = quadrant;
-            setAbleToUndo(true);
-            counter = 0;
-            if (!gameOver && !getPauseBtn().isDisabled() && getPlayer1().getTurn()) {
-                Object[] temp1 = quadrant.getPane().getChildren().toArray();
-                File imageFile1 = new File("src/sample/images/TicTacToeSingleX.png");
-                Image imageO1 = new Image(imageFile1.toURI().toString());
-                ImageView quadrantImageView1 = (ImageView) temp1[0];
-                quadrantImageView1.setImage(imageO1);
-                quadrant.setIsMarked(true);
-                quadrant.setPlayerPlayed(getPlayer1());
-                getPlayer1().setTurn(false);
-                getPlayer2().setTurn(true);
-                if (!checkIfWon(quadrant, getPlayer1())) {
-                    checkIfTie();
-                    if (!gameOver && !getPauseBtn().isDisabled() && getNumberOfPlayers() == 1 && getPlayer2().getTurn()) {
-                        quadrant = QuadrantController.getQuadrantToMark(quadrant);
-                        Object[] temp2 = quadrant.getPane().getChildren().toArray();
-                        File imageFile2 = new File("src/sample/images/TicTacToeSingleO.png");
-                        Image imageO2 = new Image(imageFile2.toURI().toString());
-                        ImageView quadrantImageView2 = (ImageView) temp2[0];
-                        quadrantImageView2.setImage(imageO2);
-                        quadrant.setIsMarked(true);
-                        quadrant.setPlayerPlayed(getPlayer2());
-                        QuadrantController.currentQuadrant = quadrant;
-                        getPlayer2().setTurn(false);
-                        getPlayer1().setTurn(true);
-                        if (!QuadrantController.checkIfWon(quadrant, getPlayer2())) {
-                            QuadrantController.checkIfTie();
-                        }
-                    }
-                }
-            } else if (!gameOver && !getPauseBtn().isDisabled() && getNumberOfPlayers() == 2 && getPlayer2().getTurn()) {
-                Object[] temp = quadrant.getPane().getChildren().toArray();
-                File imageFile = new File("src/sample/images/TicTacToeSingleO.png");
-                Image imageO = new Image(imageFile.toURI().toString());
-                ImageView quadrantImageView = (ImageView) temp[0];
-                quadrantImageView.setImage(imageO);
-                quadrant.setIsMarked(true);
-                quadrant.setPlayerPlayed(getPlayer2());
-                getPlayer2().setTurn(false);
-                getPlayer1().setTurn(true);
-                if (!QuadrantController.checkIfWon(quadrant, getPlayer2())) {
-                    QuadrantController.checkIfTie();
-                }
-            }
-        }
-
-        return true;
     }
 }
