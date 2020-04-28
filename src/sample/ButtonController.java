@@ -62,21 +62,6 @@ public class ButtonController {
     }
 
     /**
-     * HIDE POPUP METHOD
-     * Hides current PopUp
-     */
-    static void hidePopUp() {
-        try {
-            getPopUp().hide();
-            setPopUp(null);
-        } catch (Exception ex) {
-            System.out.println(ex.getMessage());
-        }
-        pauseBtn.setDisable(false);
-        undoBtn.setDisable(false);
-    }
-
-    /**
      * UNDO METHOD
      * Undo the last move
      */

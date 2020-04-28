@@ -71,10 +71,9 @@ public class GameController {
             setFirstMovePlayer(getPlayer1());
         }
 
+        hidePopUp();
         getPauseBtn().setDisable(false);
         getUndoBtn().setDisable(false);
-        setWonGamePopUpShown(false);
-        setTiedGamePopUpShown(false);
 
         initializeQuadrants();
 

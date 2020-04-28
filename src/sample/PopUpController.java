@@ -15,7 +15,6 @@ import java.io.*;
 
 import static sample.ButtonController.*;
 import static sample.GameController.*;
-import static sample.DatabaseController.*;
 import static sample.PlayerController.*;
 
 public class PopUpController {
@@ -32,6 +31,7 @@ public class PopUpController {
     private static boolean enterNumberPopUpShown = false;
     private static boolean accountLoginPopUpShown = false;
     private static boolean createAccountPopUpShown = false;
+    private static boolean createAccountErrorPopUpShown = false;
     private static boolean wonGamePopUpShown = false;
     private static boolean tiedGamePopUpShown = false;
 
@@ -84,6 +84,10 @@ public class PopUpController {
 
     static void setCreateAccountPopUpShown(boolean bool) {
         createAccountPopUpShown = bool;
+    }
+
+    static void setCreateAccountErrorPopUpShown(boolean bool) {
+        createAccountErrorPopUpShown = bool;
     }
 
     static void setWonGamePopUpShown(boolean bool) {
@@ -143,6 +147,10 @@ public class PopUpController {
 
     static boolean getCreateAccountPopUpShown() {
         return createAccountPopUpShown;
+    }
+
+    static boolean getCreateAccountErrorPopUpShown() {
+        return createAccountErrorPopUpShown;
     }
 
     static boolean getWonGamePopUpShown() {
@@ -290,6 +298,7 @@ public class PopUpController {
      * PopUp to create new account
      */
     static void createAccountPopUp() {
+        setCreateAccountPopUpShown(true);
         PopUp = new Popup(); //creates new popup
         createAccountPopUpShown = true;
 
@@ -400,6 +409,7 @@ public class PopUpController {
      * PopUp for when a player tries to enter a username that already exist
      */
     static void usernameAlreadyExistPopUp() {
+        setCreateAccountErrorPopUpShown(true);
         PopUp = new Popup(); //creates new popup
 
         TitledPane usernameAlreadyExistPopUpPane = null; //calls popup menu created in 'usernameAlreadyExistPopUp.fxml' file
@@ -428,6 +438,7 @@ public class PopUpController {
      * PopUp for when a player tries to enter an invalid username
      */
     static void invalidUsernamePopUp() {
+        setCreateAccountErrorPopUpShown(true);
         PopUp = new Popup(); //creates new popup
 
         TitledPane invalidUsernamePopUpPane = null; //calls popup menu created in 'invalidUsernamePopUp.fxml' file
@@ -456,6 +467,7 @@ public class PopUpController {
      * PopUp for passwords do not match
      */
     static void passwordsDontMatchPopUp() {
+        setCreateAccountErrorPopUpShown(true);
         PopUp = new Popup(); //creates new popup
 
         TitledPane passwordsDontMatchPopUpPane = null; //calls popup menu created in 'passwordsDontMatchPopUp.fxml' file
@@ -484,6 +496,7 @@ public class PopUpController {
      * PopUp for when a player tries to enter an invalid password
      */
     static void invalidPasswordPopUp() {
+        setCreateAccountErrorPopUpShown(true);
         PopUp = new Popup(); //creates new popup
 
         TitledPane invalidPasswordPopUpPane = null; //calls popup menu created in 'invalidPasswordPopUp.fxml' file
@@ -741,5 +754,28 @@ public class PopUpController {
                 System.out.println(ex.getMessage());
             }
         });
+    }
+
+    /**
+     * HIDE POPUP METHOD
+     * Hides current PopUp
+     */
+    static void hidePopUp() {
+        setCreateAccountPopUpShown(false);
+        setAccountLoginPopUpShown(false);
+        boolean t = getAccountLoginPopUpShown();
+        setWonGamePopUpShown(false);
+        setEnterNumberPopUpShown(false);
+        setTiedGamePopUpShown(false);
+        setCreateAccountErrorPopUpShown(false);
+
+        try {
+            getPopUp().hide();
+            setPopUp(null);
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
+        getPauseBtn().setDisable(false);
+        getUndoBtn().setDisable(false);
     }
 }

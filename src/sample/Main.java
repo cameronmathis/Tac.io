@@ -67,22 +67,22 @@ public class Main extends Application {
          * SHORTCUT KEYS
          */
         getOpeningScene().setOnKeyReleased(event -> {
+            boolean t1 = getCreateAccountPopUpShown();
+            boolean t2 = getCreateAccountErrorPopUpShown();
             // Pregame shortcut keys
             if (getEnterNumberPopUpShown() && (event.getCode() == KeyCode.DIGIT1 || event.getCode() == KeyCode.NUMPAD1)) {
                 setNumberOfPlayers(1);
                 hidePopUp();
-                setEnterNumberPopUpShown(false);
                 newOrReturningUserPopUp();
                 getPlayer2().setUsername("Computer");
             } else if (getEnterNumberPopUpShown() && (event.getCode() == KeyCode.DIGIT2 || event.getCode() == KeyCode.NUMPAD2)) {
                 setNumberOfPlayers(2);
                 hidePopUp();
-                setEnterNumberPopUpShown(false);
                 enterTwoNamesPopUp();
             } else if ((getCreateAccountPopUpShown() || getAccountLoginPopUpShown()) && event.getCode() == KeyCode.ENTER) {
                 if (getCreateAccountPopUpShown()) {
                     TextField username = (TextField) getCreateAccountPopUpPane().lookup("#username");
-                    if (username.getText().equals("") || (username.getText().length() > 20)) {
+                    if (username.getText().equals("") || (username.getText().length() > 250)) {
                         hidePopUp();
                         invalidUsernamePopUp();
                         return;
@@ -98,7 +98,7 @@ public class Main extends Application {
                         hidePopUp();
                         passwordsDontMatchPopUp();
                         return;
-                    } else if (password1.getText().equals("") || (password1.getText().length() < 7) || (password1.getText().length() > 20)) {
+                    } else if (password1.getText().equals("") || (password1.getText().length() < 7) || (password1.getText().length() > 250)) {
                         hidePopUp();
                         invalidPasswordPopUp();
                         return;
@@ -106,7 +106,6 @@ public class Main extends Application {
                     setPlayer1(createPlayer(new Player(), username.getText(), password1.getText()));
                     hidePopUp();
                     startGame();
-                    setCreateAccountPopUpShown(false);
                 } else if (getAccountLoginPopUpShown() && (getNumberOfPlayers() == 1)) {
                     Player tempPlayer = new Player();
                     TextField username = (TextField) getAccountLoginPopUpPane().lookup("#username");
@@ -135,7 +134,6 @@ public class Main extends Application {
                     setPlayer1(importPlayer(tempPlayer, username.getText(), password.getText(), 0, 0));
                     hidePopUp();
                     startGame();
-                    setAccountLoginPopUpShown(false);
                 } else if (getNumberOfPlayers() == 2) {
                     if (!(((TextField) getEnterTwoNamesPopUpPane().lookup("#player1Name")).getText().equals(""))) {
                         TextField name1 = (TextField) getEnterTwoNamesPopUpPane().lookup("#player1Name");
@@ -151,8 +149,10 @@ public class Main extends Application {
                     }
                     hidePopUp();
                     startGame();
-                    setAccountLoginPopUpShown(false);
                 }
+            } else if (getCreateAccountErrorPopUpShown() && event.getCode() == KeyCode.ENTER) {
+                hidePopUp();
+                createAccountPopUp();
             }
         });
 
@@ -179,11 +179,9 @@ public class Main extends Application {
             } else if (event.getCode() == KeyCode.ENTER && getWonGamePopUpShown()) {
                 setGame();
                 hidePopUp();
-                setWonGamePopUpShown(false);
             } else if (event.getCode() == KeyCode.ENTER && getTiedGamePopUpShown()) {
                 setGame();
                 hidePopUp();
-                setWonGamePopUpShown(false);
             } else if (event.getCode() == KeyCode.SPACE && !getPauseBtn().isDisabled()) {
                 pause();
             } else if (event.getCode() == KeyCode.SPACE && getPauseBtn().isDisabled()) {
