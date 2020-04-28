@@ -82,7 +82,7 @@ public class Main extends Application {
             } else if ((getCreateAccountPopUpShown() || getAccountLoginPopUpShown()) && event.getCode() == KeyCode.ENTER) {
                 if (getCreateAccountPopUpShown()) {
                     TextField username = (TextField) getCreateAccountPopUpPane().lookup("#username");
-                    if (username.getText().equals("") || (username.getText().length() > 250)) {
+                    if (username.getText().equals("") || username.getText().contains(" ") || (username.getText().length() > 250)) {
                         hidePopUp();
                         invalidUsernamePopUp();
                         return;
@@ -98,7 +98,7 @@ public class Main extends Application {
                         hidePopUp();
                         passwordsDontMatchPopUp();
                         return;
-                    } else if (password1.getText().equals("") || (password1.getText().length() < 7) || (password1.getText().length() > 250)) {
+                    } else if (password1.getText().equals("") || password1.getText().contains(" ") || (password1.getText().length() < 7) || (password1.getText().length() > 250)) {
                         hidePopUp();
                         invalidPasswordPopUp();
                         return;
