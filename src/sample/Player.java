@@ -82,21 +82,13 @@ public class Player {
 
     int getTotalGamesTied() { return totalGamesTied; }
 
-    Date getLastDatePlayed() {
-        return lastDatePlayed;
-    }
+    Date getLastDatePlayed() { return lastDatePlayed; }
 
-    double getWinPercentage() {
-        return totalGamesWon / totalGamesPlayed * 100;
-    }
+    double getWinPercentage() { return totalGamesWon / totalGamesPlayed * 100; }
 
-    boolean getTurn() {
-        return isTurn;
-    }
+    boolean getTurn() { return isTurn; }
 
     @Override
-    public String toString() {
-        return "Name: " + getUsername();
-    }
+    public String toString() { return "Name: " + getUsername(); }
 
 }

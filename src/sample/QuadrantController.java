@@ -5,7 +5,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
 import java.io.File;
-import java.util.Random;
 
 import static sample.ButtonController.*;
 import static sample.ComputerController.*;
@@ -175,33 +174,6 @@ public class QuadrantController {
     }
 
     /**
-     * GET QUADRANT TO MARK METHOD
-     * Find the best quadrant to mark
-     */
-    static Quadrant getQuadrantToMark(Quadrant quadrant) {
-        previousPreviousQuadrant = previousQuadrant;
-        previousQuadrant = quadrant;
-
-        //Primary Offensive Moves
-        if (primaryOffensiveMove() != null) {
-            primaryOffensiveMove();
-        }
-
-        //Defensive Moves
-        if (defensiveMove(quadrant) != null) {
-            return defensiveMove(quadrant);
-        }
-
-        //Secondary Offensive Moves
-        if (secondaryOffensiveMove() != null) {
-            return secondaryOffensiveMove();
-        }
-
-        //Random Moves
-        return randomMove();
-    }
-
-    /**
      * CHECK MARKED METHOD
      * Check if square is playable and responds accordingly
      */
@@ -241,7 +213,7 @@ public class QuadrantController {
                 if (!checkIfWon(quadrant, getPlayer1())) {
                     checkIfTie();
                     if (!gameOver && !getPauseBtn().isDisabled() && getNumberOfPlayers() == 1 && getPlayer2().getTurn()) {
-                        quadrant = QuadrantController.getQuadrantToMark(quadrant);
+                        quadrant = getQuadrantToMark(quadrant);
                         Object[] temp2 = quadrant.getPane().getChildren().toArray();
                         File imageFile2 = new File("src/sample/images/TicTacToeSingleO.png");
                         Image imageO2 = new Image(imageFile2.toURI().toString());

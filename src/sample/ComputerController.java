@@ -1,11 +1,49 @@
 package sample;
 
+import java.beans.beancontext.BeanContext;
 import java.util.Random;
 
+import static sample.ComputerState.*;
 import static sample.PlayerController.*;
 import static sample.QuadrantController.*;
 
 public class ComputerController {
+    private static ComputerState currentState;
+
+    public void setCurrentState(ComputerState currentState) { this.currentState = currentState; }
+
+    public static ComputerState getCurrentState() { return currentState; }
+
+    /**
+     * GET QUADRANT TO MARK METHOD
+     * Find the best quadrant to mark
+     */
+    static Quadrant getQuadrantToMark(Quadrant quadrant) {
+        setPreviousPreviousQuadrant(getPreviousQuadrant());
+        setPreviousQuadrant(quadrant);
+
+        switch (currentState) {
+            case HARD:
+                //Primary Offensive Moves
+                if (primaryOffensiveMove() != null) {
+                    primaryOffensiveMove();
+                }
+            case MEDIUM:
+                //Defensive Moves
+                if (defensiveMove(quadrant) != null) {
+                    return defensiveMove(quadrant);
+                }
+            case EASY:
+                //Secondary Offensive Moves
+                if (secondaryOffensiveMove() != null) {
+                    return secondaryOffensiveMove();
+                }
+            default:
+                //Random Moves
+                return randomMove();
+        }
+    }
+
     static Quadrant primaryOffensiveMove() {
         if (getTopLeft().getPlayerPlayed() != null && getTopLeft().getPlayerPlayed().equals(getPlayer2())) {
             if (getTopCenter().getPlayerPlayed() != null && getTopCenter().getPlayerPlayed().equals(getPlayer2())) {
