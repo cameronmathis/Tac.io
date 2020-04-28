@@ -6,7 +6,7 @@ import java.sql.Date;
  * PLAYER OBJECT
  */
 public class Player {
-
+    //Variables
     private String username;
     private String password;
     private boolean isTurn;

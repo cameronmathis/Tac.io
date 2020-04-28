@@ -8,7 +8,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
-
 import static sample.ButtonController.*;
 import static sample.PlayerController.*;
 import static sample.QuadrantController.*;
@@ -16,7 +15,6 @@ import static sample.GameController.*;
 import static sample.PopUpController.*;
 
 public class Main extends Application {
-
     //The GUI interface scene
     @Override
     public void start(Stage primaryStage) throws Exception {

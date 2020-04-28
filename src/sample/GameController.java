@@ -12,7 +12,6 @@ import static sample.PopUpController.*;
 import static sample.QuadrantController.*;
 
 public class GameController {
-
     /**
      * START GAME METHOD
      * Starts the game

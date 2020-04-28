@@ -1,13 +1,12 @@
 package sample;
 
-import java.beans.beancontext.BeanContext;
 import java.util.Random;
 
-import static sample.ComputerState.*;
 import static sample.PlayerController.*;
 import static sample.QuadrantController.*;
 
 public class ComputerController {
+    //Variables
     private static ComputerState currentState;
 
     public void setCurrentState(ComputerState currentState) { this.currentState = currentState; }

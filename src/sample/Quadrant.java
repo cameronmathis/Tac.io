@@ -7,7 +7,7 @@ import javafx.scene.layout.Pane;
 import java.io.File;
 
 public class Quadrant {
-
+    //Variables
     private Pane pane;
     private boolean isMarked;
     private Player playerPlayed;
