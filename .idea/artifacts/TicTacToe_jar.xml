@@ -2,7 +2,7 @@
   <artifact type="jar" name="TicTacToe:jar">
     <output-path>$PROJECT_DIR$/out/artifacts/TicTacToe_jar</output-path>
     <root id="archive" name="TicTacToe.jar">
-      <element id="module-output" name="TicTacToe" />
+      <element id="module-output" name="Tac.io" />
     </root>
   </artifact>
 </component>

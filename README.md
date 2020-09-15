@@ -6,10 +6,11 @@ This is a JavaFX TicTacToe Java Application
 * [Setup](#setup)
 * [Features](#features)
 * [Status](#status)
+* [Language details](#Language-details)
 * [Contact](#contact)
 
 ## General info
-This is a project I decided I wanted to do after being exposed to JavaFX at an intership in 2019. Since then it has grown to much more than I ever intended.
+This is a project I decided I wanted to do after being exposed to JavaFX at an internship in 2019. Since then, it has grown to much more than I ever intended.
 
 ## Setup
 In order to run, clone this repo onto your local machine.
@@ -21,8 +22,8 @@ Implemented:
 * User vs User
 * CPU Difficulty Levels
 
-Work-in-Progess:
-* Create database of player ranks in RaspberryPi
+Work-in-Progress:
+* Create a database of player ranks in RaspberryPi
 
 To-do list:
 * Create way to easily distribute and run
@@ -30,6 +31,10 @@ To-do list:
 ## Status
 Project is: _in progress_
 
+## Language details
+Language used: JavaFX </br>
+Version used: 11.0.8
+
 ## Contact
-Created by [@cameronmathis] - feel free to contact me!
+Created by [@cameronmathis](https://github.com/cameronmathis/) - feel free to contact me!
 

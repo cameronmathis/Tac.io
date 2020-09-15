@@ -14,7 +14,7 @@
     </properties>
     <root id="root">
       <element id="archive" name="TicTacToe.jar">
-        <element id="module-output" name="TicTacToe" />
+        <element id="module-output" name="Tac.io" />
       </element>
     </root>
   </artifact>
