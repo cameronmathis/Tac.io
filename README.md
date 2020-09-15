@@ -22,7 +22,7 @@ Implemented:
 * CPU Difficulty Levels
 
 Work-in-Progess:
-*Create database of players ranks in RaspberryPi
+* Create database of players ranks in RaspberryPi
 
 To-do list:
 * Create way to easily distribute and run
