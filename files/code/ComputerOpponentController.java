@@ -1,17 +1,15 @@
-package sample;
+package code;
 
 import java.util.Random;
 
-import static sample.PlayerController.*;
-import static sample.QuadrantController.*;
+import static code.PlayerController.*;
+import static code.QuadrantController.*;
 
-public class ComputerController {
+public class ComputerOpponentController {
     //Variables
-    private static ComputerState currentState;
+    private static ComputerOpponentState currentState;
 
-    public void setCurrentState(ComputerState currentState) { this.currentState = currentState; }
-
-    public static ComputerState getCurrentState() { return currentState; }
+    public static void setCurrentState(ComputerOpponentState cs) { currentState = cs; }
 
     /**
      * GET QUADRANT TO MARK METHOD

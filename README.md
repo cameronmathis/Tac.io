@@ -10,7 +10,8 @@ This is a JavaFX TicTacToe Java Application
 * [Contact](#contact)
 
 ## General info
-This is a project I decided I wanted to do after being exposed to JavaFX at an internship in 2019. Since then, it has grown to much more than I ever intended.
+This is a project I decided I wanted to do after being exposed to JavaFX at an internship in 2019. I had a graphic 
+designer create all the images used. It is definitely the most visually appealing program I have ever developed.
 
 ## Setup
 In order to run, clone this repo onto your local machine.
@@ -23,7 +24,7 @@ Implemented:
 * CPU Difficulty Levels
 
 Work-in-Progress:
-* Create a database of player ranks in RaspberryPi
+* Improving code
 
 To-do list:
 * Create way to easily distribute and run

@@ -1,4 +1,4 @@
-package sample;
+package code;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -6,10 +6,10 @@ import javafx.scene.layout.Pane;
 
 import java.io.File;
 
-import static sample.ButtonController.*;
-import static sample.ComputerController.*;
-import static sample.PlayerController.*;
-import static sample.PopUpController.*;
+import static code.ButtonController.*;
+import static code.ComputerOpponentController.*;
+import static code.PlayerController.*;
+import static code.PopUpController.*;
 
 public class QuadrantController {
     // Variables
@@ -31,42 +31,6 @@ public class QuadrantController {
     /**
      * SETTER METHODS
      */
-    static void setTopLeft(Quadrant q) {
-        topLeft = q;
-    }
-
-    static void setTopCenter(Quadrant q) {
-        topCenter = q;
-    }
-
-    static void setTopRight(Quadrant q) {
-        topRight = q;
-    }
-
-    static void setCenterLeft(Quadrant q) {
-        centerLeft = q;
-    }
-
-    static void setCenter(Quadrant q) {
-        center = q;
-    }
-
-    static void setCenterRight(Quadrant q) {
-        centerRight = q;
-    }
-
-    static void setBottomLeft(Quadrant q) {
-        bottomLeft = q;
-    }
-
-    static void setBottomCenter(Quadrant q) {
-        bottomCenter = q;
-    }
-
-    static void setBottomRight(Quadrant q) {
-        bottomRight = q;
-    }
-
     static void setCurrentQuadrant(Quadrant q) {
         currentQuadrant = q;
     }
@@ -178,8 +142,7 @@ public class QuadrantController {
      * Check if square is playable and responds accordingly
      */
     static boolean markQuadrant(Quadrant quadrant, boolean isMarked) {
-        boolean start;
-        start = currentQuadrant == null;
+        boolean start = currentQuadrant == null;
 
         if ((getNumberOfPlayers() == 2 && isMarked) || (getPlayer1().getTurn() && isMarked)) {
             if (!previousQuadrant.equals(quadrant)) {
@@ -202,7 +165,7 @@ public class QuadrantController {
             counter = 0;
             if (!gameOver && !getPauseBtn().isDisabled() && getPlayer1().getTurn()) {
                 Object[] temp1 = quadrant.getPane().getChildren().toArray();
-                File imageFile1 = new File("src/sample/images/TicTacToeSingleX.png");
+                File imageFile1 = new File("files/images/TicTacToeSingleX.png");
                 Image imageO1 = new Image(imageFile1.toURI().toString());
                 ImageView quadrantImageView1 = (ImageView) temp1[0];
                 quadrantImageView1.setImage(imageO1);
@@ -215,7 +178,7 @@ public class QuadrantController {
                     if (!gameOver && !getPauseBtn().isDisabled() && getNumberOfPlayers() == 1 && getPlayer2().getTurn()) {
                         quadrant = getQuadrantToMark(quadrant);
                         Object[] temp2 = quadrant.getPane().getChildren().toArray();
-                        File imageFile2 = new File("src/sample/images/TicTacToeSingleO.png");
+                        File imageFile2 = new File("files/images/TicTacToeSingleO.png");
                         Image imageO2 = new Image(imageFile2.toURI().toString());
                         ImageView quadrantImageView2 = (ImageView) temp2[0];
                         quadrantImageView2.setImage(imageO2);
@@ -231,7 +194,7 @@ public class QuadrantController {
                 }
             } else if (!gameOver && !getPauseBtn().isDisabled() && getNumberOfPlayers() == 2 && getPlayer2().getTurn()) {
                 Object[] temp = quadrant.getPane().getChildren().toArray();
-                File imageFile = new File("src/sample/images/TicTacToeSingleO.png");
+                File imageFile = new File("files/images/TicTacToeSingleO.png");
                 Image imageO = new Image(imageFile.toURI().toString());
                 ImageView quadrantImageView = (ImageView) temp[0];
                 quadrantImageView.setImage(imageO);
@@ -259,7 +222,6 @@ public class QuadrantController {
                     gameOver = true;
                     getPauseBtn().setDisable(true);
                     getUndoBtn().setDisable(true);
-                    player.setGamesWon(player.getGamesWon() + 1);
                     gameOverPopUp(player);
                     return true;
                 }
@@ -269,7 +231,6 @@ public class QuadrantController {
                     gameOver = true;
                     getPauseBtn().setDisable(true);
                     getUndoBtn().setDisable(true);
-                    player.setGamesWon(player.getGamesWon() + 1);
                     gameOverPopUp(player);
                     return true;
                 }
@@ -279,7 +240,6 @@ public class QuadrantController {
                     gameOver = true;
                     getPauseBtn().setDisable(true);
                     getUndoBtn().setDisable(true);
-                    player.setGamesWon(player.getGamesWon() + 1);
                     gameOverPopUp(player);
                     return true;
                 }
@@ -292,7 +252,6 @@ public class QuadrantController {
                     gameOver = true;
                     getPauseBtn().setDisable(true);
                     getUndoBtn().setDisable(true);
-                    player.setGamesWon(player.getGamesWon() + 1);
                     gameOverPopUp(player);
                     return true;
                 }
@@ -302,7 +261,6 @@ public class QuadrantController {
                     gameOver = true;
                     getPauseBtn().setDisable(true);
                     getUndoBtn().setDisable(true);
-                    player.setGamesWon(player.getGamesWon() + 1);
                     gameOverPopUp(player);
                     return true;
                 }
@@ -315,7 +273,6 @@ public class QuadrantController {
                     gameOver = true;
                     getPauseBtn().setDisable(true);
                     getUndoBtn().setDisable(true);
-                    player.setGamesWon(player.getGamesWon() + 1);
                     gameOverPopUp(player);
                     return true;
                 }
@@ -325,7 +282,6 @@ public class QuadrantController {
                     gameOver = true;
                     getPauseBtn().setDisable(true);
                     getUndoBtn().setDisable(true);
-                    player.setGamesWon(player.getGamesWon() + 1);
                     gameOverPopUp(player);
                     return true;
                 }
@@ -335,7 +291,6 @@ public class QuadrantController {
                     gameOver = true;
                     getPauseBtn().setDisable(true);
                     getUndoBtn().setDisable(true);
-                    player.setGamesWon(player.getGamesWon() + 1);
                     gameOverPopUp(player);
                     return true;
                 }
@@ -348,7 +303,6 @@ public class QuadrantController {
                     gameOver = true;
                     getPauseBtn().setDisable(true);
                     getUndoBtn().setDisable(true);
-                    player.setGamesWon(player.getGamesWon() + 1);
                     gameOverPopUp(player);
                     return true;
                 }
@@ -358,7 +312,6 @@ public class QuadrantController {
                     gameOver = true;
                     getPauseBtn().setDisable(true);
                     getUndoBtn().setDisable(true);
-                    player.setGamesWon(player.getGamesWon() + 1);
                     gameOverPopUp(player);
                     return true;
                 }
@@ -371,7 +324,6 @@ public class QuadrantController {
                     gameOver = true;
                     getPauseBtn().setDisable(true);
                     getUndoBtn().setDisable(true);
-                    player.setGamesWon(player.getGamesWon() + 1);
                     gameOverPopUp(player);
                     return true;
                 }
@@ -381,7 +333,6 @@ public class QuadrantController {
                     gameOver = true;
                     getPauseBtn().setDisable(true);
                     getUndoBtn().setDisable(true);
-                    player.setGamesWon(player.getGamesWon() + 1);
                     gameOverPopUp(player);
                     return true;
                 }
@@ -391,7 +342,6 @@ public class QuadrantController {
                     gameOver = true;
                     getPauseBtn().setDisable(true);
                     getUndoBtn().setDisable(true);
-                    player.setGamesWon(player.getGamesWon() + 1);
                     gameOverPopUp(player);
                     return true;
                 }
@@ -401,7 +351,6 @@ public class QuadrantController {
                     gameOver = true;
                     getPauseBtn().setDisable(true);
                     getUndoBtn().setDisable(true);
-                    player.setGamesWon(player.getGamesWon() + 1);
                     gameOverPopUp(player);
                     return true;
                 }
@@ -414,7 +363,6 @@ public class QuadrantController {
                     gameOver = true;
                     getPauseBtn().setDisable(true);
                     getUndoBtn().setDisable(true);
-                    player.setGamesWon(player.getGamesWon() + 1);
                     gameOverPopUp(player);
                     return true;
                 }
@@ -424,7 +372,6 @@ public class QuadrantController {
                     gameOver = true;
                     getPauseBtn().setDisable(true);
                     getUndoBtn().setDisable(true);
-                    player.setGamesWon(player.getGamesWon() + 1);
                     gameOverPopUp(player);
                     return true;
                 }
@@ -437,7 +384,6 @@ public class QuadrantController {
                     gameOver = true;
                     getPauseBtn().setDisable(true);
                     getUndoBtn().setDisable(true);
-                    player.setGamesWon(player.getGamesWon() + 1);
                     gameOverPopUp(player);
                     return true;
                 }
@@ -447,7 +393,6 @@ public class QuadrantController {
                     gameOver = true;
                     getPauseBtn().setDisable(true);
                     getUndoBtn().setDisable(true);
-                    player.setGamesWon(player.getGamesWon() + 1);
                     gameOverPopUp(player);
                     return true;
                 }
@@ -457,7 +402,6 @@ public class QuadrantController {
                     gameOver = true;
                     getPauseBtn().setDisable(true);
                     getUndoBtn().setDisable(true);
-                    player.setGamesWon(player.getGamesWon() + 1);
                     gameOverPopUp(player);
                     return true;
                 }
@@ -470,7 +414,6 @@ public class QuadrantController {
                     gameOver = true;
                     getPauseBtn().setDisable(true);
                     getUndoBtn().setDisable(true);
-                    player.setGamesWon(player.getGamesWon() + 1);
                     gameOverPopUp(player);
                     return true;
                 }
@@ -480,7 +423,6 @@ public class QuadrantController {
                     gameOver = true;
                     getPauseBtn().setDisable(true);
                     getUndoBtn().setDisable(true);
-                    player.setGamesWon(player.getGamesWon() + 1);
                     gameOverPopUp(player);
                     return true;
                 }
@@ -493,7 +435,6 @@ public class QuadrantController {
                     gameOver = true;
                     getPauseBtn().setDisable(true);
                     getUndoBtn().setDisable(true);
-                    player.setGamesWon(player.getGamesWon() + 1);
                     gameOverPopUp(player);
                     return true;
                 }
@@ -503,7 +444,6 @@ public class QuadrantController {
                     gameOver = true;
                     getPauseBtn().setDisable(true);
                     getUndoBtn().setDisable(true);
-                    player.setGamesWon(player.getGamesWon() + 1);
                     gameOverPopUp(player);
                     return true;
                 }
@@ -513,7 +453,6 @@ public class QuadrantController {
                     gameOver = true;
                     getPauseBtn().setDisable(true);
                     getUndoBtn().setDisable(true);
-                    player.setGamesWon(player.getGamesWon() + 1);
                     gameOverPopUp(player);
                     return true;
                 }

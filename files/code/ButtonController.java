@@ -1,10 +1,10 @@
-package sample;
+package code;
 
 import javafx.scene.control.Button;
 
-import static sample.PlayerController.*;
-import static sample.PopUpController.*;
-import static sample.QuadrantController.*;
+import static code.PlayerController.*;
+import static code.PopUpController.*;
+import static code.QuadrantController.*;
 
 public class ButtonController {
     // Variables
@@ -15,12 +15,12 @@ public class ButtonController {
     /**
      * SETTER METHODS
      */
-    static void setPauseBtn(Button b) {
-        pauseBtn = b;
+    static void setPauseBtn(Button button) {
+        pauseBtn = button;
     }
 
-    static void setUndoBtn(Button b) {
-        undoBtn = b;
+    static void setUndoBtn(Button button) {
+        undoBtn = button;
     }
 
     static void setAbleToUndo(boolean bool) {
@@ -38,18 +38,6 @@ public class ButtonController {
         return undoBtn;
     }
 
-    static boolean getAbleToUndo() {
-        return ableToUndo;
-    }
-
-    /**
-     * BUTTON INITIALIZATION
-     * Initialize all the buttons
-     */
-    static void initializeButtons() {
-        pauseBtn = (Button) getGameScene().lookup("#pause");
-        undoBtn = (Button) getGameScene().lookup("#undo");
-    }
 
     /**
      * PAUSE METHOD

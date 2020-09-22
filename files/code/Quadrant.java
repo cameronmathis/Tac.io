@@ -1,4 +1,4 @@
-package sample;
+package code;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -24,7 +24,7 @@ public class Quadrant {
         if (isMarked == false) {
             this.setPlayerPlayed(null);
             Object[] temp = this.getPane().getChildren().toArray();
-            File imageFile = new File("src/sample/images/BlankImage.png");
+            File imageFile = new File("images/BlankImage.png");
             Image blankImage = new Image(imageFile.toURI().toString());
             ImageView quadrantImageView = (ImageView) temp[0];
             quadrantImageView.setImage(blankImage);
