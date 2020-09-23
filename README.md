@@ -19,19 +19,19 @@ In order to run, clone this repo onto your local machine.
 ## Features
 Implemented:
 * Full GUI
-* User vs CPU
 * User vs User
+* User vs CPU
 * CPU Difficulty Levels
 
 Work-in-Progress:
 * Improving code
-* Thoroughly test
 
 To-do list:
+* Thoroughly test
 * Create way to easily distribute and run
 
 ## Status
-Project is: _finished_
+Project is: _in progress_
 
 ## Language details
 Language used: JavaFX </br>
