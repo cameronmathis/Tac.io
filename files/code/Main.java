@@ -31,10 +31,6 @@ public class Main extends Application {
         setOpeningPane(FXMLLoader.load(getClass().getResource("StartScreen.fxml")));
         setGamePane(FXMLLoader.load(getClass().getResource("GameScene.fxml")));
 
-        /**
-         * MAIN STAGE CREATED
-         * Main Stage and Scene Created and shown
-         */
         setOpeningScene(new Scene(getOpeningPane())); //creates a new scene from 'StartScreen.fxml'
         setGameScene(new Scene(getGamePane())); //created a new scene from 'GameScene.fxml'
         primaryStage.setTitle("TicTacToe"); //sets the title of the app
@@ -112,7 +108,7 @@ public class Main extends Application {
                 setGame();
                 hidePopUp();
             } //pause game shortcut
-            else if (event.getCode() == KeyCode.SPACE && !getPauseBtn().isDisabled()) {
+            else if (event.getCode() == KeyCode.SPACE && !getPauseBtn().isDisabled() && getIsPopUpShowing() == false) {
                 pause();
             } //unpause game shortcut
             else if (event.getCode() == KeyCode.SPACE && getPauseBtn().isDisabled()) {

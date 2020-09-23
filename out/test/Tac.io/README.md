@@ -25,13 +25,12 @@ Implemented:
 
 Work-in-Progress:
 * Improving code
-* Thoroughly test
 
 To-do list:
 * Create way to easily distribute and run
 
 ## Status
-Project is: _finished_
+Project is: _in progress_
 
 ## Language details
 Language used: JavaFX </br>

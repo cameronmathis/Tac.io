@@ -27,8 +27,8 @@ public class PopUpController {
     private static Scene openingScene;
     private static AnchorPane gamePane;
     private static Scene gameScene;
+    private static boolean isPopUpShowing = false;
     private static boolean enterNumberPopUpShown = false;
-    private static boolean enterNamePopUpShown = false;
     private static boolean wonGamePopUpShown = false;
     private static boolean tiedGamePopUpShown = false;
 
@@ -59,12 +59,10 @@ public class PopUpController {
         gameScene = s;
     }
 
+    static void setIsPopUpShowing(boolean bool) { isPopUpShowing = bool; }
+
     static void setEnterNumberPopUpShown(boolean bool) {
         enterNumberPopUpShown = bool;
-    }
-
-    static void setEnterNamePopUpShown(boolean bool) {
-        enterNamePopUpShown = bool;
     }
 
     static void setWonGamePopUpShown(boolean bool) {
@@ -102,12 +100,10 @@ public class PopUpController {
         return gameScene;
     }
 
+    static boolean getIsPopUpShowing() { return isPopUpShowing;}
+
     static boolean getEnterNumberPopUpShown() {
         return enterNumberPopUpShown;
-    }
-
-    static boolean getEnterNamePopUpShown() {
-        return enterNamePopUpShown;
     }
 
     static boolean getWonGamePopUpShown() {
@@ -123,6 +119,7 @@ public class PopUpController {
      * PopUp to ask for number of players
      */
     static void numberOfPlayersPopUp() {
+        setIsPopUpShowing(true);
         enterNumberPopUpShown = true;
         setFirstMovePlayer(null);
 
@@ -165,7 +162,7 @@ public class PopUpController {
      * PopUp to ask for player name
      */
     static void enterOneNamePopUp() {
-        enterNamePopUpShown = true;
+        setIsPopUpShowing(true);
         PopUp = new Popup(); //creates new popup
 
         selectDifficultyPopUpPane = null; //calls popup menu created in 'enterOneNamePopUp.fxml' file
@@ -185,14 +182,13 @@ public class PopUpController {
 
         Button enterBtn = (Button) selectDifficultyPopUpPane.lookup("#enter");
         enterBtn.setOnAction(event -> {
-            if (!(((TextField) selectDifficultyPopUpPane.lookup("#player1Name")).getText().equals(""))) {
+            if (!(((TextField) selectDifficultyPopUpPane.lookup("#player1Name")).getText().trim().equals(""))) {
                 TextField name1 = (TextField) selectDifficultyPopUpPane.lookup("#player1Name");
-                getPlayer1().setUsername(name1.getText());
+                getPlayer1().setUsername(name1.getText().trim());
             } else {
                 getPlayer1().setUsername("player1");
             }
             hidePopUp();
-            enterNamePopUpShown = false;
             selectDifficultyPopUp();
         });
     }
@@ -202,6 +198,7 @@ public class PopUpController {
      * PopUp to ask for player name
      */
     static void selectDifficultyPopUp() {
+        setIsPopUpShowing(true);
         PopUp = new Popup(); //creates new popup
 
         selectDifficultyPopUpPane = null; //calls popup menu created in 'selectDifficultyPopUp.fxml' file
@@ -221,27 +218,23 @@ public class PopUpController {
             setCurrentState(BEGINNER);
             hidePopUp();
             startGame();
-            enterNamePopUpShown = false;
         });Button easyBtn = (Button) selectDifficultyPopUpPane.lookup("#easy");
         easyBtn.setOnAction(event -> {
             setCurrentState(EASY);
             hidePopUp();
             startGame();
-            enterNamePopUpShown = false;
         });
         Button mediumBtn = (Button) selectDifficultyPopUpPane.lookup("#medium");
         mediumBtn.setOnAction(event -> {
             setCurrentState(MEDIUM);
             hidePopUp();
             startGame();
-            enterNamePopUpShown = false;
         });
         Button hardBtn = (Button) selectDifficultyPopUpPane.lookup("#hard");
         hardBtn.setOnAction(event -> {
             setCurrentState(HARD);
             hidePopUp();
             startGame();
-            enterNamePopUpShown = false;
         });
     }
 
@@ -250,7 +243,7 @@ public class PopUpController {
      * PopUp to ask for both player names
      */
     static void enterTwoNamesPopUp() {
-        enterNamePopUpShown = true;
+        setIsPopUpShowing(true);
         PopUp = new Popup(); //creates new popup
 
         selectDifficultyPopUpPane = null; //calls popup menu created in 'enterTwoNamesPopUp.fxml' file
@@ -270,21 +263,20 @@ public class PopUpController {
 
         Button enterBtn = (Button) selectDifficultyPopUpPane.lookup("#enter");
         enterBtn.setOnAction(event -> {
-            if (!(((TextField) selectDifficultyPopUpPane.lookup("#player1Name")).getText().equals(""))) {
+            if (!(((TextField) selectDifficultyPopUpPane.lookup("#player1Name")).getText().trim().equals(""))) {
                 TextField name1 = (TextField) selectDifficultyPopUpPane.lookup("#player1Name");
-                getPlayer1().setUsername(name1.getText());
+                getPlayer1().setUsername(name1.getText().trim());
             } else {
                 getPlayer1().setUsername("player1");
             }
-            if (!(((TextField) selectDifficultyPopUpPane.lookup("#player2Name")).getText().equals(""))) {
+            if (!(((TextField) selectDifficultyPopUpPane.lookup("#player2Name")).getText().trim().equals(""))) {
                 TextField name2 = (TextField) selectDifficultyPopUpPane.lookup("#player2Name");
-                getPlayer2().setUsername(name2.getText());
+                getPlayer2().setUsername(name2.getText().trim());
             } else {
                 getPlayer2().setUsername("player2");
             }
             hidePopUp();
             startGame();
-            enterNamePopUpShown = false;
         });
     }
 
@@ -293,6 +285,7 @@ public class PopUpController {
      * PopUp for when the game is paused
      */
     static void pausedPopUp() {
+        setIsPopUpShowing(true);
         PopUp = new Popup(); //creates new popup
 
         TitledPane pausedPupUpPane = null; //calls popup menu created in 'pausePopUp.fxml' file
@@ -328,6 +321,7 @@ public class PopUpController {
      * PopUp for when you try and undo before a play is made
      */
     static void undoStartPopUp() {
+        setIsPopUpShowing(true);
         PopUp = new Popup(); //creates new popup
 
         TitledPane undoStartPopUpPane = null; //calls popup menu created in 'undoStartPopUp.fxml' file
@@ -353,6 +347,7 @@ public class PopUpController {
      * PopUp for when you try and undo twice
      */
     static void undoTwicePopUp() {
+        setIsPopUpShowing(true);
         PopUp = new Popup(); //creates new popup
 
         TitledPane undoTwicePopUpPane = null; //calls popup menu created in 'undoTwicePopUp.fxml' file
@@ -378,6 +373,7 @@ public class PopUpController {
      * PopUp for when a player tries to mark an already marked quadrant numerous times
      */
     static void isAlreadyMarkedPopUp() {
+        setIsPopUpShowing(true);
         PopUp = new Popup(); //creates new popup
 
         TitledPane isAlreadyMarkedPopUpPane = null; //calls popup menu created in 'isAlreadyMarkedPopUp.fxml' file
@@ -403,6 +399,7 @@ public class PopUpController {
      * PopUp for when the game is over
      */
     static void gameOverPopUp(Player player) {
+        setIsPopUpShowing(true);
         wonGamePopUpShown = true;
 
         PopUp = new Popup(); //creates new popup
@@ -448,6 +445,7 @@ public class PopUpController {
      * PopUp for when the game is tied
      */
     static void tiePopUp() {
+        setIsPopUpShowing(true);
         tiedGamePopUpShown = true;
 
         PopUp = new Popup(); //creates new popup
@@ -486,7 +484,6 @@ public class PopUpController {
      * Hides current PopUp
      */
     static void hidePopUp() {
-        setEnterNamePopUpShown(false);
         setWonGamePopUpShown(false);
         setEnterNumberPopUpShown(false);
         setTiedGamePopUpShown(false);
@@ -499,5 +496,6 @@ public class PopUpController {
         }
         getPauseBtn().setDisable(false);
         getUndoBtn().setDisable(false);
+        setIsPopUpShowing(false);
     }
 }

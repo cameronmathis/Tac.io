@@ -99,10 +99,6 @@ public class QuadrantController {
         return previousPreviousQuadrant;
     }
 
-    static boolean getGameOver() {
-        return gameOver;
-    }
-
     /**
      * INITIALIZE QUADRANTS METHOD
      * Initialize all the quadrants
