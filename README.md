@@ -35,7 +35,7 @@ Project is: _in progress_
 
 ## Language details
 Language used: JavaFX </br>
-Version used: 11.0.8
+Version used: 11.0.9
 
 ## Contact
 Created by [@cameronmathis](https://github.com/cameronmathis/) - feel free to contact me!
